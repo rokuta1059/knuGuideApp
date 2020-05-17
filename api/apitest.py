@@ -6,6 +6,9 @@ import func
 
 app = Flask(__name__)
 api = Api(app)
+api.app.config['RESTFUL_JSON'] = {
+    'ensure_ascii': False
+}
 
 class myTestApi(Resource):
     def get(self):
