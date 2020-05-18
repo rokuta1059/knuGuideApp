@@ -16,6 +16,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -40,7 +45,31 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // Glide
+    // Glide (이미지 라이브러리)
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // Logger (로깅 라이브러리)
+    implementation 'com.orhanobut:logger:2.2.0'
+
+    // Okhttp3 (HTTP 통신 라이브러리)
+    implementation 'com.squareup.okhttp3:okhttp:4.0.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.1'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.0.1'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+
+    // Gson (Json 파싱 라이브러리)
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Jsoup (HTML 파싱 라이브러리)
+    implementation 'org.jsoup:jsoup:1.13.1'
+
+    // RxKotlin (데이터 라이브러리)
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
 }

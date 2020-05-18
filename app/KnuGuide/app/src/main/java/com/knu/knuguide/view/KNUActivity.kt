@@ -2,32 +2,33 @@ package com.knu.knuguide.view
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import com.knu.knuguide.core.KNUService
 
 abstract class KNUActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        KNUService.instance()
     }
 
-    protected fun navigateTo(cls: Class<Any>, @Nullable bundle: Bundle) {
-        val intent: Intent = Intent()
+    protected fun navigateTo(cls: Class<*>, bundle: Bundle?) {
+        val intent: Intent = Intent(this, cls)
         if (bundle != null)
             intent.putExtras(bundle)
 
         startActivity(intent)
     }
 
-    protected fun navigateToForResult(cls: Class<Any>, @Nullable bundle: Bundle, requestCode: Int) {
-        val intent: Intent = Intent()
+    protected fun navigateToForResult(cls: Class<*>, bundle: Bundle?, requestCode: Int) {
+        val intent: Intent = Intent(this, cls)
         if (bundle != null)
             intent.putExtras(bundle)
 
         startActivityForResult(intent, requestCode)
     }
 
-    protected fun switchTo(cls: Class<Any>, @Nullable bundle: Bundle) {
-        val intent: Intent = Intent()
+    protected fun switchTo(cls: Class<*>, bundle: Bundle?) {
+        val intent: Intent = Intent(this, cls)
         if (bundle != null)
             intent.putExtras(bundle)
 
@@ -38,8 +39,8 @@ abstract class KNUActivity : AppCompatActivity() {
         finish()
     }
 
-    protected fun restartActivity(cls: Class<Any>, @Nullable bundle: Bundle) {
-        val intent: Intent = Intent()
+    protected fun restartActivity(cls: Class<*>, bundle: Bundle?) {
+        val intent: Intent = Intent(this, cls)
         if (bundle != null)
             intent.putExtras(bundle)
 
@@ -47,8 +48,8 @@ abstract class KNUActivity : AppCompatActivity() {
         finish()
     }
 
-    protected fun restartActivityForResult(cls: Class<Any>, @Nullable bundle: Bundle, requestCode: Int) {
-        val intent: Intent = Intent()
+    protected fun restartActivityForResult(cls: Class<*>, bundle: Bundle?, requestCode: Int) {
+        val intent: Intent = Intent(this, cls)
         if (bundle != null)
             intent.putExtras(bundle)
 
