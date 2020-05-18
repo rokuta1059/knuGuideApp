@@ -1,6 +1,7 @@
 import sys
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
+from collections import OrderedDict
 import json
 import func
 
@@ -22,6 +23,32 @@ class testMulti(Resource):
     def get(self, num):
         return {'result': num * 10}
 
+"""
+    학과 공지사항 받아오는 클래스
+    주소값: /department/notice/{학과이름}
+"""
+class departmentNotice(Resource):
+    def get(self, department):
+        noticeTable = func.getDepartmentFunc(department)
+        table = []
+
+        # table을 JSON 형태로 재정렬
+        for t in noticeTable:
+            jsonTable = OrderedDict()
+            jsonTable["title"] = t[0]
+            jsonTable["link"] = t[1]
+            table.append(jsonTable)
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('department', type=str)
+        parser.add_argument('notice', type=list)
+
+        return {"department": department, "notice": table}
+
+"""
+    식단 받아오는 클래스
+    주소값: /cafeteria/{식당이름}
+"""
 class cafeteriaMenu(Resource):
     
     def get(self, name):
@@ -44,6 +71,7 @@ class cafeteriaMenu(Resource):
 api.add_resource(myTestApi, '/')
 api.add_resource(testMulti, '/multi/<int:num>')
 api.add_resource(cafeteriaMenu, '/cafeteria/<string:name>')
+api.add_resource(departmentNotice, '/department/notice/<string:department>')
 
 if __name__ == '__main__':
     app.run(debug=True)
