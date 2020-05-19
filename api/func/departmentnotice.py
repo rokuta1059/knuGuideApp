@@ -38,3 +38,4 @@ def departmentBizNotice():
 
     return data
 
+#학사일정
