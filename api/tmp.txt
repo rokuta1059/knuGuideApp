@@ -13,8 +13,7 @@ department - 과와 관련된 모든 것
 과사무소 위치
 - department/office
 기본호출 -> 모든 과 사무실 확인
-- department/office/{과 이름}
-원하는 과 사무실 위치 확인
+post 받으면 해당 과 사무실 확인
 - department/notice/{과 이름}
 해당 과의 공지사항을 스크래핑해서 보여줌
 - department/notice/kangwon
