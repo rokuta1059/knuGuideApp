@@ -105,8 +105,9 @@ class cafeteriaMenu(Resource):
 
 api.add_resource(myTestApi, '/')
 api.add_resource(testMulti, '/multi/<int:num>')
-api.add_resource(cafeteriaMenu, '/cafeteria/<string:name>')
+api.add_resource(departmentOffice, '/department/office')
 api.add_resource(departmentNotice, '/department/notice/<string:department>')
+api.add_resource(cafeteriaMenu, '/cafeteria/<string:name>')
 
 if __name__ == '__main__':
     app.run(debug=True)
