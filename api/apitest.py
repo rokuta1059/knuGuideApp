@@ -24,6 +24,41 @@ class testMulti(Resource):
         return {'result': num * 10}
 
 """
+    학과사무실 주소랑 전화번호 받아오는 클래스
+    주소값: /department/office
+    !! 코드 작성만 했음 상세 코드 미구현으로 인해 테스트 미실시 !!
+"""
+class departmentOffice(Resource):
+    def get(self):
+        table = []
+        officeTable = func.getDepartmentOffice()
+        for t in officeTable:
+            jsonTable = OrderedDict()
+            jsonTable["department"] = t[0]
+            jsonTable["address"] = t[1]
+            jsonTable["number"] = t[2]
+            table.append(jsonTable)
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('content', type=list)
+
+        return {"content": table}
+
+    def post(self):
+        department_json = request.get_json()
+        data = func.getDepartmentOffice(department_json["department"])
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('department', type=str)
+        parser.add_argument('address', type=str)
+        parser.add_argument('number', type=str)
+
+        return {"department": data[0],
+            "address": data[1],
+            "number": data[2] }
+
+
+"""
     학과 공지사항 받아오는 클래스
     주소값: /department/notice/{학과이름}
 """
