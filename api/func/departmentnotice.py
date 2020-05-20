@@ -1,6 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 
+# 필독!!!!!!!!!!!!!!!!!!!!
+# return 값은 아래처럼 해주세요
+# [['번호', '제목', '작성일자', '링크'], ['번호', '제목', '작성일자', '링크'], .... ]
+# 번호 항목은 NOTICE와 같은 값일 경우 '공지'가 될 수 있도록 해주세요
+
 # 컴퓨터공학과 공지사항
 def departmentComputerNotice():
     resp = requests.get("https://cse.kangwon.ac.kr")
