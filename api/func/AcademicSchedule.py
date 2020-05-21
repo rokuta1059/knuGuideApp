@@ -10,9 +10,15 @@ def acaSchedule():
     data = []
     while keyword != None:
         array = keyword.find_all('td')
-        data.append(array[0].text.strip())
+        date = array[0].text.strip().split(" ~ ")
+        if len(date) == 1:
+            data.append(date[0])
+            data.append(date[0])
+        else:
+            data.append(date[0])
+            data.append(date[1])
         data.append((array[1].text.strip()))
-        print(array[0].text.strip()+"\t\t"+ array[1].text.strip())
+        #print(array[0].text.strip()+"\t\t"+ array[1].text.strip())
         keyword = keyword.next_sibling.next_sibling
     return data
 
