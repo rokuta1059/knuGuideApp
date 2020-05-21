@@ -1,7 +1,5 @@
 package com.knu.knuguide.core
 
-import com.knu.knuguide.data.User
-import com.knu.knuguide.data.UserResponse
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import io.reactivex.Flowable
@@ -36,23 +34,23 @@ class KNUService {
         api = baseRetrofitBuilder.build().create(KNUInterface::class.java)
     }
 
-    fun postStation(stationName: String): Single<ArrayList<String>> {
-        return api!!.postStation(prmOperation = "getStationListByStationName", prmStationId = "", prmStationName = URLEncoder.encode(stationName, "euc-kr"), prmSearchCode = "", prmCoordX = "", prmCoordY = "")
-            .map {
-                val html = it.string()
-                val document = Jsoup.parse(html)
-                val elements = document.select("body > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr")
-
-                val list = ArrayList<String>()
-                for (e in elements) {
-                    list.add(e.text())
-                }
-
-                return@map list
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
+//    fun postStation(stationName: String): Single<ArrayList<String>> {
+//        return api!!.postStation(prmOperation = "getStationListByStationName", prmStationId = "", prmStationName = URLEncoder.encode(stationName, "euc-kr"), prmSearchCode = "", prmCoordX = "", prmCoordY = "")
+//            .map {
+//                val html = it.string()
+//                val document = Jsoup.parse(html)
+//                val elements = document.select("body > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr")
+//
+//                val list = ArrayList<String>()
+//                for (e in elements) {
+//                    list.add(e.text())
+//                }
+//
+//                return@map list
+//            }
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//    }
 
 //    fun getSQUsers(howmany: Int): Single<ResponseBody> {
 //        return api!!.getSQUsers("desc", "reputation", "stackoverflow", howmany)
