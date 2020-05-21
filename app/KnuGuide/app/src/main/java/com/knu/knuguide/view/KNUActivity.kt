@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.knu.knuguide.core.KNUService
 
 abstract class KNUActivity : AppCompatActivity() {
+    protected abstract fun getKNUID(): String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         KNUService.instance()

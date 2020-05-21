@@ -16,4 +16,12 @@ class SplashActivity : KNUActivity() {
             switchTo(MainActivity::class.java, null)
         }, 3000)
     }
+
+    override fun getKNUID(): String {
+        return KNU_ID
+    }
+
+    companion object {
+        const val KNU_ID = "SplashActivity"
+    }
 }
