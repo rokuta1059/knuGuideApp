@@ -116,4 +116,7 @@ api.add_resource(departmentNotice, '/department/notice/<string:department>')
 api.add_resource(cafeteriaMenu, '/cafeteria/<string:name>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    f = open('value.txt', 'r')
+    host = f.readline()
+    port = f.readline()
+    app.run(host=host,port=port,debug=True)
