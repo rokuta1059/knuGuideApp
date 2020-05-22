@@ -103,6 +103,12 @@ class cafeteriaMenu(Resource):
             ]
         }
 
+class usiversitySchedule(Resource):
+
+    def get(self):
+        table = []
+        schedule = func.acaSchedule()
+
 api.add_resource(myTestApi, '/')
 api.add_resource(testMulti, '/multi/<int:num>')
 api.add_resource(departmentOffice, '/department/office')
