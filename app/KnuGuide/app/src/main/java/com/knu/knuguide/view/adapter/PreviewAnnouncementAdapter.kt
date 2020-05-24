@@ -10,14 +10,7 @@ import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.announcement.Announcement
 import kotlinx.android.synthetic.main.item_announcement.view.*
 
-class PreviewAnnouncementAdapter(val context: Context, val items: ArrayList<KNUData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    class AnnouncementViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-    private fun bindAnnouncement(announcement: Announcement, holder: AnnouncementViewHolder) {
-        holder.itemView.source.text = announcement.source
-        holder.itemView.itemtitle.text = announcement.title
-    }
+class PreviewAnnouncementAdapter(private val context: Context, private val items: ArrayList<KNUData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -39,6 +32,14 @@ class PreviewAnnouncementAdapter(val context: Context, val items: ArrayList<KNUD
             }
         }
     }
+
+    class AnnouncementViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    private fun bindAnnouncement(announcement: Announcement, holder: AnnouncementViewHolder) {
+        holder.itemView.source.text = announcement.source
+        holder.itemView.itemtitle.text = announcement.title
+    }
+
 
     override fun getItemViewType(position: Int): Int {
         return items[position].getRecyclerType()

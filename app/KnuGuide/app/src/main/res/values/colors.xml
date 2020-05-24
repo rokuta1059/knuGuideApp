@@ -6,4 +6,6 @@
 
     <color name="appBackground">#5CBEFF</color>
     <color name="preview_announcement_divider">#808080</color>
+
+    <color name="cal_header_title">#003B87</color>
 </resources>
