@@ -1,0 +1,30 @@
+cba 경영대
+economics 경제학전공
+tourism 관광경영학과
+foodtech 식품생명공학과
+appliedplant 식물자원응용과학전공
+applybio 응용생물학전공
+horti 원예과학전공
+agecon 농업자원경제학과
+aed 지역건설공학과
+sport 스포츠과학과
+phyedu 체육교육과
+forest 산림대
+forestry 산림자원학전공
+wood 산림소재공학전공
+lands 생태조경디자인학과
+pharmacy 약대
+bm 의생대
+molscien 분자생명과학과
+biohealth 생명건강공학과
+bme 생물의소재공학과
+bmc 의생명융합학부
+si 시스템면역과학전공
+dmbt 의생명공학전공
+english 영어영문학과
+german 독어독문학전공
+chinese 중어중문학전공
+histo 사학전공
+
+
+정치외교학과 안함
