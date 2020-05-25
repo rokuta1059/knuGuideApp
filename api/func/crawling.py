@@ -1,35 +1,54 @@
 import requests
-from bs4 import BeautifulSoup as bs
+from bs4 import BeautifulSoup
 import ssl
 from urllib.request import urlopen
 
-# 경영대
-def cba():
-    resp = requests.get('http://cba.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
 
-    while keyword != None:
-        url = keyword.a.get('href')
-        resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+baseurl = ""
+
+
+def callreq(base, url):
+    global baseurl
+    baseurl = base
+    resp = requests.get(base+url)
+    soup = BeautifulSoup(resp.content, "html.parser")
+    return soup
+
+
+def callurl(url):
+    context = ssl._create_unverified_context()
+    resp = urlopen(url, context=context)
+    soup = BeautifulSoup(resp.read(), "html.parser")
+    return soup
+
+
+def cba(soup, callsign):
+    if soup.find('iframe') is not None:
+        soup = callreq(baseurl, soup.find('iframe').get('src').lstrip("."))
+    keyword = soup.find('td', "td_subject").parent
+
+    while keyword is not None:
+        url = keyword.find('td', "td_subject").a.get('href')
+        if callsign == "url":
+            soup = callurl(url)
+        elif callsign == "req":
+            soup = callreq('', url)
         title = soup.find('h1', id="bo_v_title")
-        print(title.text.strip(), keyword.find('td', "td_date").text)
-        print(url)
+        date = soup.find('section', id="bo_v_info").find_all('strong')[1]
+        print(title.text.strip(), date.text.strip())
+        print(keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
 
 # 경영대 경영학전공
-def biz():
-    resp = requests.get('http://biz.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
+def biz(soup):
+    global baseurl
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
-    baseURL = "http://biz.kangwon.ac.kr/"
 
-    while keyword != None:
-        url = baseURL+keyword.a.get('href')
+    while keyword is not None:
+        url = baseurl+keyword.a.get('href')
         resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('table', "board_view").td
         print(title.text.strip(), keyword.find('td', "datetime").text)
         print(url)
@@ -39,78 +58,48 @@ def biz():
 # 경영대 회계학전공
 def account():
     resp = requests.get('http://account.kangwon.ac.kr/bbs/board.php?bo_table=notice')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "table table-hover").tbody.tr
 
     while keyword != None:
         url = keyword.a.get('href')
         resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('h4', "subject")
         print(title.text.strip().rstrip("new").strip())
         print(url)
         keyword = keyword.next_sibling.next_sibling
 
 
-# 경영대 경제학전공
-def economics():
-    resp = requests.get('http://economics.kangwon.ac.kr/bbs/board.php?bo_table=sub07_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        url = keyword.a.get('href')
-        resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
-        title = soup.find('article', id="bo_v").header
-        print(title.text.strip(), keyword.find('td', "td_date").text)
-        print(url)
-        keyword = keyword.next_sibling.next_sibling
-
 
 # 경영대 정보통계학전공
 def statistics():
     resp = requests.get('http://statistics.kangwon.ac.kr/board/bbs/board.php?bo_table=notice_bbs')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
     baseURL = "http://statistics.kangwon.ac.kr/board"
 
     while keyword != None:
         url = baseURL+keyword.a.get('href').lstrip("..")
         resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('div', id="conbox").td.td.div
         print(title.text.strip(), keyword.find('td', "datetime").text)
         print(url)
         keyword = keyword.next_sibling.next_sibling
 
 
-# 경영대 관광경영학과
-def tourism():
-    resp = requests.get('http://tourism.kangwon.ac.kr/bbs/board.php?bo_table=notice')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('tr', "bo_notice")
-
-    while keyword != None:
-        url = keyword.a.get('href')
-        resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
-        title = soup.find('h1', id="bo_v_title")
-        print(title.text.strip(), keyword.find('td', "td_date").text)
-        print(url)
-        keyword = keyword.next_sibling.next_sibling
-
 
 # 경영대 국제무역학과
 def itb():
     resp = requests.get('http://itb.kangwon.ac.kr/bbs/board.php?bo_table=notice')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', "bo_notice")
 
     while keyword != None:
         url = keyword.a.get('href')
         resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('h4', id="bo_v_title").b
         date = soup.find('ul', "list-inline").li.next_sibling.next_sibling.b
         print(title.text, date.text)
@@ -123,7 +112,7 @@ def agrilifesci():
     baseURL = "http://knucals.kangwon.ac.kr/contents.do?v="
     lastURL = "&pageIndex=1&divId=&searchCondition=1&searchKeyword="
     resp = requests.get(baseURL+"&id=&cid=db2548006ba044b09df5b6b5df7aacd4&masterId=03cc0395b649458081fb83355712a973"+lastURL)
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('div', "board_body").ul.li
     cId = "&cid=db2548006ba044b09df5b6b5df7aacd4"
     masterId = "&masterid=03cc0395b649458081fb83355712a973"
@@ -139,7 +128,7 @@ def agrilifesci():
 # 농생대 미래농업융합학부
 def cll():
     resp = requests.get('http://cll.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -151,7 +140,7 @@ def cll():
 # 농생대 바이오시스템기계공학전공
 def bse():
     resp = requests.get('http://bse.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -160,83 +149,11 @@ def bse():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 농생대 식품생명공학전공
-def foodtech():
-    resp = requests.get('http://foodtech.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 농생대 식물자원응용과학전공
-def appliedplant():
-    resp = requests.get('http://appliedplant.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 농생대 응용생물학전공
-def applybio():
-    resp = requests.get('http://applybio.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 농생대 원예과학전공
-def horti():
-    resp = requests.get('http://horti.kangwon.ac.kr/bbs/board.php?bo_table=sub5_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 농생대 농업자원경제학전공
-def agecon():
-    resp = requests.get('http://agecon.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 농생대 지역건설공학과
-def aed():
-    resp = requests.get('http://aed.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 농생대 바이오자원환경학전공
 def dbe():
     baseURL = "https://dbe.kangwon.ac.kr/dbe/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -253,7 +170,7 @@ def dbe():
 def ecoenv():
     baseURL = "https://ecoenv.kangwon.ac.kr/ecoenv/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -269,7 +186,7 @@ def ecoenv():
 # 동생대
 def anilifsci():
     resp = requests.get('http://cals.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -282,7 +199,7 @@ def anilifsci():
 # 동생대 동물산업융합학과
 def animal():
     resp = requests.get('http://animal.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -295,7 +212,7 @@ def animal():
 # 동생대 동물응용과학과
 def applanimalsci():
     resp = requests.get('http://applanimalsci.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -308,7 +225,7 @@ def applanimalsci():
 # 동생대 동물자원과학과
 def aniscience():
     resp = requests.get('http://aniscience.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -322,13 +239,13 @@ def aniscience():
 def ace():
     baseURL = "http://ace.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=4_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "bbs_list").tbody.tr
 
     while keyword.next_sibling != None:
         url = baseURL + keyword.a.get('href')
         resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('div', "bbs_view").dl.dt
         print(title.text, keyword.find('td', "dt").text)
         print(url)
@@ -339,7 +256,7 @@ def ace():
 def architecture():
     baseURL = "http://architecture.kangwon.ac.kr/nano/www/board/"
     resp = requests.get(baseURL+'list.php?bid_=comm_notice')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "left").parent
 
     while keyword != None:
@@ -356,7 +273,7 @@ def architecture():
 def archi():
     baseURL = "http://archi.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=4_1_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -373,7 +290,7 @@ def archi():
 def civil():
     baseURL = "http://civil.kangwon.ac.kr/2014/"
     resp = requests.get(baseURL+'index.php?mp=6_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -390,7 +307,7 @@ def civil():
 def environ():
     baseURL = "https://environ.kangwon.ac.kr/environ/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -407,7 +324,7 @@ def environ():
 def mechanical():
     baseURL = "http://mechanical.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=5_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -424,7 +341,7 @@ def mechanical():
 def mecha():
     baseURL = "https://mecha.kangwon.ac.kr/mecha/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -441,7 +358,7 @@ def mecha():
 def material():
     baseURL = "http://material.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=5_1_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -458,7 +375,7 @@ def material():
 def enre():
     baseURL = "http://www.enre.kr/"
     resp = requests.get(baseURL+'index.php?mt=page&mp=5_1&mm=oxbbs&oxid=1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -475,7 +392,7 @@ def enre():
 def sme():
     baseURL = "http://sme.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=5_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -492,7 +409,7 @@ def sme():
 def chemeng():
     baseURL = "http://chemeng.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mt=page&mp=5_1&mm=oxbbs&oxid=1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -509,7 +426,7 @@ def chemeng():
 def bioeng():
     baseURL = "http://bioeng.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=6_1_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -526,7 +443,7 @@ def bioeng():
 def design():
     baseURL = "https://design.kangwon.ac.kr/design/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -545,7 +462,7 @@ def design():
 def art():
     baseURL = "http://kangwonart.ac.kr"
     resp = requests.get(baseURL+'/wp/?page_id=1782')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', "kboard-list-notice")
 
     while keyword != None:
@@ -556,27 +473,11 @@ def art():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 문예대공대 스포츠과학과
-def sport():
-    baseURL = "http://sport.kangwon.ac.kr"
-    resp = requests.get('http://sport.kangwon.ac.kr/sub2/04.php')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('iframe')
-    resp = requests.get(baseURL+keyword.get('src').lstrip("."))
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('tr', "bo_notice")
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 문예대공대 영상문화학과
 def vculture():
     baseURL = "https://vculture.kangwon.ac.kr/vculture/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -593,10 +494,10 @@ def vculture():
 def educatio():
     baseURL = "http://educatio.kangwon.ac.kr/"
     resp = requests.get(baseURL+'sub04_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL + keyword.get('src').lstrip("."))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', align="center").table.next_sibling.next_sibling
     array = keyword.find_all('tr', align="center")
 
@@ -614,10 +515,10 @@ def educatio():
 def edu():
     baseURL = "http://edu.kangwon.ac.kr/new/"
     resp = requests.get(baseURL+'sub04_02.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL + keyword.get('src').lstrip("."))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     array = soup.find_all('td', align="left")
     date = soup.find_all('td', "text8")
 
@@ -630,10 +531,10 @@ def edu():
 def kedu():
     baseURL = "http://kedu.kangwon.ac.kr/"
     resp = requests.get(baseURL+'sub05_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('div', id="con").find('iframe')
     resp = requests.get(baseURL+keyword.get('src'))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     array = soup.find_all('td', "text_03")
     for i in range(0, len(array)):
         title = array[i]
@@ -652,7 +553,7 @@ def kedu():
 def history():
     baseURL = "http://history.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=5_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling != None:
@@ -669,7 +570,7 @@ def history():
 def engedu():
     baseURL = "http://engedu.kangwon.ac.kr/twb_bbs/"
     resp = requests.get(baseURL+'user_bbs_list.php?bcd=01_06_04_00_00')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('div', id="user_board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -684,10 +585,10 @@ def engedu():
 def ethicsedu():
     baseURL = "http://ethicsedu.kangwon.ac.kr/new/"
     resp = requests.get(baseURL+'sub06_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL+keyword.get('src'))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     #print(soup)
     array = soup.find_all('td', align="left")
     date = soup.find_all('td', "text8")
@@ -700,10 +601,10 @@ def ethicsedu():
 def ssedu():
     baseURL = "http://ssedu.kangwon.ac.kr/new/"
     resp = requests.get(baseURL+'sub02_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL + keyword.get('src'))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
 
     array = soup.find_all('td', align="left")
     date = soup.find_all('td', "text8")
@@ -715,7 +616,7 @@ def ssedu():
 # 사범대 지리교육과
 def geoedu():
     resp = requests.get('http://geoedu.kangwon.ac.kr/department/notice.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     array = soup.find_all('td', "text-left")
 
     for i in range(0, len(array)):
@@ -731,10 +632,10 @@ def geoedu():
 def ccedu():
     baseURL = "http://ccedu.kangwon.ac.kr/new/"
     resp = requests.get(baseURL+'sub03_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL + keyword.get('src'))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     # print(soup)
     array = soup.find_all('td', align="left")
     date = soup.find_all('td', "text8")
@@ -747,7 +648,7 @@ def ccedu():
 def homecs():
     baseURL = "http://homecs.kangwon.ac.kr/bbs/"
     resp = requests.get(baseURL+'zboard.php?id=bbs31&page=1&page_num=20&category=&sn=off&ss=on&sc=on&keyword=&prev_no=504&sn1=&divpage=1&select_arrange=headnum&desc=asc')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', "title").next_sibling.next_sibling
 
     while keyword != None:
@@ -762,10 +663,10 @@ def homecs():
 def sciedu():
     baseURL = "http://sciedu.kangwon.ac.kr/new/"
     resp = requests.get(baseURL+'sub02_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL + keyword.get('src'))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     # print(soup)
     array = soup.find_all('td', align="left")
     date = soup.find_all('td', "text8")
@@ -778,7 +679,7 @@ def sciedu():
 def mathedu():
     baseURL = "http://mathedu.kangwon.ac.kr/"
     resp = requests.get(baseURL+'main.php?mt=page&mp=3_1&mm=oxbbs&oxid=2')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', height="25")
 
     while keyword.next_sibling != None:
@@ -789,27 +690,11 @@ def mathedu():
         keyword = keyword.next_sibling.next_sibling.next_sibling
 
 
-# 사범대 체육교육과
-def phyedu():
-    baseURL = "http://phyedu.kangwon.ac.kr/"
-    resp = requests.get(baseURL+'sub5/03.php')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('iframe')
-    resp = requests.get(baseURL+keyword.get('src').lstrip("./"))
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 사과대
 def social():
     baseURL = "http://social.kangwon.ac.kr/bbs/"
     resp = requests.get(baseURL+'zboard.php?id=notice')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('td', "list_han3")
     date = soup.find_all('td', "list_eng3")
 
@@ -823,7 +708,7 @@ def social():
 def anthro():
     baseURL = "http://anthro.kangwon.ac.kr/bbs/"
     resp = requests.get(baseURL+'zboard.php?id=bbs41')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('td', "list_han3")
     date = soup.find_all('td', "list_eng3")
 
@@ -837,7 +722,7 @@ def anthro():
 def re():
     baseURL = "http://re1978.kangwon.ac.kr/bbs/"
     resp = requests.get(baseURL+'zboard.php?id=bbs41')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('td', "list_han3")
     date = soup.find_all('td', "list_eng3")
 
@@ -851,7 +736,7 @@ def re():
 def sociology():
     baseURL = "http://sociology.kangwon.ac.kr/bbs/"
     resp = requests.get(baseURL+'zboard.php?id=notice')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('td', "list_han3")
     date = soup.find_all('td', "list_eng3")
 
@@ -865,7 +750,7 @@ def sociology():
 def masscom():
     baseURL = "http://masscom.kangwon.ac.kr"
     resp = requests.get(baseURL+'/bbs/board.php?bo_table=sub3_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -880,15 +765,24 @@ def masscom():
 def politics():
     baseURL = "http://politics.kangwon.ac.kr"
     resp = requests.get(baseURL+'/bbs/board.php?bo_table=sub9_3')
-    soup = bs(resp.content, "html.parser")
-    print(soup)
+    soup = BeautifulSoup(resp.content, "html.parser")
+    keyword = soup.find('tr', "notice")
+
+    while keyword is not None:
+        resp = requests.get(baseURL+keyword.a.get('href').lstrip("."))
+        soup = BeautifulSoup(resp.content, "html.parser")
+        title = keyword.a
+        date = soup.find('div', "info").find('span', "date").text.split(" ")[1]
+        print(title.text, date)
+        print(baseURL+keyword.a.get('href').lstrip("."))
+        keyword = keyword.next_sibling.next_sibling
 
 
 # 사과대 행정학전공
 def padm():
     context = ssl._create_unverified_context()
     resp = urlopen('https://padm.kangwon.ac.kr:40592/bbs/board.php?bo_table=sub3_2', context=context)
-    soup = bs(resp.read(), "html.parser")
+    soup = BeautifulSoup(resp.read(), "html.parser")
     keyword = soup.find_all('li', "list-item")
 
     for i in range(0, len(keyword)):
@@ -908,7 +802,7 @@ def padm():
 def psych():
     baseURL = "http://psych.kangwon.ac.kr/gnuboard4"
     resp = requests.get(baseURL+'/bbs/board.php?bo_table=bbs41')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -919,22 +813,10 @@ def psych():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 산림대
-def forest():
-    resp = requests.get('http://forest.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 산림대 산림경영학전공
 def fm():
     resp = requests.get('http://fm.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -944,23 +826,11 @@ def fm():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 산림대 산림자원학전공
-def forestry():
-    resp = requests.get('http://forestry.kangwon.ac.kr/bbs/board.php?bo_table=sub04_01')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 산림대 산림환경보호학전공
 def fep():
     baseURL = "http://fep.kangwon.ac.kr/"
     resp = requests.get(baseURL+'bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -968,19 +838,6 @@ def fep():
         date = keyword.find('td', "datetime")
         print(title.text.strip(), date.text)
         print(baseURL + title.get('href').lstrip("."))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 산림대 산림소재공학전공
-def wood():
-    context = ssl._create_unverified_context()
-    resp = urlopen('https://wood.kangwon.ac.kr/bbs/board.php?bo_table=sub07_1', context=context)
-    soup = bs(resp.read(), "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
 
@@ -989,7 +846,7 @@ def paper():
     baseURL = "https://paper.kangwon.ac.kr/board"
     context = ssl._create_unverified_context()
     resp = urlopen(baseURL+'/bbs/board.php?bo_table=sub03_1', context=context)
-    soup = bs(resp.read(), "html.parser")
+    soup = BeautifulSoup(resp.read(), "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -1000,25 +857,11 @@ def paper():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 산림대 생태조경디자인학과
-def lands():
-    resp = requests.get('http://lands.kangwon.ac.kr/bbs/board.php?bo_table=sub03_01')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('tr', "bo_notice")
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date narrow_view")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 수의과
 def vetmed():
     baseURL = "http://vetmed.kangwon.ac.kr"
     resp = requests.get(baseURL+'/bbs/board.php?bo_table=sub07_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
 
@@ -1030,25 +873,11 @@ def vetmed():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 약대
-def pharmacy():
-    resp = requests.get('http://pharmacy.kangwon.ac.kr/bbs/board.php?bo_table=sub02_05')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 간호대
 def nurse():
     baseURL = "https://nurse.kangwon.ac.kr/nurse/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -1061,108 +890,10 @@ def nurse():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 의생대
-def bm():
-    resp = requests.get('http://bmcollege.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 의생대 분자생명과학과
-def molscien():
-    resp = requests.get('http://molscien.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 의생대 생명건강공학과
-def biohealth():
-    resp = requests.get('http://bio-health.kangwon.ac.kr/bbs/board.php?bo_table=sub04_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 의생대 생물의소재공학과
-def bme():
-    resp = requests.get('http://bme.kangwon.ac.kr/bbs/board.php?bo_table=sub04_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 의생대 의생명융합학부
-def bmc():
-    resp = requests.get('http://bmc.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 의생대 시스템면역과학전공
-def si():
-    resp = requests.get('http://si.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 의생대 의생명공학전공
-def dmbt():
-    resp = requests.get('http://dmbt.kangwon.ac.kr/bbs/board.php?bo_table=sub07_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('table', "table table-striped").tbody.tr
-
-    while keyword != None:
-        title = keyword.find('td', "td_subject").a
-        date = keyword.find('td', "td_date")
-        print(title.text.strip(), date.text)
-        print(title.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 인문대
 def humanities():
     resp = requests.get('http://humanities.kangwon.ac.kr/sub04_01.php')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('table', align="center")
 
     for i in range(5, len(keyword)-2):
@@ -1182,7 +913,7 @@ def humanities():
 def korean():
     baseURL = "http://korean.kangwon.ac.kr/2013"
     resp = requests.get(baseURL+'/bbs/board.php?bo_table=sub05_01')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('tr', align="center")
     for i in range(1, len(keyword)):
         title = keyword[i].find('td', align="left").a
@@ -1191,23 +922,11 @@ def korean():
         print(baseURL+title.get('href').lstrip("."))
 
 
-# 인문대 영어영문학전공
-def english():
-    resp = requests.get('http://english.kangwon.ac.kr/new/board/bbs/board.php?bo_table=info')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 인문대 불어불문학과
 def france():
     baseURL = "http://france.kangwon.ac.kr"
     resp = requests.get(baseURL+'/?doc=bbs/board.php&bo_table=gongi')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find_all('tr', align="center")
 
     for i in range(0, len(keyword)):
@@ -1217,42 +936,10 @@ def france():
         print(baseURL+title.get('href').lstrip("."))
 
 
-# 인문대 독어독문학전공
-def german():
-    resp = requests.get('http://german.kangwon.ac.kr/bbs/board.php?bo_table=notice')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        title = keyword.a
-        date = keyword.find('td', "td_date")
-        num = 0
-        if title.find('span') != None:
-            temp = title.find('span', "sound_only")
-            num = len(temp.text)*3 + len(temp.next_sibling.text) + len(temp.next_sibling.next_sibling.text)*3
-        length = len(title.text) - num
-        title = title.text[:length]
-        print(title.strip(), date.text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
-# 인문대 중어중문학전공
-def chinese():
-    resp = requests.get('http://chinese.kangwon.ac.kr/bbs/board.php?bo_table=sub5_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 인문대 일본학전공
 def japan():
     resp = requests.get('http://www.kw-japan.com/bbs/board.php?bo_table=4_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "td_subject").parent
 
     while keyword != None:
@@ -1266,10 +953,10 @@ def japan():
 def philo():
     baseURL = "http://kwphilo.kangwon.ac.kr"
     resp = requests.get('http://kwphilo.kangwon.ac.kr/sub05_01.htm')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('iframe')
     resp = requests.get(baseURL+keyword.get('src').lstrip("."))
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -1280,23 +967,11 @@ def philo():
         keyword = keyword.next_sibling.next_sibling
 
 
-# 인문대 사학전공
-def histo():
-    resp = requests.get('http://knuhisto.kangwon.ac.kr/bbs/board.php?bo_table=sub7_1')
-    soup = bs(resp.content, "html.parser")
-    keyword = soup.find('td', "td_subject").parent
-
-    while keyword != None:
-        print(keyword.a.text.strip(), keyword.find('td', "td_date").text)
-        print(keyword.a.get('href'))
-        keyword = keyword.next_sibling.next_sibling
-
-
 # 자연대 물리학과
 def physics():
     baseURL = "http://physics.bluechips.co.kr"
     resp = requests.get(baseURL+'/sub46')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', "notice")
 
     while keyword != None:
@@ -1313,7 +988,7 @@ def physics():
 def biology():
     baseURL = "https://biology.kangwon.ac.kr/biology/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -1329,7 +1004,7 @@ def biology():
 # 자연대 수학과
 def math():
     resp = requests.get('http://math.kangwon.ac.kr/xe/notice')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', "notice")
 
     while keyword != None:
@@ -1346,7 +1021,7 @@ def math():
 def geophysics():
     baseURL = "https://geophysics.kangwon.ac.kr/geophysics/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -1363,7 +1038,7 @@ def geophysics():
 def geology():
     baseURL = "https://geology.kangwon.ac.kr/geology/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
     while keyword.next_sibling.next_sibling != None:
         array = keyword.find_all('td')
@@ -1378,7 +1053,7 @@ def geology():
 def biochem():
     baseURL = "https://biochem.kangwon.ac.kr/biochem/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -1395,7 +1070,7 @@ def biochem():
 def chemis():
     baseURL = "http://chemis.kangwon.ac.kr/board"
     resp = requests.get(baseURL+'/bbs/board.php?bo_table=chemis_table04')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "board_list").tr.next_sibling.next_sibling
 
     while keyword != None:
@@ -1410,7 +1085,7 @@ def chemis():
 def it():
     baseURL = "http://it.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=4_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "bbs_list").tbody.tr
 
     while keyword.next_sibling != None:
@@ -1425,7 +1100,7 @@ def it():
 def eee():
     baseURL = "https://eee.kangwon.ac.kr/eee/"
     resp = requests.get(baseURL+'bbs_list.php?code=sub07a&keyvalue=sub07')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('td', "text-center hidden-xs").parent
 
     while keyword != None:
@@ -1442,7 +1117,7 @@ def eee():
 def ee():
     baseURL = "http://ee.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=5_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "bbs_list").tbody.tr
 
     while keyword.next_sibling != None:
@@ -1458,13 +1133,13 @@ def ee():
 def cse():
     baseURL = "https://cse.kangwon.ac.kr/"
     resp = requests.get(baseURL+'index.php?mp=5_1_1')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('table', "bbs_list").tbody.tr
 
     while keyword.next_sibling != None:
         url = baseURL+keyword.a.get('href')
         resp = requests.get(url)
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('div', "bbs_view").dl.dt
         print(title.text, keyword.find('td', "dt").text)
         print(url)
@@ -1472,99 +1147,131 @@ def cse():
 
 
 if __name__ == '__main__':
-    #cba()
-    #biz()
-    #account()
-    #economics()
-    #statistics()
-    #tourism()
-    #itb()
-    #agrilifesci()
-    #cll()          <-
-    #bse()          <- url제외 코드 똑같음
-    #foodtech()     <- datetime -> date 제외 똑같음
-    #appliedplant() <- datetime -> date 제외 똑같음
-    #applybio()     <- datetime -> date 제외 똑같음
-    #horti()        <- datetime -> date 제외 똑같음
-    #agecon()       <- datetime -> date 제외 똑같음
-    #aed()          <- datetime -> date 제외 똑같음
-    #dbe()                                                                  <-
-    #ecoenv()                                                               <-
-    #anilifsci()        <-
-    #animal()           <-
-    #applanimalsci()    <-
-    #aniscience()       <- url제외 코드 똑같음
-    #ace()                  <- 컴공이랑 url제외 코드 똑같음
-    #architecture()
-    #archi()                    <-
-    #civil()                    <-
-    #environ()                                                              <-
-    #mechanical()               <-
-    #mecha()                                                                <-
-    #material()                 <-
-    #enre()                     <-
-    #sme()                      <-
-    #chemeng()                  <-
-    #bioeng()                   <-
-    #design()                                                               <-
-    #art()
-    #sport()       <- datetime -> date 제외 똑같음
-    #vculture()                                                             <-
-    #educatio()
-    #edu()
-    #kedu()
-    #history()                  <- url제외 코드 똑같음
-    #engedu()
-    #ethicsedu()                    <-
-    #ssedu()                        <-
-    #geoedu()
-    #ccedu()                        <-
-    #homecs()
-    #sciedu()                       <- url제외 코드 똑같음
-    #mathedu()
-    #phyedu()
-    #social()                           <-
-    #anthro()                           <- url 제외 코드 똑같음
-    #re()                               <- i+, url 제외 코드 똑같음
-    #sociology()                        <- i+, url 제외 코드 똑같음
-    #masscom()                              <-
-    #politics() <- 미완
-    #padm()
-    #psych()                                <- url 제외 코드 똑같음
-    #forest()        <- datetime -> date 제외 코드 똑같음
-    #fm()               <- url 제외 코드 똑같음
-    #forestry()     <- datetime -> date 제외 코드 똑같음
-    #fep()                                          <-
-    #wood()         <- url, soup, datetime -> date 제외 코드 똑같음
-    #paper()                                        <- url, soup 제외 코드 똑같음
-    #lands()
-    #vetmed()       <- biz와 매우 비슷
-    #pharmacy()     <- cba와 매우 비슷
-    #nurse()                                                                <-
-    #bm()           <- pharmacy와 url제외 코드 똑같음
-    #molscien()     <- bm과 url 제외 코드 똑같음
-    #biohealth()    <- bm과 url 제외 코드 똑같음
-    #bme()          <- bm과 url 제외 코드 똑같음
-    #bmc()          <- bm과 url 제외 코드 똑같음
-    #si()           <- bm과 url 제외 코드 똑같음
-    #dmbt()         <- bm과 url 제외 코드 똑같음
-    #humanities()
-    #korean() <- some character 오류 "..." 때문인 듯
-    #english()      <- datetime -> date 제외 코드 똑같음
-    #france()
-    #german()       <- 베이스만 가져옴
-    #chinese()      <- datetime -> date 제외 코드 똑같음
-    #japan()            <- url 제외 코드 똑같음
-    #philo()
-    #histo()         <- datetime -> date 제외 코드 똑같음
-    #physics()                                                              <- find, url 제외 코드 똑같음
-    #biology()                                                              <-
-    #math()                                                                 <- find, url 제외 코드 똑같음
-    #geophysics()                                                           <-
-    #geology()
-    #biochem()                                                              <-
-    #chemis()
-    #it()
-    #eee()                                                                  <- url 제외 코드 똑같음
-    #ee()
-    #cse()
+    # 경영대
+    cbaurl = "http://cba.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1"
+    # 경제학전공
+    economicsurl = "http://economics.kangwon.ac.kr/bbs/board.php?bo_table=sub07_1"
+    # 관광경영학과
+    tourismurl = "http://tourism.kangwon.ac.kr/bbs/board.php?bo_table=notice"
+    # 식품생명공학과
+    foodtechurl = "http://foodtech.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 식물자원응용과학전공
+    appliedplanturl = "http://appliedplant.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 응용생물학전공
+    applybiourl = "http://applybio.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 원예과학전공
+    hortiurl = "http://horti.kangwon.ac.kr/bbs/board.php?bo_table=sub5_1"
+    # 농업자원경제학과
+    ageconurl = "http://agecon.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 지역건설공학과
+    aedurl = "http://aed.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 산림대
+    foresturl = "http://forest.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1"
+    # 산림자원학전공
+    forestryurl = "http://forestry.kangwon.ac.kr/bbs/board.php?bo_table=sub04_01"
+    # 산림소재공학전공
+    woodurl = "https://wood.kangwon.ac.kr/bbs/board.php?bo_table=sub07_1"
+    # 생태조경디자인학과
+    landsurl = "http://lands.kangwon.ac.kr/bbs/board.php?bo_table=sub03_01"
+    # 약대
+    pharmacyurl = "http://pharmacy.kangwon.ac.kr/bbs/board.php?bo_table=sub02_05"
+    # 의생대
+    bmurl = "http://bmcollege.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 분자생명과학과
+    molscienurl = "http://molscien.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 생명건강공학과
+    biohealthurl = "http://bio-health.kangwon.ac.kr/bbs/board.php?bo_table=sub04_1"
+    # 생물의소재공학과
+    bmeurl = "http://bme.kangwon.ac.kr/bbs/board.php?bo_table=sub04_1"
+    # 의생명융합학부
+    bmcurl = "http://bmc.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1"
+    # 시스템면역과학전공
+    siurl = "http://si.kangwon.ac.kr/bbs/board.php?bo_table=sub05_1"
+    # 의생명공학전공
+    dmbturl = "http://dmbt.kangwon.ac.kr/bbs/board.php?bo_table=sub07_1"
+    # 영어영문학전공
+    englishurl = "http://english.kangwon.ac.kr/new/board/bbs/board.php?bo_table=info"
+    # 독어독문학전공
+    germanurl = "http://german.kangwon.ac.kr/bbs/board.php?bo_table=notice"
+    # 중어중문학전공
+    chineseurl = "http://chinese.kangwon.ac.kr/bbs/board.php?bo_table=sub5_1"
+    # 사학전공
+    histourl = "http://knuhisto.kangwon.ac.kr/bbs/board.php?bo_table=sub7_1"
+    # 체육교육과
+    # cba(callreq('http://phyedu.kangwon.ac.kr/', 'sub5/03.php'), "req")
+    # 스포츠과학과
+    # cba(callreq('http://sport.kangwon.ac.kr', '/sub2/04.php'), "req")
+
+
+
+
+    itburl = "http://itb.kangwon.ac.kr/bbs/board.php?bo_table=notice"
+    # biz(callbs('http://biz.kangwon.ac.kr/', 'bbs/board.php?bo_table=sub06_1'))
+    # account()
+    # statistics()
+    # itb()
+    # agrilifesci()
+    # cll()          <-
+    # bse()          <- url제외 코드 똑같음
+    # dbe()                                                                  <-
+    # ecoenv()                                                               <-
+    # anilifsci()        <-
+    # animal()           <-
+    # applanimalsci()    <-
+    # aniscience()       <- url제외 코드 똑같음
+    # ace()                  <- 컴공이랑 url제외 코드 똑같음
+    # architecture()
+    # archi()                    <-
+    # civil()                    <-
+    # environ()                                                              <-
+    # mechanical()               <-
+    # mecha()                                                                <-
+    # material()                 <-
+    # enre()                     <-
+    # sme()                      <-
+    # chemeng()                  <-
+    # bioeng()                   <-
+    # design()                                                               <-
+    # art()
+    # vculture()                                                             <-
+    # educatio()
+    # edu()
+    # kedu()
+    # history()                  <- url제외 코드 똑같음
+    # engedu()
+    # ethicsedu()                    <-
+    # ssedu()                        <-
+    # geoedu()
+    # ccedu()                        <-
+    # homecs()
+    # sciedu()                       <- url제외 코드 똑같음
+    # mathedu()
+    # social()                           <-
+    # anthro()                           <- url 제외 코드 똑같음
+    # re()                               <- i+, url 제외 코드 똑같음
+    # sociology()                        <- i+, url 제외 코드 똑같음
+    # masscom()                              <-
+    # politics()
+    # padm()
+    # psych()                                <- url 제외 코드 똑같음
+    # fm()               <- url 제외 코드 똑같음
+    # fep()                                          <-
+    # paper()                                        <- url, soup 제외 코드 똑같음
+    # vetmed()       <- biz와 매우 비슷
+    # nurse()                                                                <-
+    # humanities()
+    # korean() <- some character 오류 "..." 때문인 듯
+    # france()
+    # japan()            <- url 제외 코드 똑같음
+    # philo()
+    # physics()                                                              <- find, url 제외 코드 똑같음
+    # biology()                                                              <-
+    # math()                                                                 <- find, url 제외 코드 똑같음
+    # geophysics()                                                           <-
+    # geology()
+    # biochem()                                                              <-
+    # chemis()
+    # it()
+    # eee()                                                                  <- url 제외 코드 똑같음
+    # ee()
+    # cse()
