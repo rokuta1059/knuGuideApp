@@ -1,30 +1,103 @@
-cba 경영대
-economics 경제학전공
-tourism 관광경영학과
-foodtech 식품생명공학과
-appliedplant 식물자원응용과학전공
-applybio 응용생물학전공
-horti 원예과학전공
-agecon 농업자원경제학과
-aed 지역건설공학과
-sport 스포츠과학과
-phyedu 체육교육과
-forest 산림대
-forestry 산림자원학전공
-wood 산림소재공학전공
-lands 생태조경디자인학과
-pharmacy 약대
-bm 의생대
-molscien 분자생명과학과
-biohealth 생명건강공학과
-bme 생물의소재공학과
-bmc 의생명융합학부
-si 시스템면역과학전공
-dmbt 의생명공학전공
-english 영어영문학과
-german 독어독문학전공
-chinese 중어중문학전공
-histo 사학전공
+cba { 
+	cba 경영대
+	economics 경제학전공
+	tourism 관광경영학과
+	foodtech 식품생명공학과
+	appliedplant 식물자원응용과학전공
+	applybio 응용생물학전공
+	horti 원예과학전공
+	agecon 농업자원경제학과
+	aed 지역건설공학과
+	sport 스포츠과학과
+	phyedu 체육교육과
+	forest 산림대
+	forestry 산림자원학전공
+	wood 산림소재공학전공
+	lands 생태조경디자인학과
+	pharmacy 약대
+	bm 의생대
+	molscien 분자생명과학과
+	biohealth 생명건강공학과
+	bme 생물의소재공학과
+	bmc 의생명융합학부
+	si 시스템면역과학전공
+	dmbt 의생명공학전공
+	english 영어영문학과
+	german 독어독문학전공
+	chinese 중어중문학전공
+	histo 사학전공
+}
 
+biz {
+	biz 경영학전공
+	fep 산림환경보호학전공
+	paper 제지공학전공
+	vetmed 수의과
+}
 
-정치외교학과 안함
+cll {
+	cll 미래농업융합학부
+	bse 바이오시스템기계공학전공
+	anilifsci 동생대
+	animal 동물산업융합학과
+	applanimalsci 동물응용과학과
+	aniscience 동물자원과학과
+	fm 산림경영학전공
+	japan 일본학전공
+}
+
+dbe {
+	dbe 바이오자원환경학전공
+	ecoenv 에코환경과학전공
+	environ 환경공학전공
+	mecha 메카트로닉스공학전공
+	design 디자인학과
+	vculture 영상문화학과
+	nurse 간호대
+	biology 생명과학과
+	geophysics 지구물리학전공
+	geology 지질학전공
+	biochem 생화학전공
+	eee 전기전자공학과
+}
+
+archi {
+	archi 건축공학전공
+	civil 토목공학전공
+	mechanical 기계의용공학전공
+	material 재료공학전공
+	enre 에너지자원공학전공
+	sme 산업공학전공
+	chemeng 화학공학전공
+	bioeng 생물공학전공
+	history 역사교육과
+}
+
+edu {
+	edu 교육학과
+	ethicsedu 윤리교육과
+	ssedu 일반사회교육과
+	ccedu 한문교육과
+	sciedu 과학교육학부
+}
+
+social {
+	social 사과대
+	anthro 문화인류학과
+	re 부동산학과
+	sociology 사회학과
+}
+
+masscom {
+	statistics 정보통계학전공
+	masscom 신문방송학과
+	psych 심리학전공
+	philo 철학전공
+	chemis 화학전공
+}
+
+it {
+	ace 문예대공대
+	it it대
+	ee 전자공학과
+	cse 컴퓨터공학과
