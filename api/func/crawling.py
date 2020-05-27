@@ -205,11 +205,11 @@ def edu(soup):
 
     arr = soup.find_all('td', align="left")
     for i in range(0, len(arr) - 2):
-        url = arr[i].a.get('href').lstrip("./")
+        url = arr[i].a.get('href').lstrip(".")
         soup = callreq(baseurl, url)
-        arr = soup.find_all('span', "text_bold888")
-        date = arr[1].next_sibling.next_sibling.text.split("조회")[0]
-        print(arr[i].text.strip(), date.strip())
+        date = soup.find_all('span', "text_bold888")
+        datetext = date[1].next_sibling.next_sibling.text.split("조회")[0]
+        print(arr[i].text.strip(), datetext.strip())
         print(baseurl + url)
 
 
@@ -750,9 +750,11 @@ if __name__ == '__main__':
     cseurl = ["https://cse.kangwon.ac.kr/", "index.php?mp=5_1_1"]
     # it(callreq(cseurl[0], cseurl[1]))
 
+    # 경영대 회계학전공
     accounturl = "http://account.kangwon.ac.kr/bbs/board.php?bo_table=notice"
     # account(callreq('', accounturl))
 
+    # 경영대 국제무역학과
     itburl = "http://itb.kangwon.ac.kr/bbs/board.php?bo_table=notice"
     # itb(callreq('', itburl))
 
@@ -793,7 +795,7 @@ if __name__ == '__main__':
     matheduurl = ["http://mathedu.kangwon.ac.kr/", "main.php?mt=page&mp=3_1&mm=oxbbs&oxid=2"]
     # mathedu(callreq(matheduurl[0], matheduurl[1]))
 
-    # 사과대 정치외교학과
+    # 사과대 정치외교학과        <- some character error
     politicsurl = ["http://politics.kangwon.ac.kr", "/bbs/board.php?bo_table=sub9_3"]
     # politics(callreq(politicsurl[0], politicsurl[1]))
 
@@ -805,7 +807,7 @@ if __name__ == '__main__':
     humanitiesurl = "http://humanities.kangwon.ac.kr/sub04_01.php"
     # humanities(callreq('', humanitiesurl))
 
-    # 인문대 국어국문학전공
+    # 인문대 국어국문학전공       <- some character error
     koreanurl = ["http://korean.kangwon.ac.kr/2013", "/bbs/board.php?bo_table=sub05_01"]
     # korean(callreq(koreanurl[0], koreanurl[1]))
 
