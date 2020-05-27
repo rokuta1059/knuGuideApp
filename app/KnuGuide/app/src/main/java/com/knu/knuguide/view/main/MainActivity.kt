@@ -11,6 +11,7 @@ import com.knu.knuguide.view.KNUActivityCollapse
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
+import com.knu.knuguide.view.speech.SpeechTestActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.knu_appbar_collapse.*
@@ -39,6 +40,9 @@ class MainActivity : KNUActivityCollapse() {
                 }
                 R.id.calender -> {
                     navigateTo(CalendarActivity::class.java, null)
+                }
+                R.id.speech -> {
+                    navigateTo(SpeechTestActivity::class.java, null)
                 }
             }
             true
