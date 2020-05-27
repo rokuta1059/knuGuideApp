@@ -10,15 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.calendar.KNUDay
+import com.knu.knuguide.support.KNUAdapterListener
 import kotlinx.android.synthetic.main.item_day.view.*
 
-class CalendarAdapter(val context: Context, items: ArrayList<KNUData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var items: ArrayList<KNUData> = items
+class CalendarAdapter(
+    private val context: Context,
+    private var items: ArrayList<KNUData>,
+    private val listener: KNUAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
-        var holder: RecyclerView.ViewHolder? = null
+        lateinit var holder: RecyclerView.ViewHolder
+
         when (viewType) {
             KNUData.Type.ITEM_DAY_EMPTY -> {
                 val view = inflater.inflate(R.layout.item_day_empty, parent, false)
@@ -26,21 +29,32 @@ class CalendarAdapter(val context: Context, items: ArrayList<KNUData>) : Recycle
             }
             KNUData.Type.ITEM_DAY -> {
                 val view = inflater.inflate(R.layout.item_day, parent, false)
-                holder = DayViewHolder(view, context)
+                holder = DayViewHolder(view)
             }
         }
-        return holder!!
+        return holder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
         when (item.getRecyclerType()) {
-            KNUData.Type.ITEM_DAY_EMPTY -> {
-                (holder as EmptyDayViewHolder).bind()
-            }
-            KNUData.Type.ITEM_DAY -> {
-                (holder as DayViewHolder).bind(item as KNUDay)
-            }
+            KNUData.Type.ITEM_DAY_EMPTY -> bind()
+            KNUData.Type.ITEM_DAY -> bindDayViewHolder(holder as DayViewHolder, item as KNUDay)
+        }
+    }
+
+    private fun bind() {}
+
+    private fun bindDayViewHolder(holder: DayViewHolder, day: KNUDay) {
+        holder.itemView.tv_day.text = day.day.toString()
+
+        if (day.includeInSchedule) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_day_background_includeInSchedule))
+            holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_includeInSchedule_weekday))
+        }
+        else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_day_background_default))
+            holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_default_weekday))
         }
     }
 
@@ -50,28 +64,16 @@ class CalendarAdapter(val context: Context, items: ArrayList<KNUData>) : Recycle
 
     override fun getItemCount(): Int { return items.size }
 
+    fun getItems(): ArrayList<KNUData> {
+        return items
+    }
+
     fun setItems(items: ArrayList<KNUData>) {
         this.items = items
     }
 
-    class EmptyDayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind() {}
-    }
-
-    class DayViewHolder(itemView: View, val context: Context) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: KNUDay) {
-            itemView.tv_day.text = item.day.toString()
-            if (item.isWeekEnd) {
-                itemView.tv_day.setTextColor(Color.RED)
-            }
-            else {
-                itemView.tv_day.setTextColor(Color.BLACK)
-            }
-
-            if (item.getTask().size > 0)
-                itemView.tv_day.background = ContextCompat.getDrawable(context, R.drawable.border_circle)
-            else
-                itemView.tv_day.background = null
-        }
-    }
+    // 빈 공간 ViewHolder
+    class EmptyDayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
+    // 일 (Day) ViewHolder
+    class DayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 }

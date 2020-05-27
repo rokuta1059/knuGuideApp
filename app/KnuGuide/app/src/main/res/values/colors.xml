@@ -8,4 +8,17 @@
     <color name="preview_announcement_divider">#808080</color>
 
     <color name="cal_header_title">#003B87</color>
+
+    <!-- 학사일정 상세일정 -->
+    <color name="item_task_background_default">#FFFFFF</color>
+    <color name="item_task_text_default">#000000</color>
+    <color name="item_task_background_select">#003B87</color>
+    <color name="item_task_text_select">#FFFFFF</color>
+    <!-- 학사일정 캘린더 -->
+    <color name="item_day_background_default">#00ff0000</color>
+    <color name="item_day_text_default_weekday">#000000</color>
+    <color name="item_day_text_default_weekend">#F44336</color>
+    <color name="item_day_background_includeInSchedule">#5CBEFF</color>
+    <color name="item_day_text_includeInSchedule_weekday">#FFFFFF</color>
+    <color name="item_day_text_includeInSchedule_weekend">#FFFFFF</color>
 </resources>

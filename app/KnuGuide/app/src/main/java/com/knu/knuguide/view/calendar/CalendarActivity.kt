@@ -2,7 +2,9 @@ package com.knu.knuguide.view.calendar
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.knu.knuguide.R
@@ -10,6 +12,7 @@ import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.support.FastClickPreventer
+import com.knu.knuguide.support.KNUAdapterListener
 import com.knu.knuguide.support.Utils
 import com.knu.knuguide.view.KNUActivityCollapse
 import com.knu.knuguide.view.adapter.CalendarAdapter
@@ -23,12 +26,13 @@ import kotlinx.android.synthetic.main.knu_appbar_collapse.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CalendarActivity : KNUActivityCollapse() {
+class CalendarActivity : KNUActivityCollapse(), KNUAdapterListener {
     private val faskClickPreventer = FastClickPreventer()
 
     // 1월 ~ 12월까지 day 정보를 저장할 Map Collection
     var cal_maps = HashMap<Int, ArrayList<KNUData>>()
     var task_maps = HashMap<String, ArrayList<KNUData>>()
+
     var calendar = GregorianCalendar()
 
     lateinit var adapter: CalendarAdapter
@@ -45,11 +49,11 @@ class CalendarActivity : KNUActivityCollapse() {
         initCalHeaders(calendar.get(Calendar.YEAR))
         initCalMaps(calendar.get(Calendar.YEAR))
 
-        adapter = CalendarAdapter(this, cal_maps[1]!!) // Default: 1월 달력
+        adapter = CalendarAdapter(this, cal_maps[1]!!, this) // Default: 1월 달력
         rv_calendar.layoutManager = StaggeredGridLayoutManager(7, StaggeredGridLayoutManager.VERTICAL) // 요일 수만큼
         rv_calendar.adapter = adapter
 
-        taskAdapter = CalendarTaskAdapter(this, task_maps["20205"]!!)
+        taskAdapter = CalendarTaskAdapter(this, task_maps["20205"]!!, this)
         rv_task.layoutManager = LinearLayoutManager(this)
         rv_task.adapter = taskAdapter
         rv_task.addItemDecoration(PreviewAnnouncementDecor(this, 1F))
@@ -123,19 +127,6 @@ class CalendarActivity : KNUActivityCollapse() {
                 dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j, isWeekEnd))
             }
 
-            if (!task_maps["${calByMonth.get(Calendar.YEAR)}$i"].isNullOrEmpty()) {
-                task_maps["${calByMonth.get(Calendar.YEAR)}$i"]!!.iterator().forEach {
-                    val t = it as Task
-                    val startDay = t.getStartDay(i)
-                    val endDay = t.getEndDay(i)
-
-                    if (endDay == -1)
-                        (dayList[dayOfWeek + startDay - 1] as KNUDay).addTask(t)
-                    else
-                        for (date in startDay..endDay)
-                            (dayList[dayOfWeek + date - 1] as KNUDay).addTask(t)
-                }
-            }
             cal_maps[i] = dayList
         }
     }
@@ -149,6 +140,35 @@ class CalendarActivity : KNUActivityCollapse() {
         taskList.add(Task(Utils.getDate(2020, 5, 20), Utils.getDate(2020,5,22), "계절학기 수강신청"))
 
         task_maps["20205"] = taskList
+    }
+
+    override fun onCalendarTaskItemClick(task: Task, isUnchecked: Boolean): Boolean {
+        if (!faskClickPreventer.isClickable())
+            return false
+
+        val dayList: ArrayList<KNUDay> = adapter.getItems() as ArrayList<KNUDay>
+        dayList.iterator().forEach { it.includeInSchedule = false }
+
+        if (!isUnchecked) {
+            val startDay = task.getStartDay(tab_months.selectedTabPosition + 1)
+            val endDay = task.getEndDay(tab_months.selectedTabPosition + 1)
+
+            var count = 0
+            while (dayList[count].getRecyclerType() == KNUData.Type.ITEM_DAY_EMPTY)
+                count++
+
+            if (endDay == -1) {
+                dayList[count + startDay - 1].includeInSchedule = true
+            }
+            else {
+                for (range in startDay..endDay) {
+                    dayList[count + range - 1].includeInSchedule = true
+                }
+            }
+        }
+        adapter.notifyDataSetChanged()
+
+        return true
     }
 
     override fun getKNUID(): String {

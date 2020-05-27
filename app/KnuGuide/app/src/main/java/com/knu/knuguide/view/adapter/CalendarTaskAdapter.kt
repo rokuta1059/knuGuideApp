@@ -1,37 +1,60 @@
 package com.knu.knuguide.view.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
-import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.data.calendar.Task
+import com.knu.knuguide.support.KNUAdapterListener
 import kotlinx.android.synthetic.main.item_task.view.*
 
-class CalendarTaskAdapter(val context: Context, items: ArrayList<KNUData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CalendarTaskAdapter(
+    private val context: Context,
+    private var items: ArrayList<KNUData>,
+    private val listener: KNUAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items: ArrayList<KNUData> = items
+    private var selectedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
-        var holder: RecyclerView.ViewHolder? = null
-        when (viewType) {
-            KNUData.Type.ITEM_TASK -> {
-                val view = inflater.inflate(R.layout.item_task, parent, false)
-                holder = CalendarTaskHolder(view, context)
-            }
-        }
-        return holder!!
+        val view = inflater.inflate(R.layout.item_task, parent, false)
+
+        return CalendarTaskViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
-        when (item.getRecyclerType()) {
-            KNUData.Type.ITEM_TASK -> {
-                (holder as CalendarTaskHolder).bind(item as Task)
+
+        bindCalendarTaskHolder(holder as CalendarTaskViewHolder, item as Task, position)
+    }
+
+    private fun bindCalendarTaskHolder(holder: CalendarTaskViewHolder, task: Task, position: Int) {
+        holder.itemView.tv_dateRanges.text = task.getDateRangeText()
+        holder.itemView.tv_content.text = task.content
+
+        if (selectedPosition == position) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_task_background_select))
+            holder.itemView.tv_dateRanges.setTextColor(ContextCompat.getColor(context, R.color.item_task_text_select))
+            holder.itemView.tv_content.setTextColor(ContextCompat.getColor(context, R.color.item_task_text_select))
+        }
+        else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_task_background_default))
+            holder.itemView.tv_dateRanges.setTextColor(ContextCompat.getColor(context, R.color.item_task_text_default))
+            holder.itemView.tv_content.setTextColor(ContextCompat.getColor(context, R.color.item_task_text_default))
+        }
+
+        holder.itemView.setOnClickListener {
+            // Clickable 하다면
+            if (listener.onCalendarTaskItemClick(task, selectedPosition == position)) {
+                // RecyclerView Holder 업데이트
+                notifyItemChanged(selectedPosition)
+                selectedPosition = if (selectedPosition == position) -1 else position
+                notifyItemChanged(selectedPosition)
             }
         }
     }
@@ -48,10 +71,5 @@ class CalendarTaskAdapter(val context: Context, items: ArrayList<KNUData>) : Rec
         this.items = items
     }
 
-    class CalendarTaskHolder(itemView: View, val context: Context) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Task) {
-            itemView.tv_dateRanges.text = item.getDateRangeText()
-            itemView.tv_content.text = item.content
-        }
-    }
+    class CalendarTaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 }
