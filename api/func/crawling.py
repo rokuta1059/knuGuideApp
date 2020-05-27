@@ -24,6 +24,16 @@ def callurl(base, url):
     return soup
 
 
+def numbering(num):
+    compare = num[0:1]
+    if num == '':
+        num = '공지'
+    elif (ord(compare) >= 65 and ord(compare) <= 90) \
+            or (ord(compare) >= 97 and ord(compare) <= 122):
+        num = '공지'
+    return num
+
+
 # 학과 통합
 def cba(soup, callsign):
     if soup.find('iframe') is not None:
@@ -32,6 +42,8 @@ def cba(soup, callsign):
 
     while keyword is not None:
         url = keyword.find('td', "td_subject").a.get('href')
+        number = keyword.find('td', 'td_num').text.strip()
+        number = numbering(number)
         if callsign == "url":
             soup = callurl('', url)
         elif callsign == "req":
@@ -39,7 +51,7 @@ def cba(soup, callsign):
         title = soup.find('h1', id="bo_v_title")
         date = soup.find('section', id="bo_v_info").find_all('strong')[1]
         datetext = "20"+date.text.split(" ")[0]
-        print(title.text.strip(), datetext.strip())
+        print(number, title.text.strip(), datetext.strip())
         print(keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -49,13 +61,15 @@ def biz(soup):
     keyword = soup.find('tr', "bg1")
 
     while keyword is not None:
+        number = keyword.find('td', 'num').text.strip()
+        number = numbering(number)
         title = keyword.find_all('a')
-        num = len(title)
+        length = len(title)
         date = keyword.find('td', "datetime").text.replace(".", "-", 2)
         if len(date) <= 9:
             date = "20"+date
-        print(title[num-1].text.strip(), date)
-        print(baseurl+title[num-1].get('href').lstrip("."))
+        print(number, title[length-1].text.strip(), date)
+        print(baseurl+title[length-1].get('href').lstrip("."))
         keyword = keyword.next_sibling.next_sibling
 
 
@@ -64,29 +78,33 @@ def account(soup):
     keyword = soup.find('table', "table table-hover").tbody.tr
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         url = keyword.a.get('href')
         resp = requests.get(url)
         soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('h4', "subject").text.strip().rstrip("new")
         date = soup.find('div', "desc").find_all('strong')[1]
         datetext = date.text.split(" ")[0]
-        print(title.strip(), datetext)
+        print(number, title.strip(), datetext)
         print(url)
         keyword = keyword.next_sibling.next_sibling
 
 
 # 경영대 국제무역학과
 def itb(soup):
-    keyword = soup.find('tr', "bo_notice")
+    keyword = soup.find('table', "table table-hover text-center bottom-3b").tbody.tr
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         url = keyword.a.get('href')
         resp = requests.get(url)
         soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('h4', id="bo_v_title").b
         date = soup.find('ul', "list-inline").li.next_sibling.next_sibling.b
         datetext = "20"+date.text.split(" ")[0]
-        print(title.text, datetext)
+        print(number, title.text, datetext)
         print(keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -102,9 +120,11 @@ def agrilifesci():
     keyword = soup.find('div', "board_body").ul.li
 
     while keyword is not None:
+        number = keyword.span.text.strip()
+        number = numbering(number).lstrip("번호")
         title = keyword.find('a', "content-list")
         date = keyword.find('span', "board_col date").text.lstrip("등록일")
-        print(title.text.strip(), date.strip())
+        print(number, title.text.strip(), date.strip())
         print(base + "view&id=" + keyword.a.get('data-id')+cid+masterid+lasturl)
         keyword = keyword.next_sibling.next_sibling
 
@@ -113,12 +133,14 @@ def cll(soup):
     keyword = soup.find('td', "td_subject").parent
 
     while keyword is not None:
+        number = keyword.find('td', 'td_num2').text.strip()
+        number = numbering(number)
         url = keyword.find('div', "bo_tit").a.get('href')
         soup = callreq('', url)
         title = soup.find('span', "bo_v_tit")
         date = soup.find('section', id="bo_v_info").find('strong', "if_date")
         datetext = "20"+date.text.split(" ")[1]
-        print(title.text.strip(), datetext.strip())
+        print(number, title.text.strip(), datetext.strip())
         print(url)
         keyword = keyword.next_sibling.next_sibling
 
@@ -129,10 +151,12 @@ def dbe(soup):
 
     while keyword is not None:
         if keyword.find('td') != -1:
+            number = keyword.find('td', 'text-center hidden-xs').text.strip()
+            number = numbering(number)
             array = keyword.find_all('td')
             title = array[1].a
             date = array[3].text.replace("/", "-", 2)
-            print(title.text.strip(), date)
+            print(number, title.text.strip(), date)
             print(baseurl+title.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -143,11 +167,13 @@ def architecture(soup):
     keyword = soup.find('td', "left").parent
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         title = keyword.a
         date = title.parent
         for i in range(0, 4):
             date = date.next_sibling
-        print(title.text, date.text)
+        print(number, title.text, date.text)
         print(baseurl+keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -157,10 +183,12 @@ def archi(soup):
     keyword = soup.find('td', "tit").parent
 
     while keyword.next_sibling is not None:
+        number = keyword.find('td').text.strip()
+        number = numbering(number)
         date = keyword.a.parent
         for i in range(0, 4):
             date = date.next_sibling
-        print(keyword.a.text.strip(), date.text)
+        print(number, keyword.a.text.strip(), date.text)
         print(baseurl + keyword.a.get('href'))
         keyword = keyword.next_sibling
 
@@ -173,9 +201,11 @@ def art(soup):
     keyword = soup.find('tr', "kboard-list-notice")
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number).rstrip("사항")
         title = keyword.find('div', "cut_strings").a
         date = keyword.find('td', "kboard-list-date")
-        print(title.text.strip(), date.text.replace(".", "-", 2))
+        print(number, title.text.strip(), date.text.replace(".", "-", 2))
         print(baseurl+title.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -189,12 +219,14 @@ def educatio(soup):
     array = keyword.find_all('tr', align="center")
 
     for i in range(1, len(array)):
+        number = array[i].find('span', "tt").text.strip()
+        number = numbering(number)
         date = array[i].find_all('span', "tt")
         if i == 1:
             date = date[3]
         else:
             date = date[4]
-        print(array[i].a.text, "20"+date.text)
+        print(number, array[i].a.text, "20"+date.text)
         print(baseurl+array[i].a.get('href').lstrip("./"))
 
 
@@ -204,12 +236,14 @@ def edu(soup):
     soup = callreq(baseurl, keyword.get('src').lstrip("."))
 
     arr = soup.find_all('td', align="left")
+    number = soup.find_all('tr', align="center")
     for i in range(0, len(arr) - 2):
+        number[i] = numbering(number[i].td.text.strip())
         url = arr[i].a.get('href').lstrip(".")
         soup = callreq(baseurl, url)
         date = soup.find_all('span', "text_bold888")
         datetext = date[1].next_sibling.next_sibling.text.split("조회")[0]
-        print(arr[i].text.strip(), datetext.strip())
+        print(number[i], arr[i].text.strip(), datetext.strip())
         print(baseurl + url)
 
 
@@ -225,7 +259,11 @@ def kedu(soup):
         for j in range(0, 4):
             title = title.previous_sibling
             date = date.next_sibling
-        print(title.text.strip(), date.text.replace(".", "-", 2))
+        number = title
+        for j in range(0, 4):
+            number = number.previous_sibling
+        number = numbering(number.text.strip())
+        print(number, title.text.strip(), date.text.replace(".", "-", 2))
         link = title.a.next_sibling.next_sibling.get('onclick')
         linkarray = link.lstrip("viewPage('").rstrip("');return false;").split("','")
         url = "http://kedu.kangwon.ac.kr/board/dboard.php?id=com1&notice_id=&s=&tot=&search=&search_cond=&no=" \
@@ -239,9 +277,11 @@ def engedu(soup):
     keyword = soup.find('div', id="user_board_list").tr.next_sibling.next_sibling
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         title = keyword.find('td', "title")
         date = keyword.find('td', "date")
-        print(title.text, date.text)
+        print(number, title.text.strip(), date.text)
         print(baseurl+title.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -252,13 +292,15 @@ def geoedu(soup):
     array = soup.find_all('td', "text-left")
 
     for i in range(0, len(array)):
+        number = array[i].previous_sibling.previous_sibling
+        number = numbering(number.text.strip())
         title = array[i].a
         date = array[i].next_sibling.next_sibling
         b_id = array[i].a.get('href').lstrip("javascript:ContentsView(").rstrip(");")
         link = baseurl+"?boardID=notice&b_id="+b_id+"&mode=view&npage=1&search_opt=b_writerName&search_text="
         link = link + "&pw_check1=&pw_check2=&pw_check3=&pw_check4=&pw_check5" \
                       "=&pw_check6=&pw_check7=&pw_check8=&pw_check9=&pw_check10="
-        print(title.text, date.text)
+        print(number, title.text.strip(), date.text)
         print(link)
 
 
@@ -268,10 +310,12 @@ def homecs(soup):
     keyword = soup.find('tr', "title").next_sibling.next_sibling
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         title = keyword.a
         date = keyword.find_all('td', "list_eng3")[1]
         datetext = date.text.replace("·", "-", 2)
-        print(title.text, datetext)
+        print(number, title.text, datetext)
         print(baseurl+keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -282,9 +326,11 @@ def mathedu(soup):
     keyword = soup.find('tr', height="25")
 
     while keyword.next_sibling is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         title = keyword.a
         date = keyword.find_all('td', align="center")[2]
-        print(title.text.strip(), date.text)
+        print(number, title.text.strip(), date.text)
         print(baseurl+keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling.next_sibling
 
@@ -297,11 +343,13 @@ def social(soup, sign):
     for i in range(0, int(len(keyword) / 2)):
         title = keyword[i * 2].a
         if sign == 'i':
+            number = date[i * 4].text.strip()
             datetext = date[i + i + i * 2 + 1].text.replace("·", "-", 2)
-            print(title.text.strip(), datetext)
         else:
+            number = date[i * 3].text.strip()
             datetext = date[i + i * 2 + 1].text.replace("·", "-", 2)
-            print(title.text.strip(), datetext)
+        number = numbering(number)
+        print(number, title.text.strip(), datetext)
         print(baseurl+title.get('href'))
 
 
@@ -312,6 +360,8 @@ def masscom(soup):
     keyword = soup.find('tr', "bg1")
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         url = keyword.find_all('a')
         num = len(url)
         url = url[num-1].get('href').lstrip(".")
@@ -319,7 +369,7 @@ def masscom(soup):
         arr = soup.find('div', style="clear:both; height:30px;")
         title = arr.next_sibling.next_sibling.text.replace(" ", "", 24)
         date = "20"+arr.text.split(" ")[2]
-        print(title.strip(), date)
+        print(number, title.strip(), date)
         print(baseurl+url)
         keyword = keyword.next_sibling.next_sibling
 
@@ -330,11 +380,13 @@ def politics(soup):
     keyword = soup.find('tr', "notice")
 
     while keyword is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         url = keyword.a.get('href').lstrip(".")
         soup = callreq(baseurl, url)
         title = keyword.a
         date = soup.find('div', "info").find('span', "date").text.split(" ")[1]
-        print(title.text, "20"+date)
+        print(number, title.text, "20"+date)
         print(baseurl+url)
         keyword = keyword.next_sibling.next_sibling
 
@@ -344,12 +396,14 @@ def padm(soup):
     keyword = soup.find('li', "list-item")
 
     while keyword is not None:
+        number = keyword.div.text.strip()
+        number = numbering(number)
         soup = callurl('', keyword.a.get('href'))
         title = soup.find('h1')
         date = soup.find('div', "panel-heading").find_all('span')
         num = len(date)
         datetext = date[num-1].get('content').split("KST")[0]
-        print(title.text.strip(), datetext)
+        print(number, title.text.strip(), datetext)
         print(keyword.a.get('href'))
         keyword = keyword.next_sibling.next_sibling
 
@@ -402,10 +456,12 @@ def physics(soup):
 
     while keyword is not None:
         if keyword.find('td') != -1:
+            number = keyword.td.text.strip()
+            number = numbering(number)
             array = keyword.find_all('td')
             title = array[1].a
             date = array[3]
-            print(title.text.strip(), date.text.replace(".", "-", 2))
+            print(number, title.text.strip(), date.text.replace(".", "-", 2))
             print(baseurl + title.get('href'))
         keyword = keyword.next_sibling
 
@@ -416,10 +472,12 @@ def math(soup):
 
     while keyword is not None:
         if keyword.find('td') != -1:
+            number = keyword.td.text.strip()
+            number = numbering(number)
             array = keyword.find_all('td')
             title = array[1].a
             date = array[3]
-            print(title.text.strip(), date.text.replace(".", "-", 2))
+            print(number, title.text.strip(), date.text.replace(".", "-", 2))
             print(title.get('href'))
         keyword = keyword.next_sibling
 
@@ -429,10 +487,12 @@ def it(soup):
     keyword = soup.find('table', "bbs_list").tbody.tr
 
     while keyword.next_sibling is not None:
+        number = keyword.td.text.strip()
+        number = numbering(number)
         title = keyword.find('td', "tit").a
         date = keyword.find_all('td')
         num = len(date)
-        print(title.text.strip(), date[num-2].text)
+        print(number, title.text.strip(), date[num-2].text)
         print(baseurl+title.get('href'))
         keyword = keyword.next_sibling
 
@@ -700,7 +760,7 @@ if __name__ == '__main__':
 
     # 사과대
     socialurl = ["http://social.kangwon.ac.kr/bbs/", "zboard.php?id=notice"]
-    # social(callreq(socialurl[0], socialurl[1]), "")
+    # social(callreq(socialurl[0], socialurl[1]), "")       <- db 터진듯 확인 필요
 
     # 사과대 문화인류학과
     anthrourl = ["http://anthro.kangwon.ac.kr/bbs/", "zboard.php?id=bbs41"]
@@ -708,7 +768,7 @@ if __name__ == '__main__':
 
     # 사과대 부동산학과
     reurl = ["http://re1978.kangwon.ac.kr/bbs/", "zboard.php?id=bbs41"]
-    # social(callreq(reurl[0], reurl[1]), "i")
+    # social(callreq(reurl[0], reurl[1]), "i")              <- db 터진듯 확인 필요
 
     # 사과대 사회학과
     sociologyurl = ["http://sociology.kangwon.ac.kr/bbs/", "zboard.php?id=notice"]
@@ -724,7 +784,7 @@ if __name__ == '__main__':
 
     # 인문대 철학전공
     philourl = ["http://kwphilo.kangwon.ac.kr", "/sub05_01.htm"]
-    # masscom(callreq(philourl[0], philourl[1]))
+    # masscom(callreq(philourl[0], philourl[1]))                <- db 터진듯 확인 필요
 
     # 자연대 화학전공
     chemisurl = ["http://chemis.kangwon.ac.kr/board", "/bbs/board.php?bo_table=chemis_table04"]
@@ -805,15 +865,15 @@ if __name__ == '__main__':
 
     # 인문대
     humanitiesurl = "http://humanities.kangwon.ac.kr/sub04_01.php"
-    # humanities(callreq('', humanitiesurl))
+    # humanities(callreq('', humanitiesurl))            <- db 터진듯 확인 필요
 
     # 인문대 국어국문학전공       <- some character error
     koreanurl = ["http://korean.kangwon.ac.kr/2013", "/bbs/board.php?bo_table=sub05_01"]
-    # korean(callreq(koreanurl[0], koreanurl[1]))
+    # korean(callreq(koreanurl[0], koreanurl[1]))       <- db 터진듯 확인 필요
 
     # 인문대 불어불문학과
     franceurl = ["http://france.kangwon.ac.kr", "/?doc=bbs/board.php&bo_table=gongi"]
-    # france(callreq(franceurl[0], franceurl[1]))
+    # france(callreq(franceurl[0], franceurl[1]))       <- db 터진듯 확인 필요
 
     # 자연대 물리학과
     physicsurl = ["http://physics.bluechips.co.kr", "/sub46"]
@@ -821,4 +881,4 @@ if __name__ == '__main__':
 
     # 자연대 수학과
     mathurl = "http://math.kangwon.ac.kr/xe/notice"
-    # math(callreq('', mathurl))        # <- find, url 제외 코드 똑같음
+    math(callreq('', mathurl))        # <- find, url 제외 코드 똑같음
