@@ -101,3 +101,9 @@ it {
 	it it대
 	ee 전자공학과
 	cse 컴퓨터공학과
+}
+
+physics {
+	physics 물리학과
+	math 수학과
+}
