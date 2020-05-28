@@ -348,6 +348,11 @@ def social(soup, sign):
         else:
             number = date[i * 3].text.strip()
             datetext = date[i + i * 2 + 1].text.replace("·", "-", 2)
+        number = number.split("\n")
+        if len(number) == 1:
+            number = number[0]
+        else:
+            number = number[len(number)-1]
         number = numbering(number)
         print(number, title.text.strip(), datetext)
         print(baseurl+title.get('href'))
@@ -413,12 +418,14 @@ def humanities(soup):
     keyword = soup.find_all('table', align="center")
 
     for i in range(5, len(keyword)-2):
+        number = keyword[i].td.text.strip()
+        number = numbering(number)
         title = keyword[i].find('td', "text_03")
         date = keyword[i].find('td', "text_03")
         for j in range(0, 4):
             title = title.previous_sibling
             date = date.next_sibling
-        print(title.text.strip(), date.text.replace(".", "-", 2))
+        print(number, title.text.strip(), date.text.replace(".", "-", 2))
         link = title.a.get('onclick')
         linkarray = link.lstrip("viewPage('").rstrip("');return false;").split("','")
         url = "http://humanities.kangwon.ac.kr/sub04_01.php?id=notice&notice_id=&s=&tot=&search=&search_cond=&no="\
@@ -431,9 +438,11 @@ def korean(soup):
     global baseurl
     keyword = soup.find_all('tr', align="center")
     for i in range(1, len(keyword)):
+        number = keyword[i].td.text.strip()
+        number = numbering(number)
         title = keyword[i].find('td', align="left").a
         date = soup.find_all('span', "member")[i-1].parent.parent.next_sibling.next_sibling
-        print(title.text, date.text)
+        print(number, title.text, date.text)
         print(baseurl+title.get('href').lstrip("."))
 
 
@@ -443,13 +452,14 @@ def france(soup):
     keyword = soup.find_all('tr', align="center")
 
     for i in range(0, len(keyword)):
+        number = keyword[i].td.text.strip()
+        number = numbering(number)
         title = keyword[i].a
         date = keyword[i].find_all('td', "bh")[2]
-        print(title.text, "20"+date.text)
+        print(number, title.text, "20"+date.text)
         print(baseurl+title.get('href').lstrip("."))
 
 
-# 자연대 물리학과
 def physics(soup):
     global baseurl
     keyword = soup.find('tr', "notice")
@@ -463,22 +473,6 @@ def physics(soup):
             date = array[3]
             print(number, title.text.strip(), date.text.replace(".", "-", 2))
             print(baseurl + title.get('href'))
-        keyword = keyword.next_sibling
-
-
-# 자연대 수학과
-def math(soup):
-    keyword = soup.find('tr', "notice")
-
-    while keyword is not None:
-        if keyword.find('td') != -1:
-            number = keyword.td.text.strip()
-            number = numbering(number)
-            array = keyword.find_all('td')
-            title = array[1].a
-            date = array[3]
-            print(number, title.text.strip(), date.text.replace(".", "-", 2))
-            print(title.get('href'))
         keyword = keyword.next_sibling
 
 
@@ -760,7 +754,7 @@ if __name__ == '__main__':
 
     # 사과대
     socialurl = ["http://social.kangwon.ac.kr/bbs/", "zboard.php?id=notice"]
-    # social(callreq(socialurl[0], socialurl[1]), "")       <- db 터진듯 확인 필요
+    # social(callreq(socialurl[0], socialurl[1]), "")
 
     # 사과대 문화인류학과
     anthrourl = ["http://anthro.kangwon.ac.kr/bbs/", "zboard.php?id=bbs41"]
@@ -768,7 +762,7 @@ if __name__ == '__main__':
 
     # 사과대 부동산학과
     reurl = ["http://re1978.kangwon.ac.kr/bbs/", "zboard.php?id=bbs41"]
-    # social(callreq(reurl[0], reurl[1]), "i")              <- db 터진듯 확인 필요
+    # social(callreq(reurl[0], reurl[1]), "i")
 
     # 사과대 사회학과
     sociologyurl = ["http://sociology.kangwon.ac.kr/bbs/", "zboard.php?id=notice"]
@@ -784,7 +778,7 @@ if __name__ == '__main__':
 
     # 인문대 철학전공
     philourl = ["http://kwphilo.kangwon.ac.kr", "/sub05_01.htm"]
-    # masscom(callreq(philourl[0], philourl[1]))                <- db 터진듯 확인 필요
+    # masscom(callreq(philourl[0], philourl[1]))
 
     # 자연대 화학전공
     chemisurl = ["http://chemis.kangwon.ac.kr/board", "/bbs/board.php?bo_table=chemis_table04"]
@@ -865,20 +859,20 @@ if __name__ == '__main__':
 
     # 인문대
     humanitiesurl = "http://humanities.kangwon.ac.kr/sub04_01.php"
-    # humanities(callreq('', humanitiesurl))            <- db 터진듯 확인 필요
+    # humanities(callreq('', humanitiesurl))
 
     # 인문대 국어국문학전공       <- some character error
     koreanurl = ["http://korean.kangwon.ac.kr/2013", "/bbs/board.php?bo_table=sub05_01"]
-    # korean(callreq(koreanurl[0], koreanurl[1]))       <- db 터진듯 확인 필요
+    # korean(callreq(koreanurl[0], koreanurl[1]))
 
     # 인문대 불어불문학과
     franceurl = ["http://france.kangwon.ac.kr", "/?doc=bbs/board.php&bo_table=gongi"]
-    # france(callreq(franceurl[0], franceurl[1]))       <- db 터진듯 확인 필요
+    # france(callreq(franceurl[0], franceurl[1]))
 
     # 자연대 물리학과
     physicsurl = ["http://physics.bluechips.co.kr", "/sub46"]
-    # physics(callreq(physicsurl[0], physicsurl[1]))     # <- find, url 제외 코드 똑같음
+    # physics(callreq(physicsurl[0], physicsurl[1]))
 
     # 자연대 수학과
     mathurl = "http://math.kangwon.ac.kr/xe/notice"
-    math(callreq('', mathurl))        # <- find, url 제외 코드 똑같음
+    # physics(callreq('', mathurl))
