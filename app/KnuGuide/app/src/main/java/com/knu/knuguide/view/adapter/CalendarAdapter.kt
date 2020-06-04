@@ -9,9 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
+import com.knu.knuguide.data.calendar.DayPosition
+import com.knu.knuguide.data.calendar.DayType
 import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.support.KNUAdapterListener
 import kotlinx.android.synthetic.main.item_day.view.*
+import kotlinx.android.synthetic.main.knu_appbar_collapse.view.*
 
 class CalendarAdapter(
     private val context: Context,
@@ -48,13 +51,34 @@ class CalendarAdapter(
     private fun bindDayViewHolder(holder: DayViewHolder, day: KNUDay) {
         holder.itemView.tv_day.text = day.day.toString()
 
-        if (day.includeInSchedule) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_day_background_includeInSchedule))
-            holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_includeInSchedule_weekday))
-        }
-        else {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_day_background_default))
-            holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_default_weekday))
+        /* 배경 초기화 */
+        holder.itemView.tv_day.background = null
+        holder.itemView.container.background = null
+
+        when (day.dayType) {
+            DayType.NONE -> {
+                holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_default_weekday))
+            }
+            DayType.SINGLE -> {
+                holder.itemView.tv_day.background = ContextCompat.getDrawable(context, R.drawable.day_single)
+                holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_includeInSchedule_weekday))
+            }
+            DayType.DURATION -> {
+                when (day.dayPos) {
+                    DayPosition.START -> {
+                        holder.itemView.container.background = ContextCompat.getDrawable(context, R.drawable.day_duration_start)
+                        holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_includeInSchedule_weekday))
+                    }
+                    DayPosition.END -> {
+                        holder.itemView.container.background = ContextCompat.getDrawable(context, R.drawable.day_duration_end)
+                        holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_includeInSchedule_weekday))
+                    }
+                    DayPosition.IN -> {
+                        holder.itemView.container.setBackgroundColor(ContextCompat.getColor(context, R.color.item_day_background_includeInSchedule))
+                        holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_includeInSchedule_weekday))
+                    }
+                }
+            }
         }
     }
 

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
+import com.knu.knuguide.data.calendar.DayPosition
+import com.knu.knuguide.data.calendar.DayType
 import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.support.FastClickPreventer
@@ -118,13 +120,10 @@ class CalendarActivity : KNUActivityCollapse(), KNUAdapterListener {
             val max = calByMonth.getActualMaximum(Calendar.DAY_OF_MONTH)
 
             for (j in 0 until dayOfWeek) {
-                dayList.add(KNUDay(KNUData.Type.ITEM_DAY_EMPTY, 0, false))
+                dayList.add(KNUDay(KNUData.Type.ITEM_DAY_EMPTY, 0))
             }
             for (j in 1..max) {
-                calByMonth.set(Calendar.DAY_OF_MONTH, j)
-                val isWeekEnd: Boolean = calByMonth.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calByMonth.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-
-                dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j, isWeekEnd))
+                dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j))
             }
 
             cal_maps[i] = dayList
@@ -146,8 +145,9 @@ class CalendarActivity : KNUActivityCollapse(), KNUAdapterListener {
         if (!faskClickPreventer.isClickable())
             return false
 
+        /* 현재 월의 Day 정보 초기화 */
         val dayList: ArrayList<KNUDay> = adapter.getItems() as ArrayList<KNUDay>
-        dayList.iterator().forEach { it.includeInSchedule = false }
+        dayList.iterator().forEach { it.dayType = DayType.NONE }
 
         if (!isUnchecked) {
             val startDay = task.getStartDay(tab_months.selectedTabPosition + 1)
@@ -158,11 +158,17 @@ class CalendarActivity : KNUActivityCollapse(), KNUAdapterListener {
                 count++
 
             if (endDay == -1) {
-                dayList[count + startDay - 1].includeInSchedule = true
+                dayList[count + startDay - 1].dayType = DayType.SINGLE
             }
             else {
                 for (range in startDay..endDay) {
-                    dayList[count + range - 1].includeInSchedule = true
+                    dayList[count + range - 1].dayType = DayType.DURATION
+                    dayList[count + range - 1].dayPos = DayPosition.IN
+
+                    if (range == startDay)
+                        dayList[count + range - 1].dayPos = DayPosition.START
+                    if (range == endDay)
+                        dayList[count + range - 1].dayPos = DayPosition.END
                 }
             }
         }

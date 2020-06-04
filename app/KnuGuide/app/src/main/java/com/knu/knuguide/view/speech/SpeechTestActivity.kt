@@ -1,7 +1,6 @@
 package com.knu.knuguide.view.speech
 
 import android.Manifest
-import android.R.attr
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -12,12 +11,15 @@ import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
 import com.knu.knuguide.R
+import com.knu.knuguide.view.KNUActivity
+import com.knu.knuguide.view.calendar.CalendarActivity
 import kotlinx.android.synthetic.main.activity_speech_test.*
 import java.util.*
 
 
-class SpeechTestActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class SpeechTestActivity : KNUActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var textToSpeech: TextToSpeech
 
@@ -31,9 +33,10 @@ class SpeechTestActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         textToSpeech = TextToSpeech(this, this)
 
+        /* 음성 인식 */
         bt_speech.setOnClickListener {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, packageName)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "말해주세요")
 
@@ -45,6 +48,7 @@ class SpeechTestActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    /* 음성 출력 */
     private fun speakOut(text: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
@@ -65,7 +69,6 @@ class SpeechTestActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             } else {
                 // 준비 완료
                 bt_speech.isEnabled = true
-                speakOut("준비 완료")
             }
         } else {
             // 작업 실패
@@ -78,12 +81,24 @@ class SpeechTestActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         when (requestCode) {
             REQ_CODE_SPEECH_INPUT -> {
-                speakOut("안녕하세요")
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    tv_result.text = result[0]
+
+                    if (result[0] == "학사 일정")
+                        navigateTo(CalendarActivity::class.java, null)
+                }
             }
         }
     }
 
+    override fun getKNUID(): String {
+        return KNU_ID
+    }
+
     companion object {
+        const val KNU_ID = "SpeechTestActivity"
+
         const val CODE_PERMISSION = 1
         const val REQ_CODE_SPEECH_INPUT = 100
     }
