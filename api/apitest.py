@@ -64,15 +64,7 @@ class departmentOffice(Resource):
 """
 class departmentNotice(Resource):
     def get(self, department):
-        noticeTable = func.getDepartmentFunc(department)
-        table = []
-
-        # table을 JSON 형태로 재정렬
-        for t in noticeTable:
-            jsonTable = OrderedDict()
-            jsonTable["title"] = t[0]
-            jsonTable["link"] = t[1]
-            table.append(jsonTable)
+        table = func.getDepartmentFunc(department)
 
         parser = reqparse.RequestParser()
         parser.add_argument('department', type=str)
@@ -91,16 +83,10 @@ class cafeteriaMenu(Resource):
         dormitoryTarget = ["새롬", "이룸", "재정"]
         for c in dormitoryTarget:
             if c in name:
-                table = func.makeDietTable(name)
+                table = func.makeCafeteriaMenuJSON(func.makeDietTable(name))
 
         return {'dormitoryName': name,
-            'result': [
-                {
-                    'breakfast': table[0],
-                    'lunch': table[1],
-                    'dinner': table[2]
-                }
-            ]
+            'result': table
         }
 
 class usiversitySchedule(Resource):
@@ -119,4 +105,6 @@ if __name__ == '__main__':
     f = open('value.txt', 'r')
     host = f.readline()
     port = f.readline()
+    print(host)
+    print(port)
     app.run(host=host,port=port,debug=True)
