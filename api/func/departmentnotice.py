@@ -4,9 +4,16 @@ from urllib.request import urlopen
 import requests
 from bs4 import BeautifulSoup
 
+
+# 게시글의 하이퍼링크가 너무 길어 앞이 짤리는 부분을 채워주기 위한 변수
+# ex) cba.kangwon.ac.kr/  <- baseurl
+#     ./bbs/board.php?pageid=1 <- href
 baseurl = ""
 
 
+# 일반적인 홈페이지 불러올 때 사용하는 함수
+# requests.get 함수를 사용한다.
+# return soup (홈페이지 소스)
 def callreq(base, url):
     global baseurl
     baseurl = base
@@ -15,15 +22,22 @@ def callreq(base, url):
     return soup
 
 
+# 인증서가 필요한 홈페이지를 불러올 때 사용하는 함수
+# urlopen 함수를 사용한다.
+# return soup (홈페이지 소스)
 def callurl(base, url):
     global baseurl
     baseurl = base
-    context = ssl._create_unverified_context()
+    context = ssl._create_unverified_context()          # 인증서 생성
     resp = urlopen(base+url, context=context)
     soup = BeautifulSoup(resp.read(), "html.parser")
     return soup
 
 
+# num을 받아 와서 num이 비어있거나 알파벳이 들어가 있으면
+# num을 공지로 바꿔주고 리턴한다.
+# 숫자일 경우 그대로 리턴해준다.
+# return num (공지 or 숫자)
 def numbering(num):
     compare = num[0:1]
     if num == '':
@@ -34,37 +48,46 @@ def numbering(num):
     return num
 
 
+# soup (홈페이지 소스)
+# titlesign (제목의 태그가 무엇인지 받아오는 변수)
+# callsign (callreq를 사용할 것인지 callurl을 사용할 것인지 받아오는 변수)
 def cba(soup, titlesign, callsign):
     data = []
+    # iframe을 발견하면 iframe 페이지를 불러온다.
     if soup.find('iframe') is not None:
         soup = callreq(baseurl, soup.find('iframe').get('src').lstrip("."))
     keyword = soup.find('td', "td_subject").parent
 
     while keyword is not None:
         url = keyword.find('td', "td_subject").a.get('href')
+        # 숫자 or 공지를 받아올 변수
+        number = ""
         if titlesign == 'h1':
             number = keyword.find('td', 'td_num').text.strip()
-        else:
+        elif titlesign == 'h2':
             number = keyword.find('td', 'td_num2').text.strip()
         number = numbering(number)
         if callsign == "url":
             soup = callurl('', url)
         elif callsign == "req":
             soup = callreq('', url)
+        # 게시글의 제목을 받아올 변수
         title = soup.find(titlesign, id="bo_v_title").text.strip()
+        # 게시글의 게시 날짜를 받아올 변수
         date = soup.find('section', id="bo_v_info")
         if titlesign == 'h1':
             date = date.find_all('strong')[1]
-            datetext = "20" + date.text.split(" ")[0].strip()
-        else:
+            date = "20" + date.text.split(" ")[0].strip()
+        elif titlesign == 'h2':
             date = date.find('strong', 'if_date')
-            datetext = "20" + date.text.split(" ")[1].strip()
+            date = "20" + date.text.split(" ")[1].strip()
+        # 하이퍼링크를 받아올 변수
         link = keyword.a.get('href')
 
-        print(number, title, datetext)
+        print(number, title, date)
         print(link)
 
-        tmp = [number, title, datetext, link]
+        tmp = [number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -83,6 +106,8 @@ def biz(soup):
         title = keyword.find_all('a')
         length = len(title)
         date = keyword.find('td', "datetime").text.replace(".", "-", 2)
+        # 앞에 20을 붙여주어 연도를 완성시킨다.
+        # ex) 20.01.01 -> 2020.01.01
         if len(date) <= 9:
             date = "20"+date
         link = baseurl+title[length-1].get('href').lstrip(".")
@@ -108,16 +133,20 @@ def account(soup):
         number = keyword.td.text.strip()
         number = numbering(number)
         url = keyword.a.get('href')
+        # 게시글을 받아오는 작업
+        # 공지사항 페이지에 내용이 부실한 경우 게시글에 들어가서 직접 데이터를 가져옴
+        # ex) 날짜가 없거나 부실한 경우, 태그의 속성이나 이름이 없어 제목에 접근하기 힘든 경우,
+        #     공지사항 페이지는 다른데 게시글이 유사한 학과들을 통합하기 위한 경우 등
         resp = requests.get(url)
         soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('h4', "subject").text.strip().rstrip("new").strip()
         date = soup.find('div', "desc").find_all('strong')[1]
-        datetext = date.text.split(" ")[0]
+        date = date.text.split(" ")[0]
 
-        print(number, title, datetext)
+        print(number, title, date)
         print(url)
 
-        tmp = [number, title, datetext, url]
+        tmp = [number, title, date, url]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -138,13 +167,13 @@ def itb(soup):
         soup = BeautifulSoup(resp.content, "html.parser")
         title = soup.find('h4', id="bo_v_title").b.text
         date = soup.find('ul', "list-inline").li.next_sibling.next_sibling.b
-        datetext = "20"+date.text.split(" ")[0]
+        date = "20"+date.text.split(" ")[0]
         link = keyword.a.get('href')
 
-        print(number, title, datetext)
+        print(number, title, date)
         print(link)
 
-        tmp = [number, title, datetext, link]
+        tmp = [number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -155,8 +184,11 @@ def itb(soup):
 # 농생대
 def agrilifesci():
     data = []
+    # 앞부분의 url
     base = "http://knucals.kangwon.ac.kr/contents.do?v="
+    # 뒷부분의 url
     lasturl = "&pageIndex=1&divId=&searchCondition=1&searchKeyword="
+    # 중간부분의 url
     cid = "&cid=db2548006ba044b09df5b6b5df7aacd4"
     masterid = "&masterid=03cc0395b649458081fb83355712a973"
     resp = requests.get(base+"&id="+cid+masterid+lasturl)
@@ -192,12 +224,12 @@ def cll(soup):
         soup = callreq('', url)
         title = soup.find('span', "bo_v_tit").text.strip()
         date = soup.find('section', id="bo_v_info").find('strong', "if_date")
-        datetext = "20"+date.text.split(" ")[1].strip()
+        date = "20"+date.text.split(" ")[1].strip()
 
-        print(number, title, datetext)
+        print(number, title, date)
         print(url)
 
-        tmp = [number, title, datetext, url]
+        tmp = [number, title, date, url]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -382,7 +414,10 @@ def kedu(soup):
             number = number.previous_sibling
         number = numbering(number.text.strip())
 
+        # key에 맞는 value를 불러오기 위한 변수
         link = title.a.next_sibling.next_sibling.get('onclick')
+        # value에서 값만 추출하기 위한 배열
+        # 0번은 no의 값, 1번은 print_no의 값
         linkarray = link.lstrip("viewPage('").rstrip("');return false;").split("','")
         url = "http://kedu.kangwon.ac.kr/board/dboard.php?id=com1&notice_id=&s=&tot=&search=&search_cond=&no=" \
               + linkarray[0] + "&print_no=" + linkarray[1] + "&exec=view&npop=&sort=&desc=&search_cat_no="
@@ -434,6 +469,7 @@ def geoedu(soup):
         number = numbering(number.text.strip())
         title = array[i].a.text.strip()
         date = array[i].next_sibling.next_sibling.text
+        # b_id의 값을 받아오기 위한 변수
         b_id = array[i].a.get('href').lstrip("javascript:ContentsView(").rstrip(");")
         link = baseurl+"?boardID=notice&b_id="+b_id+"&mode=view&npage=1&search_opt=b_writerName&search_text="
         link = link + "&pw_check1=&pw_check2=&pw_check3=&pw_check4=&pw_check5" \
@@ -497,6 +533,9 @@ def mathedu(soup):
     return data
 
 
+# sign
+# (number와 date에 접근하는 부분을 제외하고 나머지 부분이
+#  똑같은 코드이기 때문에 합친 후, number와 date 접근의 차이를 두기 위한 변수)
 def social(soup, sign):
     global baseurl
     data = []
@@ -627,7 +666,10 @@ def humanities(soup):
         for j in range(0, 4):
             title = title.previous_sibling
             date = date.next_sibling
+        # key의 맞는 value를 불러오기 위한 변수
         link = title.a.get('onclick')
+        # value에서 값만 추출하여 저장하는 배열
+        # 0번은 no의 값, 1번은 print_no의 값
         linkarray = link.lstrip("viewPage('").rstrip("');return false;").split("','")
         url = "http://humanities.kangwon.ac.kr/sub04_01.php?id=notice&notice_id=&s=&tot=&search=&search_cond=&no=" \
               + linkarray[0] + "&print_no=" + linkarray[1] + "&exec=view&npop=&sort=&desc=&search_cat_no="
