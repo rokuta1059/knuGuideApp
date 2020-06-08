@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.knu.knuguide">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Google STT 사용을 위한 권한 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Google STT 사용을 위한 권한 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.speech.SpeechTestActivity"></activity>
+        <activity android:name=".view.announcement.FilterSearchTestActivity"></activity>
+        <activity android:name=".view.speech.SpeechTestActivity" />
         <activity android:name=".view.calendar.CalendarActivity" />
         <activity android:name=".view.announcement.AnnouncementActivity" />
         <activity android:name=".view.landing.SplashActivity">

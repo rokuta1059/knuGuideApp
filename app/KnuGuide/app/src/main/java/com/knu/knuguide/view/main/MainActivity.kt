@@ -3,21 +3,21 @@ package com.knu.knuguide.view.main
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.knu.knuguide.R
-import com.knu.knuguide.view.adapter.PreviewAnnouncementAdapter
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.announcement.Announcement
 import com.knu.knuguide.support.FastClickPreventer
-import com.knu.knuguide.view.KNUActivityCollapse
+import com.knu.knuguide.view.KNUActivity
+import com.knu.knuguide.view.adapter.PreviewAnnouncementAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.speech.SpeechTestActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.knu_appbar_collapse.*
+import kotlinx.android.synthetic.main.knu_appbar.*
 import kotlinx.android.synthetic.main.preview_announcement.*
 
-class MainActivity : KNUActivityCollapse() {
+class MainActivity : KNUActivity() {
     private val compositeDisposable = CompositeDisposable()
     private val fastClickPreventer = FastClickPreventer()
     private var items = ArrayList<KNUData>()
@@ -27,7 +27,7 @@ class MainActivity : KNUActivityCollapse() {
         setContentView(R.layout.activity_main)
 
         // menu 클릭 시 Navigation View 열기
-        menu.setOnClickListener {
+        appbar_menu.setOnClickListener {
             if (fastClickPreventer.isClickable())
                 drawerLayout.openDrawer(nav_view)
         }

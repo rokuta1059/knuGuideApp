@@ -21,4 +21,7 @@
     <color name="item_day_background_includeInSchedule">#5CBEFF</color>
     <color name="item_day_text_includeInSchedule_weekday">#FFFFFF</color>
     <color name="item_day_text_includeInSchedule_weekend">#FFFFFF</color>
+
+    <!-- 공지사항 필터 -->
+    <color name="item_announcement_department_chips">#487EE8</color>
 </resources>

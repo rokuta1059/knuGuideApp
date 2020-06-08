@@ -1,10 +1,7 @@
 package com.knu.knuguide.view.calendar
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.MotionEvent
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.knu.knuguide.R
@@ -16,7 +13,7 @@ import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.support.FastClickPreventer
 import com.knu.knuguide.support.KNUAdapterListener
 import com.knu.knuguide.support.Utils
-import com.knu.knuguide.view.KNUActivityCollapse
+import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.CalendarAdapter
 import com.knu.knuguide.view.adapter.CalendarTaskAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
@@ -24,11 +21,11 @@ import kotlinx.android.synthetic.main.activity_calendar.*
 import kotlinx.android.synthetic.main.cal_contents.*
 import kotlinx.android.synthetic.main.cal_header.*
 import kotlinx.android.synthetic.main.cal_months.*
-import kotlinx.android.synthetic.main.knu_appbar_collapse.*
+import kotlinx.android.synthetic.main.knu_appbar.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CalendarActivity : KNUActivityCollapse(), KNUAdapterListener {
+class CalendarActivity : KNUActivity(), KNUAdapterListener {
     private val faskClickPreventer = FastClickPreventer()
 
     // 1월 ~ 12월까지 day 정보를 저장할 Map Collection
@@ -44,7 +41,7 @@ class CalendarActivity : KNUActivityCollapse(), KNUAdapterListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
-        back.setOnClickListener{ if (faskClickPreventer.isClickable()) onBackPressed() }
+        appbar_back.setOnClickListener{ if (faskClickPreventer.isClickable()) onBackPressed() }
 
         setTasks()
 
