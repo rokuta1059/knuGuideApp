@@ -23,12 +23,13 @@ class testMulti(Resource):
     def get(self, num):
         return {'result': num * 10}
 
-"""
-    학과사무실 주소랑 전화번호 받아오는 클래스
-    주소값: /department/office
-    !! 코드 작성만 했음 상세 코드 미구현으로 인해 테스트 미실시 !!
-"""
+
 class departmentOffice(Resource):
+    """
+    학과사무실 주소랑 전화번호 받아오는 클래스
+    - 주소값: /department/office
+    - !! 코드 작성만 했음 상세 코드 미구현으로 인해 테스트 미실시 !!
+    """
     def get(self):
         table = []
         officeTable = func.getDepartmentOffice()
@@ -58,25 +59,26 @@ class departmentOffice(Resource):
             "number": data[2] }
 
 
-"""
-    학과 공지사항 받아오는 클래스
-    주소값: /department/notice/{학과이름}
-"""
+
 class departmentNotice(Resource):
-    def get(self, department):
-        table = func.getDepartmentFunc(department)
+    """
+    학과 공지사항 받아오는 클래스
+    - 주소값: /department/notice/{학과아이디}
+    """
+    def get(self, department_id):
+        table = func.getDepartmentFunc(department_id)
 
         parser = reqparse.RequestParser()
         parser.add_argument('department', type=str)
         parser.add_argument('notice', type=list)
 
-        return {"department": department, "notice": table}
+        return {"department": department_id, "notice": table}
 
-"""
-    식단 받아오는 클래스
-    주소값: /cafeteria/{식당이름}
-"""
 class cafeteriaMenu(Resource):
+    """
+    식단 받아오는 클래스
+    - 주소값: /cafeteria/{식당이름}
+    """
     
     def get(self, name):
         table = []
@@ -89,7 +91,11 @@ class cafeteriaMenu(Resource):
             'result': table
         }
 
-class usiversitySchedule(Resource):
+class universitySchedule(Resource):
+    """
+    학교의 학사일정을 받아오는 클래스
+    - 주소값: /university/schedule
+    """
 
     def get(self):
         table = []
@@ -100,6 +106,7 @@ api.add_resource(testMulti, '/multi/<int:num>')
 api.add_resource(departmentOffice, '/department/office')
 api.add_resource(departmentNotice, '/department/notice/<string:department>')
 api.add_resource(cafeteriaMenu, '/cafeteria/<string:name>')
+api.add_resource(universitySchedule, '/unicersity/schedule')
 
 if __name__ == '__main__':
     f = open('value.txt', 'r')
