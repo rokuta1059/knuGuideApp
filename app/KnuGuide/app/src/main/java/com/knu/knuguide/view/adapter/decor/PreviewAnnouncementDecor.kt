@@ -36,8 +36,8 @@ class PreviewAnnouncementDecor(val context: Context, var spacing: Float) : Recyc
             val params: RecyclerView.LayoutParams = view.layoutParams as RecyclerView.LayoutParams
 
             val position = params.viewAdapterPosition
-            if (position < state.itemCount - 1)
-                c.drawLine(view.left.toFloat(), view.bottom + offset, view.right.toFloat(), view.bottom + offset, paint)
+//            if (position < state.itemCount - 1)
+//                c.drawLine(view.left.toFloat(), view.bottom + offset, view.right.toFloat(), view.bottom + offset, paint)
         }
     }
 }

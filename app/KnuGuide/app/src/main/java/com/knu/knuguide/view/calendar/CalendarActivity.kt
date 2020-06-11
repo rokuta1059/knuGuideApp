@@ -26,7 +26,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class CalendarActivity : KNUActivity(), KNUAdapterListener {
-    private val faskClickPreventer = FastClickPreventer()
+    private val fastClickPreventer = FastClickPreventer()
 
     // 1월 ~ 12월까지 day 정보를 저장할 Map Collection
     var cal_maps = HashMap<Int, ArrayList<KNUData>>()
@@ -41,7 +41,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
-        appbar_back.setOnClickListener{ if (faskClickPreventer.isClickable()) onBackPressed() }
+        appbar_back.setOnClickListener{ if (fastClickPreventer.isClickable()) onBackPressed() }
 
         setTasks()
 
@@ -77,7 +77,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
         tab_months.getTabAt(calendar.get(Calendar.MONTH))?.select()
 
         bt_year_prev.setOnClickListener {
-            if (faskClickPreventer.isClickable()) {
+            if (fastClickPreventer.isClickable()) {
                 calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1)
                 initCalHeaders(calendar.get(Calendar.YEAR))
                 initCalMaps(calendar.get(Calendar.YEAR))
@@ -87,7 +87,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
         }
 
         bt_year_next.setOnClickListener {
-            if (faskClickPreventer.isClickable()) {
+            if (fastClickPreventer.isClickable()) {
                 calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1)
                 initCalHeaders(calendar.get(Calendar.YEAR))
                 initCalMaps(calendar.get(Calendar.YEAR))
@@ -139,7 +139,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
     }
 
     override fun onCalendarTaskItemClick(task: Task, isUnchecked: Boolean): Boolean {
-        if (!faskClickPreventer.isClickable())
+        if (!fastClickPreventer.isClickable())
             return false
 
         /* 현재 월의 Day 정보 초기화 */

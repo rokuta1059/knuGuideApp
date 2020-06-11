@@ -4,29 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:background="@drawable/border_all">
 
-    <TextView
-        android:id="@+id/source"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/holo_green_dark"
+    <View
+        android:id="@+id/v_tag"
+        android:layout_width="18dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="SW중심사업단" />
+        tools:background="@color/appBackground" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
 
     <TextView
-        android:id="@+id/itemtitle"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:ellipsize="end"
-        android:maxLines="1"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/divider"
+        app:layout_constraintEnd_toStartOf="@id/bt_view"
+        app:layout_constraintStart_toEndOf="@id/v_tag"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="공지사항 제목" />
+
+    <ImageView
+        android:id="@+id/iv_department"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/department"
+        app:layout_constraintStart_toEndOf="@id/v_tag"
+        app:layout_constraintTop_toTopOf="@id/divider"
+        app:srcCompat="@drawable/ic_department"
+        tools:tint="@color/appBackground" />
+
+    <TextView
+        android:id="@+id/department"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_department"
+        app:layout_constraintTop_toTopOf="@id/divider"
+        tools:text="컴퓨터공학과" />
+
+    <ImageView
+        android:id="@+id/iv_date"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/department"
+        app:layout_constraintTop_toTopOf="@id/divider"
+        app:srcCompat="@drawable/ic_time"
+        tools:tint="@color/appBackground" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_date"
+        app:layout_constraintTop_toTopOf="@id/divider"
+        tools:text="2020.00.00" />
+
+    <ImageButton
+        android:id="@+id/bt_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/source"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="2020년 KNU SW중심대학 SW학습공동체 모집 안내" />
+        app:srcCompat="@drawable/ic_arrow_right"
+        tools:tint="@color/appBackground" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

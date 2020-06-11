@@ -6,7 +6,8 @@ interface KNUData : Serializable {
 
     class Type {
         companion object {
-            const val ITEM_ANNOUNCEMENT = 10
+            const val ITEM_ANNOUNCEMENT_PREVIEW = 10
+            const val ITEM_ANNOUNCEMENT = 11
 
             // Calendar
             const val ITEM_DAY_EMPTY = 20

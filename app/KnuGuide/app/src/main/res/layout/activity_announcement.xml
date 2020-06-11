@@ -14,13 +14,15 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/item_announcement_background"
+        android:padding="8dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <TextView
-            android:id="@+id/imageView2"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:text="qwer\nqewrqwrew\nqewrqwr\nqewrqwrwe\nqwerqwer\n"
-            android:textSize="100sp"/>
+            android:layout_height="wrap_content"
+            android:background="@color/item_announcement_background" />
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

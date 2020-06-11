@@ -9,6 +9,7 @@
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/collapse_toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/appBackground"
@@ -25,6 +26,8 @@
             android:layout_gravity="bottom"
             android:paddingLeft="14.5dp"
             android:paddingRight="14.5dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_collapseMode="parallax"
             app:layout_collapseParallaxMultiplier="0.01">
 
@@ -92,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
-                android:visibility="invisible"
+                android:text="컴퓨터공학과"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,13 +125,13 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
-                    android:visibility="invisible"
+                    android:text="컴퓨터공학과"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="컴퓨터공학과"
-                    tools:visibility="visible"/>
+                    tools:text="컴퓨터공학과" />
 
                 <ImageButton
                     android:id="@+id/appbar_search_collapsed"

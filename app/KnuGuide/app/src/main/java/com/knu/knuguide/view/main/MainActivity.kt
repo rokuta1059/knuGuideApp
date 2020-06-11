@@ -7,7 +7,7 @@ import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.announcement.Announcement
 import com.knu.knuguide.support.FastClickPreventer
 import com.knu.knuguide.view.KNUActivity
-import com.knu.knuguide.view.adapter.PreviewAnnouncementAdapter
+import com.knu.knuguide.view.adapter.AnnouncementAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
@@ -59,8 +59,8 @@ class MainActivity : KNUActivity() {
 
         // 공지사항 아이템 추가
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = PreviewAnnouncementAdapter(this, items)
-        recyclerView.addItemDecoration(PreviewAnnouncementDecor(this, 1f))
+        recyclerView.adapter = AnnouncementAdapter(this, items)
+        recyclerView.addItemDecoration(PreviewAnnouncementDecor(this, 2f))
     }
 
 //    fun getStations(stationName: String) {

@@ -1,10 +1,16 @@
 package com.knu.knuguide.view
 
+import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
+import android.os.Handler
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import com.google.android.material.appbar.AppBarLayout
+import com.knu.knuguide.R
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.main.MainActivity
@@ -57,6 +63,7 @@ abstract class KNUActivityCollapse : KNUBlankActivity() {
             AnnouncementActivity.KNU_ID -> {
                 setActionBarCustomView(KNU_ID)
                 setActionBarTitle(true, "공지사항")
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
         }
     }
@@ -85,6 +92,7 @@ abstract class KNUActivityCollapse : KNUBlankActivity() {
             if (isCollapsingActionBar) {
                 startAppBarAlphaAnimation(expanded_toolbar_container, 0, View.VISIBLE)
                 startAppBarAlphaAnimation(appbar, 0, View.GONE)
+                appbar.visibility = View.INVISIBLE
             }
             else {
                 startAppBarAlphaAnimation(expanded_toolbar_container, 0, View.INVISIBLE)
@@ -96,13 +104,15 @@ abstract class KNUActivityCollapse : KNUBlankActivity() {
     private fun handleToolbarVisibility(view: View, percentage: Float) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
             if (!isActionBarVisible) {
+                view.visibility = View.VISIBLE
                 startAppBarAlphaAnimation(view, ALPHA_ANIMATIONS_DURATION, View.VISIBLE)
                 isActionBarVisible = true
             }
         }
         else {
             if (isActionBarVisible) {
-                startAppBarAlphaAnimation(view, ALPHA_ANIMATIONS_DURATION, View.GONE)
+                view.visibility = View.INVISIBLE
+                startAppBarAlphaAnimation(expanded_toolbar_container, ALPHA_ANIMATIONS_DURATION, View.VISIBLE)
                 isActionBarVisible = false
             }
         }
@@ -112,10 +122,10 @@ abstract class KNUActivityCollapse : KNUBlankActivity() {
         private const val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f
         private const val ALPHA_ANIMATIONS_DURATION = 200L
 
-        private fun startAppBarAlphaAnimation(view: View, duration: Long, visibility: Int) {
+        fun startAppBarAlphaAnimation(view: View, duration: Long, visibility: Int) {
             val alphaAnimation = if (visibility == View.VISIBLE) AlphaAnimation(0f, 1f) else AlphaAnimation(1f, 0f)
             alphaAnimation.duration = duration
-            alphaAnimation.fillAfter = true
+
             view.startAnimation(alphaAnimation)
         }
     }
