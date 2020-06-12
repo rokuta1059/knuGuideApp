@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 from datetime import datetime, date, time
 
-def makeDietTable(dormitory):
+def make_diet_table(dormitory):
     foodtable = []
     weekday = datetime.today().weekday()
 

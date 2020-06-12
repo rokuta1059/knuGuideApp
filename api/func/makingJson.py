@@ -1,7 +1,24 @@
 from collections import OrderedDict
 import json
 
-def makeNoticeJSON(department, noticeTable):
+def make_department_office_json(data):
+    """
+        학과 목록을 JSON 형태로 반환하는 함수
+    """
+    table = []
+    for t in data:
+        jsonTable = OrderedDict()
+        jsonTable["college"] = t['college']
+        jsonTable["department"] = t['department']
+        jsonTable["callnumber"] = t['callnumber']
+        jsonTable["location"] = t['location']
+        jsonTable["map"] = t['map']
+        jsonTable["site"] = t['site']
+        table.append(jsonTable)
+
+    return table
+
+def make_notice_json(department, noticeTable):
     """
         공지사항을 JSON 형태로 반환하는 함수
         - department: 해당 학과의 이름
@@ -21,7 +38,7 @@ def makeNoticeJSON(department, noticeTable):
 
     return table
 
-def makeCafeteriaMenuJSON(menuTable):
+def make_cafeteria_menu_json(menuTable):
     """
         식단을 JSON 형태로 반환하는 함수
         - menuTable: 메뉴가 저장된 배열

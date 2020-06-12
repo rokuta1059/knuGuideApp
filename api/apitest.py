@@ -33,13 +33,6 @@ class departmentOffice(Resource):
     def get(self):
         table = []
         officeTable = func.getDepartmentOffice()
-        for t in officeTable:
-            jsonTable = OrderedDict()
-            jsonTable["department"] = t[0]
-            jsonTable["address"] = t[1]
-            jsonTable["number"] = t[2]
-            table.append(jsonTable)
-
         parser = reqparse.RequestParser()
         parser.add_argument('content', type=list)
 
@@ -47,16 +40,14 @@ class departmentOffice(Resource):
 
     def post(self):
         department_json = request.get_json()
-        data = func.getDepartmentOffice(department_json["department"])
+        data = func.getDepartmentOffice(department_json["department_id"])
 
         parser = reqparse.RequestParser()
-        parser.add_argument('department', type=str)
-        parser.add_argument('address', type=str)
-        parser.add_argument('number', type=str)
+        parser.add_argument('department_id', type=str)
+        parser.add_argument('content', type=str)
 
-        return {"department": data[0],
-            "address": data[1],
-            "number": data[2] }
+        return {"department_id": department_json["department_id"],
+            "content": data}
 
 
 
@@ -66,7 +57,7 @@ class departmentNotice(Resource):
     - 주소값: /department/notice/{학과아이디}
     """
     def get(self, department_id):
-        table = func.getDepartmentFunc(department_id)
+        table = func.get_department_func(department_id)
 
         parser = reqparse.RequestParser()
         parser.add_argument('department', type=str)

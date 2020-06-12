@@ -26,7 +26,7 @@ def db_connect():
     return cursor
 
 
-def getDepartmentFunc(department_id):
+def get_department_func(department_id):
 
     """
         해당하는 학과의 id를 받아온 후 데이터베이스를 검색하여
@@ -44,104 +44,104 @@ def getDepartmentFunc(department_id):
     for row in data:
 
         if row['crf'] is 'cba':
-            return mj.makingNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.cba(dn.callreq('', row['site']), 'h1', "req")
             )
         elif row['crf'] is 'biz':
-            return mj.makingNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.biz(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'cll':
-            return mj.makingNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.cll(dn.callreq('', row['site']))
             )
         elif row['crf'] is 'dbe':
-            return mj.makingNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.dbe(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'archi':
-            return mj.makingNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.archi(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'edu':
-            return mj.makingNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.edu(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'social':
             if row['department'] in ['부동산학과', '사회학과']:
-                return mj.makingNoticeJSON(
+                return mj.make_notice_json(
                     row['department'], dn.social(dn.callreq(row['site'], row['site_append']), "i")
                 )
             else:
-                return mj.makingNoticeJSON(
+                return mj.make_notice_json(
                     row['department'], dn.social(dn.callreq(row['site'], row['site_append']), "")
                 )
         elif row['crf'] is 'masscom':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.masscom(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'it':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.it(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'physics':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.physics(dn.callreq(row['site'], row['site_append']))
-            )
+            ) # 공용함수의 끝
         elif row['crf'] is 'agrilifesci':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.agrilifesci()
             )
         elif row['crf'] is 'architecture':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.architecture(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'art':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.art(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'educatio':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.educatio(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'kedu':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.kedu(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'engedu':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.engedu(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'geoedu':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.geoedu(dn.callreq(row['site'], ''))
             )
         elif row['crf'] is 'homecs':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.homecs(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'mathedu':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.mathedu(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'politics':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.politics(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'padm':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.padm(dn.callreq('', row['site']))
             )
         elif row['crf'] is 'humanities':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.humanities(dn.callreq('', row['site']))
             )
         elif row['crf'] is 'korean':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.korean(dn.callreq(row['site'], row['site_append']))
             )
         elif row['crf'] is 'france':
-            return mj.makeNoticeJSON(
+            return mj.make_notice_json(
                 row['department'], dn.france(dn.callreq(row['site'], row['site_append']))
             )
         else:
