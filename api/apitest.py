@@ -32,12 +32,11 @@ class departmentOffice(Resource):
     - !! 코드 작성만 했음 상세 코드 미구현으로 인해 테스트 미실시 !!
     """
     def get(self, department_id):
-        table = []
-        officeTable = func.get_department_office()
+        officeTable = func.get_department_office(department_id)
         parser = reqparse.RequestParser()
         parser.add_argument('content', type=list)
 
-        return {"content": table}
+        return {"content": officeTable}
 
     def post(self):
         department_json = request.get_json()
