@@ -35,7 +35,7 @@ def get_department_office(department_id):
     
     cursor = db_connect()
     sql = "select * from table_department where id=%s"
-    cursor.execute(sql)
+    cursor.execute(sql, (department_id))
     data = cursor.fetchall()
 
     return mj.make_department_office_json(data)
