@@ -8,12 +8,14 @@ def db_connect():
         데이터베이스에 연결한 후
         커서를 반환한다.
     """
-    f = open('databasePW.txt', 'r')
-    user = f.readline()
-    passwd = f.readline()
-    host = f.readline()
-    db = f.readline()
-    charset = f.readline()
+    f = open('./knuGuideApp/api/func/databasePW.txt', 'r')
+    db_connect_table = f.read().split()
+    user = db_connect_table[0]
+    passwd = db_connect_table[1]
+    host = db_connect_table[2]
+    port = db_connect_table[3]
+    db = db_connect_table[4]
+    charset = db_connect_table[5]
     conn = pymysql.connect(
         user=user, passwd=passwd, host=host, db=db, charset=charset
     )
