@@ -1,3 +1,4 @@
+import os
 import sys
 from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
@@ -30,9 +31,9 @@ class departmentOffice(Resource):
     - 주소값: /department/office
     - !! 코드 작성만 했음 상세 코드 미구현으로 인해 테스트 미실시 !!
     """
-    def get(self):
+    def get(self, department_id):
         table = []
-        officeTable = func.getDepartmentOffice()
+        officeTable = func.get_department_office()
         parser = reqparse.RequestParser()
         parser.add_argument('content', type=list)
 
@@ -40,7 +41,7 @@ class departmentOffice(Resource):
 
     def post(self):
         department_json = request.get_json()
-        data = func.getDepartmentOffice(department_json["department_id"])
+        data = func.get_department_office(department_json["department_id"])
 
         parser = reqparse.RequestParser()
         parser.add_argument('department_id', type=str)
@@ -76,7 +77,7 @@ class cafeteriaMenu(Resource):
         dormitoryTarget = ["새롬", "이룸", "재정"]
         for c in dormitoryTarget:
             if c in name:
-                table = func.makeCafeteriaMenuJSON(func.makeDietTable(name))
+                table = func.make_cafeteria_menu_json(func.make_diet_table(name))
 
         return {'dormitoryName': name,
             'result': table
@@ -94,15 +95,14 @@ class universitySchedule(Resource):
 
 api.add_resource(myTestApi, '/')
 api.add_resource(testMulti, '/multi/<int:num>')
-api.add_resource(departmentOffice, '/department/office')
-api.add_resource(departmentNotice, '/department/notice/<string:department>')
-api.add_resource(cafeteriaMenu, '/cafeteria/<string:name>')
+api.add_resource(departmentOffice, '/department/office/<department_id>')
+api.add_resource(departmentNotice, '/department/notice/<department_id>')
+api.add_resource(cafeteriaMenu, '/cafeteria/<name>')
 api.add_resource(universitySchedule, '/unicersity/schedule')
 
 if __name__ == '__main__':
-    f = open('value.txt', 'r')
-    host = f.readline()
-    port = f.readline()
-    print(host)
-    print(port)
-    app.run(host=host,port=port,debug=True)
+    print(os.getcwd())
+    f = open('./knuGuideApp/api/value.txt', 'r')
+    host = f.read().split()
+    print('{0}:{1}'.format(host[0], host[1]))
+    app.run(host=host[0],port=host[1],debug=True)
