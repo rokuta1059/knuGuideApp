@@ -49,3 +49,18 @@ def make_cafeteria_menu_json(menuTable):
     jsonTable["dinner"] = menuTable[2]
 
     return jsonTable
+
+def make_academic_schedule_json(scheduleTable):
+    """
+        학사일정을 JSON 형태로 반환하는 함수
+    """
+    table = []
+
+    for t in scheduleTable:
+        jsonTable = OrderedDict()
+        jsonTable["start_date"] = t[0]
+        jsonTable["end_date"] = t[1]
+        jsonTable["content"] = t[2]
+        table.append(jsonTable)
+    
+    return table
