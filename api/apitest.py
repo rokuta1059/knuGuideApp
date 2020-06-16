@@ -28,28 +28,15 @@ class testMulti(Resource):
 class departmentOffice(Resource):
     """
     학과사무실 주소랑 전화번호 받아오는 클래스
-    - 주소값: /department/office
-    - !! 코드 작성만 했음 상세 코드 미구현으로 인해 테스트 미실시 !!
+    - 주소값: /department/office/{학과아이디}
     """
     def get(self, department_id):
         officeTable = func.get_department_office(department_id)
         parser = reqparse.RequestParser()
         parser.add_argument('content', type=list)
 
-        return {"content": officeTable}
-
-    def post(self):
-        department_json = request.get_json()
-        data = func.get_department_office(department_json["department_id"])
-
-        parser = reqparse.RequestParser()
-        parser.add_argument('department_id', type=str)
-        parser.add_argument('content', type=str)
-
-        return {"department_id": department_json["department_id"],
-            "content": data}
-
-
+        return { "department": department_id,
+            "content": officeTable}
 
 class departmentNotice(Resource):
     """
