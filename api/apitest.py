@@ -76,8 +76,11 @@ class universitySchedule(Resource):
     """
 
     def get(self):
-        table = []
-        schedule = func.acaSchedule()
+        schedule = func.make_academic_schedule_json(func.acaSchedule())
+
+        return {'year': 2020,
+            'content': schedule
+        }
 
 api.add_resource(myTestApi, '/')
 api.add_resource(testMulti, '/multi/<int:num>')
