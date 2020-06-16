@@ -84,7 +84,7 @@ api.add_resource(testMulti, '/multi/<int:num>')
 api.add_resource(departmentOffice, '/department/office/<department_id>')
 api.add_resource(departmentNotice, '/department/notice/<department_id>')
 api.add_resource(cafeteriaMenu, '/cafeteria/<name>')
-api.add_resource(universitySchedule, '/unicersity/schedule')
+api.add_resource(universitySchedule, '/university/schedule')
 
 if __name__ == '__main__':
     print(os.getcwd())
