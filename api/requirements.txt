@@ -1,5 +1,6 @@
 aniso8601==8.0.0
 astroid==2.4.1
+autopep8==1.5.3
 beautifulsoup4==4.9.0
 bs4==0.0.1
 certifi==2020.4.5.1
@@ -15,6 +16,7 @@ Jinja2==2.11.2
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
+pycodestyle==2.6.0
 pylint==2.5.2
 PyMySQL==0.9.3
 pytz==2020.1
