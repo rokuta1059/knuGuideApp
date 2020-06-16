@@ -76,7 +76,7 @@ class universitySchedule(Resource):
     """
 
     def get(self):
-        schedule = func.make_academic_schedule_json(func.acaSchedule())
+        schedule = func.make_academic_schedule_json(func.aca_schedule())
 
         return {'year': 2020,
             'content': schedule

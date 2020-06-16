@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 # 학사일정
-def acaschedule():
+def aca_schedule():
     """
         학사 일정을 받아오는 함수
     """
@@ -31,5 +31,5 @@ def acaschedule():
 
 
 if __name__ == '__main__':
-    array = acaschedule()
+    array = aca_schedule()
     print(array)
