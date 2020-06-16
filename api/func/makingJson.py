@@ -18,10 +18,9 @@ def make_department_office_json(data):
 
     return table
 
-def make_notice_json(department, noticeTable):
+def make_notice_json(noticeTable):
     """
         공지사항을 JSON 형태로 반환하는 함수
-        - department: 해당 학과의 이름
         - noticeTable: 받아 온 해당 학과의 공지사항 배열
     """
     table = []
@@ -29,11 +28,11 @@ def make_notice_json(department, noticeTable):
     # table을 JSON 형태로 재정렬
     for t in noticeTable:
         jsonTable = OrderedDict()
-        jsonTable["department"] = department
-        jsonTable["number"] = t[0]
-        jsonTable["title"] = t[1]
-        jsonTable["date"] = t[2]
-        jsonTable["link"] = t[3]
+        jsonTable["department"] = t[0]
+        jsonTable["number"] = t[1]
+        jsonTable["title"] = t[2]
+        jsonTable["date"] = t[3]
+        jsonTable["link"] = t[4]
         table.append(jsonTable)
 
     return table
