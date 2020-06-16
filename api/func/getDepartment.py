@@ -23,7 +23,7 @@ def db_connect():
         데이터베이스에 연결한 후
         커서를 반환한다.
     """
-    f = open('./knuGuideApp/api/func/databasePW.txt', 'r')
+    f = open('databasePW.txt', 'r')
     db_connect_table = f.read().split()
     user = db_connect_table[0]
     passwd = db_connect_table[1]

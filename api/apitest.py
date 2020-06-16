@@ -88,7 +88,7 @@ api.add_resource(universitySchedule, '/unicersity/schedule')
 
 if __name__ == '__main__':
     print(os.getcwd())
-    f = open('./knuGuideApp/api/value.txt', 'r')
+    f = open('value.txt', 'r')
     host = f.read().split()
     print('{0}:{1}'.format(host[0], host[1]))
     app.run(host=host[0],port=host[1],debug=True)
