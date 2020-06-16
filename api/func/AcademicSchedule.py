@@ -14,16 +14,18 @@ def acaschedule():
 
     data = []
     while keyword is not None:
+        tmp = []
         arr = keyword.find_all('td')
         date = arr[0].text.strip().split(" ~ ")
         if len(date) == 1:
-            data.append(date[0])
-            data.append(date[0])
+            tmp.append(date[0])
+            tmp.append(date[0])
         else:
-            data.append(date[0])
-            data.append(date[1])
-        data.append((array[1].text.strip()))
+            tmp.append(date[0])
+            tmp.append(date[1])
+        tmp.append((arr[1].text.strip()))
         # print(array[0].text.strip()+"\t\t"+ array[1].text.strip())
+        data.append(tmp)
         keyword = keyword.next_sibling.next_sibling
     return data
 
