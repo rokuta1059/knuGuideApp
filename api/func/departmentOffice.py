@@ -26,7 +26,7 @@ def split_id(d_id):
     """
     return [d_id[i:i+3] for i in range(0, len(d_id), 3)]
 
-def get_department_office():
+def get_department_office_all():
     
     cursor = db_connect()
     sql = "select * from table_department"

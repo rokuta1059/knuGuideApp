@@ -25,6 +25,13 @@ class testMulti(Resource):
     def get(self, num):
         return {'result': num * 10}
 
+class department_office_all(Resource):
+    def get(self):
+        officeTable = func.get_department_office_all()
+        parser = reqparse.RequestParser()
+        parser.add_argument('content', type=list)
+
+        return {"content": officeTable}
 
 class departmentOffice(Resource):
     """
@@ -34,6 +41,7 @@ class departmentOffice(Resource):
     def get(self, department_id):
         officeTable = func.get_department_office(department_id)
         parser = reqparse.RequestParser()
+        parser.add_argument('department', type=str)
         parser.add_argument('content', type=list)
 
         return { "department": department_id,
@@ -85,6 +93,7 @@ class universitySchedule(Resource):
 
 api.add_resource(myTestApi, '/')
 api.add_resource(testMulti, '/multi/<int:num>')
+api.add_resource(department_office_all, '/department/office')
 api.add_resource(departmentOffice, '/department/office/<department_id>')
 api.add_resource(departmentNotice, '/department/notice/<department_id>')
 api.add_resource(cafeteriaMenu, '/cafeteria/<name>')
