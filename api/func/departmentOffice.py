@@ -46,7 +46,7 @@ def get_department_office(department_id):
         cursor.execute(sql, (id))
         data = cursor.fetchall()
 
-        json_data.append(mj.make_department_office_json(data))
+        json_data.extend(mj.make_department_office_json(data))
 
     return json_data
 
