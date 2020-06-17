@@ -27,7 +27,7 @@ class testMulti(Resource):
 
 class department_office_all(Resource):
     def get(self):
-        officeTable = func.get_department_office()
+        officeTable = func.get_department_office_all()
         parser = reqparse.RequestParser()
         parser.add_argument('content', type=list)
 
