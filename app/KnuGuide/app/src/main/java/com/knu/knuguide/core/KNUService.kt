@@ -1,33 +1,34 @@
 package com.knu.knuguide.core
 
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger
-import io.reactivex.Flowable
+import com.knu.knuguide.BuildConfig
+import com.knu.knuguide.core.logging.HttpPrettyLogging
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
-import org.jsoup.Jsoup
-import retrofit2.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.URLEncoder
-import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 
 class KNUService {
     init {
-        Logger.addLogAdapter(AndroidLogAdapter()) // Logger initialize
+        val loggingInterceptor = HttpLoggingInterceptor(HttpPrettyLogging())
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val baseClientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
+
+        if (BuildConfig.DEBUG)
+            baseClientBuilder.addInterceptor(loggingInterceptor)
+
         val baseClient = baseClientBuilder.build()
 
         val baseRetrofitBuilder = Retrofit.Builder()
-                .baseUrl(TEST_URL)
+                .baseUrl(TEST_URL_2)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(baseClient)
@@ -64,11 +65,23 @@ class KNUService {
 //            .observeOn(AndroidSchedulers.mainThread())
 //    }
 
+    fun getTest(): Single<ResponseBody> {
+        return api!!.getTest()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getSchedule(): Single<ResponseBody> {
+        return api!!.getSchedule()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     companion object {
         private var service: KNUService? = null
 
         private var TEST_URL = "http://www.chbis.kr/"
-        private var TEST_URL_2 = "https://api.stackexchange.com/"
+        private var TEST_URL_2 = "http://13.125.224.14:8888/"
         private var TEST_URL_3 = "https://samples.openweathermap.org/data/2.5/"
 
         private var api: KNUInterface? = null
