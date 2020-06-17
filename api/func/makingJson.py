@@ -10,6 +10,7 @@ def make_department_office_json(data):
         jsonTable = OrderedDict()
         jsonTable["college"] = t['college']
         jsonTable["department"] = t['department']
+        jsonTable["id"] = t['id']
         jsonTable["callnumber"] = t['callnumber']
         jsonTable["location"] = t['location']
         jsonTable["map"] = t['map']
