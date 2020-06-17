@@ -17,6 +17,7 @@ import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.CalendarAdapter
 import com.knu.knuguide.view.adapter.CalendarTaskAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
+import com.knu.knuguide.view.widget.KNUHorizontalProgressbar
 import kotlinx.android.synthetic.main.activity_calendar.*
 import kotlinx.android.synthetic.main.cal_contents.*
 import kotlinx.android.synthetic.main.cal_header.*
@@ -27,6 +28,8 @@ import kotlin.collections.ArrayList
 
 class CalendarActivity : KNUActivity(), KNUAdapterListener {
     private val fastClickPreventer = FastClickPreventer()
+
+    lateinit var progressBar: KNUHorizontalProgressbar
 
     // 1월 ~ 12월까지 day 정보를 저장할 Map Collection
     var cal_maps = HashMap<Int, ArrayList<KNUData>>()
@@ -95,6 +98,10 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
                 adapter.notifyDataSetChanged()
             }
         }
+
+        // progressBar initialize
+        progressBar = findViewById(R.id.progress_bar)
+        progressBar.startProgress()
     }
 
     // calendar header 초기화
