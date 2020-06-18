@@ -1,44 +1,84 @@
 package com.knu.knuguide.data.calendar
 
 import android.graphics.Color
+import com.google.gson.annotations.SerializedName
 import com.knu.knuguide.data.KNUData
 import java.io.Serializable
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Task : Serializable, KNUData {
-    private var start: GregorianCalendar
-    private var end: GregorianCalendar? = null
-    var content: String
-
-    constructor(start: GregorianCalendar, content: String) {
-        this.start = start
-        this.content = content
-    }
-    constructor(start: GregorianCalendar, end: GregorianCalendar, content: String) {
-        this.start = start
-        this.end = end
-        this.content = content
-    }
+    /**
+     * startDate : 시작일
+     * endDate : 종료일
+     * content : 일정 내용
+     */
+    @SerializedName("start_date")
+    internal var startDate: String? = null
+    @SerializedName("end_date")
+    internal var endDate: String? = null
+    @SerializedName("content")
+    var content: String? = null
 
     override fun getRecyclerType(): Int {
         return KNUData.Type.ITEM_TASK
     }
 
-    fun getDateRangeText(): String {
-        val startText = "${start.get(Calendar.YEAR)}.${getZeroFormat(start.get(Calendar.MONTH))}.${getZeroFormat(start.get(Calendar.DAY_OF_MONTH))}"
+    private fun getStartDate(): String {
+        if (startDate.isNullOrEmpty())
+            startDate = "2000.01.01(월)"
 
-        return if (end == null) { startText }
-        else {
-            val endText = "${end!!.get(Calendar.YEAR)}.${getZeroFormat(end!!.get(Calendar.MONTH))}.${getZeroFormat(end!!.get(Calendar.DAY_OF_MONTH))}"
-
-            "$startText ~ $endText"
-        }
+        return "$startDate"
     }
 
-    private fun getZeroFormat(value: Int): String = if (value < 10) "0$value" else "$value"
+    private fun getEndDate(): String {
+        if (endDate.isNullOrEmpty())
+            endDate = "2000.01.01(월)"
+
+        return "$endDate"
+    }
+
+    fun getStartDateCalendar(): Calendar {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd(E)")
+
+        // Calendar 시간 설정
+        calendar.time = dateFormat.parse(getStartDate())
+
+        return calendar
+    }
+
+    fun getEndDateCalendar(): Calendar {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd(E)")
+
+        // Calendar 시간 설정
+        calendar.time = dateFormat.parse(getEndDate())
+
+        return calendar
+    }
+
+    fun getDateString(): String {
+        return if (getStartDate() == getEndDate()) getStartDate()
+               else "${getStartDate()} ~ ${getEndDate()}"
+    }
+
+    fun startDateToYearMonthTag(): String {
+        val calendar = getStartDateCalendar()
+
+        return "${calendar.get(Calendar.YEAR)}${calendar.get(Calendar.MONTH)+1}"
+    }
+
+    fun endDateToYearMonthTag(): String {
+        val calendar = getEndDateCalendar()
+
+        return "${calendar.get(Calendar.YEAR)}${calendar.get(Calendar.MONTH)+1}"
+    }
 
     fun getStartDay(current: Int): Int {
-        return if (start.get(Calendar.MONTH) != current) {
+        val start = getStartDateCalendar()
+
+        return if (start.get(Calendar.MONTH) != current - 1) {
             1
         } else {
             start.get(Calendar.DAY_OF_MONTH)
@@ -46,12 +86,15 @@ class Task : Serializable, KNUData {
     }
 
     fun getEndDay(current: Int): Int {
+        val start = getStartDateCalendar()
+        val end = getEndDateCalendar()
+
         return when {
-            end == null -> {
+            endDate == startDate -> {
                 -1
             }
-            end!!.get(Calendar.MONTH) != current -> {
-                end!!.getActualMaximum(Calendar.DAY_OF_MONTH)
+            end!!.get(Calendar.MONTH) != current - 1 -> {
+                start!!.getActualMaximum(Calendar.DAY_OF_MONTH)
             }
             else -> {
                 end!!.get(Calendar.DAY_OF_MONTH)

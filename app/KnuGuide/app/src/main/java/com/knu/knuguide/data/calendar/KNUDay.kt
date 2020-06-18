@@ -1,9 +1,11 @@
 package com.knu.knuguide.data.calendar
 
+import com.google.gson.annotations.SerializedName
 import com.knu.knuguide.data.KNUData
 import java.io.Serializable
 
 class KNUDay(private val type: Int, var day: Int) : Serializable, KNUData {
+
     var dayType = DayType.NONE      // 하루인지 기간인지 판별
     var dayPos = DayPosition.IN     // Task 에서 Day 위치
 

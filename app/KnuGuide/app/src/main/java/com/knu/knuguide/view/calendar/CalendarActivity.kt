@@ -1,10 +1,12 @@
 package com.knu.knuguide.view.calendar
 
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.knu.knuguide.R
+import com.knu.knuguide.core.KNUService
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.calendar.DayPosition
 import com.knu.knuguide.data.calendar.DayType
@@ -18,18 +20,21 @@ import com.knu.knuguide.view.adapter.CalendarAdapter
 import com.knu.knuguide.view.adapter.CalendarTaskAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.widget.KNUHorizontalProgressbar
+import com.orhanobut.logger.Logger
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_calendar.*
 import kotlinx.android.synthetic.main.cal_contents.*
 import kotlinx.android.synthetic.main.cal_header.*
 import kotlinx.android.synthetic.main.cal_months.*
 import kotlinx.android.synthetic.main.knu_appbar.*
+import okhttp3.ResponseBody
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CalendarActivity : KNUActivity(), KNUAdapterListener {
     private val fastClickPreventer = FastClickPreventer()
-
-    lateinit var progressBar: KNUHorizontalProgressbar
+    private val compositeDisposable = CompositeDisposable()
 
     // 1월 ~ 12월까지 day 정보를 저장할 Map Collection
     var cal_maps = HashMap<Int, ArrayList<KNUData>>()
@@ -40,14 +45,17 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
     lateinit var adapter: CalendarAdapter
     lateinit var taskAdapter: CalendarTaskAdapter
 
+    /**
+       todo: 1. 달력 초기화
+             2. 일정 데이터 Load & 추가
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
         appbar_back.setOnClickListener{ if (fastClickPreventer.isClickable()) onBackPressed() }
 
-        setTasks()
-
+        // setUpCalendar
         initCalHeaders(calendar.get(Calendar.YEAR))
         initCalMaps(calendar.get(Calendar.YEAR))
 
@@ -55,13 +63,19 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
         rv_calendar.layoutManager = StaggeredGridLayoutManager(7, StaggeredGridLayoutManager.VERTICAL) // 요일 수만큼
         rv_calendar.adapter = adapter
 
-        taskAdapter = CalendarTaskAdapter(this, task_maps["20205"]!!, this)
+        task_maps["202005"] = ArrayList<KNUData>()
+        taskAdapter = CalendarTaskAdapter(this, task_maps["202005"]!!, this)
         rv_task.layoutManager = LinearLayoutManager(this)
         rv_task.adapter = taskAdapter
         rv_task.addItemDecoration(PreviewAnnouncementDecor(this, 1F))
 
         tab_months.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                taskAdapter.unselect()
+
+                val dayList: ArrayList<KNUDay> = adapter.getItems() as ArrayList<KNUDay>
+                dayList.iterator().forEach { it.dayType = DayType.NONE }
+
                 tv_contents_title.text = tab?.text
                 adapter.setItems(cal_maps[tab_months.selectedTabPosition + 1]!!)
                 adapter.notifyDataSetChanged()
@@ -77,7 +91,6 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {}
             override fun onTabUnselected(p0: TabLayout.Tab?) {}
         })
-        tab_months.getTabAt(calendar.get(Calendar.MONTH))?.select()
 
         bt_year_prev.setOnClickListener {
             if (fastClickPreventer.isClickable()) {
@@ -86,6 +99,14 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
                 initCalMaps(calendar.get(Calendar.YEAR))
                 adapter.setItems(cal_maps[tab_months.selectedTabPosition + 1]!!)
                 adapter.notifyDataSetChanged()
+
+                if (task_maps["${calendar.get(Calendar.YEAR)}${tab_months.selectedTabPosition + 1}"].isNullOrEmpty()) {
+                    taskAdapter.setItems(ArrayList<KNUData>())
+                }
+                else {
+                    taskAdapter.setItems(task_maps["${calendar.get(Calendar.YEAR)}${tab_months.selectedTabPosition + 1}"]!!)
+                }
+                taskAdapter.notifyDataSetChanged()
             }
         }
 
@@ -96,12 +117,19 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
                 initCalMaps(calendar.get(Calendar.YEAR))
                 adapter.setItems(cal_maps[tab_months.selectedTabPosition + 1]!!)
                 adapter.notifyDataSetChanged()
+
+                if (task_maps["${calendar.get(Calendar.YEAR)}${tab_months.selectedTabPosition + 1}"].isNullOrEmpty()) {
+                    taskAdapter.setItems(ArrayList<KNUData>())
+                }
+                else {
+                    taskAdapter.setItems(task_maps["${calendar.get(Calendar.YEAR)}${tab_months.selectedTabPosition + 1}"]!!)
+                }
+                taskAdapter.notifyDataSetChanged()
             }
         }
 
-        // progressBar initialize
-        progressBar = findViewById(R.id.progress_bar)
-        progressBar.startProgress()
+        // setUpTask
+        setTasks()
     }
 
     // calendar header 초기화
@@ -135,14 +163,41 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
     }
 
     private fun setTasks() {
-        val taskList = ArrayList<KNUData>()
+        progress_bar.startProgress()
 
-        taskList.add(Task(Utils.getDate(2020, 4, 20), Utils.getDate(2020, 5, 4), "석사학위청구 논문심사 신청(대학원)"))
-        taskList.add(Task(Utils.getDate(2020, 5, 4), Utils.getDate(2020,5,8), "1학기 중간 수업평가"))
-        taskList.add(Task(Utils.getDate(2020, 5, 8), "중간시험 종료일"))
-        taskList.add(Task(Utils.getDate(2020, 5, 20), Utils.getDate(2020,5,22), "계절학기 수강신청"))
+        compositeDisposable.add(KNUService.instance()!!.getSchedule().subscribeWith(object : DisposableSingleObserver<List<Task>>() {
+            override fun onSuccess(list: List<Task>) {
+                progress_bar.stopProgress()
 
-        task_maps["20205"] = taskList
+                /**
+                 * todo : 1. list에 담긴 task 하나씩 startDate와 endDate를 비교하여 걸친 년월에 모두 Task를 추가
+                 * */
+                for (task in list) {
+                    val startTag = task.startDateToYearMonthTag()
+                    val endTag = task.endDateToYearMonthTag()
+
+                    if (task_maps[startTag] == null)
+                        task_maps[startTag] = ArrayList<KNUData>()
+
+                    task_maps[startTag]!!.add(task)
+
+                    if (startTag != endTag) {
+                        if (task_maps[endTag] == null)
+                            task_maps[endTag] = ArrayList<KNUData>()
+
+                        task_maps[endTag]!!.add(task)
+                    }
+                }
+
+                tab_months.getTabAt(calendar.get(Calendar.MONTH))?.select()
+            }
+
+            override fun onError(e: Throwable) {
+                progress_bar.stopProgress()
+
+                Log.d("Error", e.message)
+            }
+        }))
     }
 
     override fun onCalendarTaskItemClick(task: Task, isUnchecked: Boolean): Boolean {
@@ -165,20 +220,29 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
                 dayList[count + startDay - 1].dayType = DayType.SINGLE
             }
             else {
-                for (range in startDay..endDay) {
-                    dayList[count + range - 1].dayType = DayType.DURATION
-                    dayList[count + range - 1].dayPos = DayPosition.IN
+                if (startDay == task.getStartDateCalendar().getActualMaximum(Calendar.DAY_OF_MONTH))
+                    dayList[count + startDay - 1].dayType = DayType.SINGLE
+                else {
+                    for (range in startDay..endDay) {
+                        dayList[count + range - 1].dayType = DayType.DURATION
+                        dayList[count + range - 1].dayPos = DayPosition.IN
 
-                    if (range == startDay)
-                        dayList[count + range - 1].dayPos = DayPosition.START
-                    if (range == endDay)
-                        dayList[count + range - 1].dayPos = DayPosition.END
+                        if (range == startDay)
+                            dayList[count + range - 1].dayPos = DayPosition.START
+                        if (range == endDay)
+                            dayList[count + range - 1].dayPos = DayPosition.END
+                    }
                 }
             }
         }
         adapter.notifyDataSetChanged()
 
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()   // 해제
     }
 
     override fun getKNUID(): String {

@@ -3,6 +3,7 @@ package com.knu.knuguide.view.main
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.knu.knuguide.R
+import com.knu.knuguide.core.KNUService
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.announcement.Announcement
 import com.knu.knuguide.support.FastClickPreventer
@@ -12,10 +13,13 @@ import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.speech.SpeechTestActivity
+import com.orhanobut.logger.Logger
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.knu_appbar.*
 import kotlinx.android.synthetic.main.preview_announcement.*
+import okhttp3.ResponseBody
 
 class MainActivity : KNUActivity() {
     private val compositeDisposable = CompositeDisposable()
@@ -62,22 +66,6 @@ class MainActivity : KNUActivity() {
         recyclerView.adapter = AnnouncementAdapter(this, items)
         recyclerView.addItemDecoration(PreviewAnnouncementDecor(this, 2f))
     }
-
-//    fun getStations(stationName: String) {
-//        compositeDisposable.add(KNUService.instance()!!.postStation(stationName)
-//            .subscribeWith(object : DisposableSingleObserver<ArrayList<String>>() {
-//                override fun onSuccess(t: ArrayList<String>) {
-//                    station.text = ""
-//
-//                    for (name in t) {
-//                        station.append(name + "\n")
-//                    }
-//                }
-//                override fun onError(e: Throwable) {
-//                    Logger.d("onError ${e.message}")
-//                }
-//            }))
-//    }
 
     override fun getKNUID(): String {
         return KNU_ID

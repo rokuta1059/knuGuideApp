@@ -18,7 +18,7 @@ class CalendarTaskAdapter(
     private var items: ArrayList<KNUData>,
     private val listener: KNUAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var selectedPosition: Int = -1
+    var selectedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -34,7 +34,7 @@ class CalendarTaskAdapter(
     }
 
     private fun bindCalendarTaskHolder(holder: CalendarTaskViewHolder, task: Task, position: Int) {
-        holder.itemView.tv_dateRanges.text = task.getDateRangeText()
+        holder.itemView.tv_dateRanges.text = task.getDateString()
         holder.itemView.tv_content.text = task.content
 
         if (selectedPosition == position) {
@@ -65,6 +65,10 @@ class CalendarTaskAdapter(
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun unselect() {
+        selectedPosition = -1
     }
 
     fun setItems(items: ArrayList<KNUData>) {

@@ -1,13 +1,19 @@
 package com.knu.knuguide.core
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.knu.knuguide.BuildConfig
 import com.knu.knuguide.core.logging.HttpPrettyLogging
+import com.knu.knuguide.data.calendar.KNUDay
+import com.knu.knuguide.data.calendar.Task
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,6 +39,8 @@ class KNUService {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(baseClient)
         api = baseRetrofitBuilder.build().create(KNUInterface::class.java)
+
+        gson = GsonBuilder().create()
     }
 
 //    fun postStation(stationName: String): Single<ArrayList<String>> {
@@ -71,14 +79,21 @@ class KNUService {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getSchedule(): Single<ResponseBody> {
+    fun getSchedule(): Single<List<Task>> {
         return api!!.getSchedule()
+            .map {
+                val respJson = JSONObject(it.string())
+                val contents = respJson.getJSONArray("content")
+                val scheduleList = gson.fromJson<List<Task>>(contents.toString(), object : TypeToken<List<Task>>() {}.type)
+                scheduleList
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
     companion object {
         private var service: KNUService? = null
+        lateinit var gson: Gson
 
         private var TEST_URL = "http://www.chbis.kr/"
         private var TEST_URL_2 = "http://13.125.224.14:8888/"
