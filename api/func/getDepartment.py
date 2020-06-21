@@ -1,5 +1,4 @@
 from . import departmentnotice as dn
-from . import crawling as cw
 from . import makingJson as mj
 import pymysql
 from datetime import datetime
@@ -10,7 +9,7 @@ from datetime import datetime
 """
 
 def sort_notice(data):
-    return sorted(data, key=lambda x : (x[1] == "공지", datetime.strptime(x[3], '%Y-%m-%d')), reverse = True)
+    return sorted(data, key=lambda x: (x[1] == "공지", datetime.strptime(x[3], '%Y-%m-%d')), reverse=True)
 
 def split_id(d_id):
     """
@@ -175,3 +174,6 @@ def get_department_func(department_id):
 #         return dn.departmentComputerNotice()
 #     elif department == "경영학전공":
 #         return dn.departmentBizNotice()
+
+if __name__ == '__main__':
+    get_department_func("AAA")

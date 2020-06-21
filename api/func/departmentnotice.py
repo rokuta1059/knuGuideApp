@@ -11,21 +11,25 @@ from bs4 import BeautifulSoup
 baseurl = ""
 
 
-# 일반적인 홈페이지 불러올 때 사용하는 함수
-# requests.get 함수를 사용한다.
-# return soup (홈페이지 소스)
+
 def callreq(base, url):
+    """
+    일반적인 홈페이지 불러올 때 사용하는 함수
+    requests.get 함수를 사용한다.
+    return soup (홈페이지 소스)
+    """
     global baseurl
     baseurl = base
     resp = requests.get(base+url)
     soup = BeautifulSoup(resp.content, "html.parser")
     return soup
 
-
-# 인증서가 필요한 홈페이지를 불러올 때 사용하는 함수
-# urlopen 함수를 사용한다.
-# return soup (홈페이지 소스)
 def callurl(base, url):
+    """
+    인증서가 필요한 홈페이지를 불러올 때 사용하는 함수
+    urlopen 함수를 사용한다.
+    return soup (홈페이지 소스)
+    """
     global baseurl
     baseurl = base
     context = ssl._create_unverified_context()          # 인증서 생성
@@ -34,11 +38,13 @@ def callurl(base, url):
     return soup
 
 
-# num을 받아 와서 num이 비어있거나 알파벳이 들어가 있으면
-# num을 공지로 바꿔주고 리턴한다.
-# 숫자일 경우 그대로 리턴해준다.
-# return num (공지 or 숫자)
 def numbering(num):
+    """
+    num을 받아 와서 num이 비어있거나 알파벳이 들어가 있으면
+    num을 공지로 바꿔주고 리턴한다.
+    숫자일 경우 그대로 리턴해준다.
+    return num (공지 or 숫자)
+    """
     compare = num[0:1]
     if num == '':
         num = '공지'
@@ -48,10 +54,12 @@ def numbering(num):
     return num
 
 
-# soup (홈페이지 소스)
-# titlesign (제목의 태그가 무엇인지 받아오는 변수)
-# callsign (callreq를 사용할 것인지 callurl을 사용할 것인지 받아오는 변수)
 def cba(department, soup, titlesign, callsign):
+    """
+    - soup : 홈페이지 소스
+    - titlesign : 제목의 태그가 무엇인지 받아오는 변수
+    - callsign : callreq를 사용할 것인지 callurl을 사용할 것인지 받아오는 변수
+    """
     data = []
     # iframe을 발견하면 iframe 페이지를 불러온다.
     if soup.find('iframe') is not None:
