@@ -35,4 +35,13 @@ interface KNUInterface {
 
     @GET("department/office")
     fun getDepartment(): Single<ResponseBody>
+
+    @GET("department/office/{id}")
+    fun getDepartmentById(@Path("id") id: String): Single<ResponseBody>
+
+    /**
+     * id : 특정 과 코드명 (ex : AAA)
+     */
+    @GET("department/notice/{id}")
+    fun getNotice(@Path("id") id: String): Single<ResponseBody>
 }

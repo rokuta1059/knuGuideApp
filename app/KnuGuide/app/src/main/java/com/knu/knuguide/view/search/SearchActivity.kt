@@ -1,5 +1,6 @@
 package com.knu.knuguide.view.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
@@ -13,6 +14,7 @@ import com.knu.knuguide.support.KNUAdapterListener
 import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.SearchAdapter
 import com.knu.knuguide.view.adapter.decor.SearchAdapterDecor
+import com.knu.knuguide.view.announcement.AnnouncementActivity.Companion.KEY_DEPARTMENT
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_search.*
@@ -89,9 +91,13 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         const val KNU_ID = "SearchActivity"
     }
 
+    /*
+        item을 이전 activity에 넘겨준다.
+     */
     override fun onSearchItemClick(item: Department) {
-        println(item.department)
-
-        // 결과 전송 Intent 작성
+        val intent = Intent()
+        intent.putExtra(KEY_DEPARTMENT, item)
+        setResult(RESULT_OK, intent)
+        finish()
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.knu.knuguide.BuildConfig
 import com.knu.knuguide.core.logging.HttpPrettyLogging
+import com.knu.knuguide.data.announcement.Announcement
 import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.data.search.Department
@@ -76,6 +77,7 @@ class KNUService {
 //            .observeOn(AndroidSchedulers.mainThread())
 //    }
 
+    // 학사일정 가져오기
     fun getSchedule(): Single<List<Task>> {
         return api!!.getSchedule()
             .map {
@@ -84,10 +86,12 @@ class KNUService {
                 val scheduleList = gson.fromJson<List<Task>>(contents.toString(), object : TypeToken<List<Task>>() {}.type)
                 scheduleList
             }
+            .onErrorResumeNext { getSchedule() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // 전체 과 정보 가져오기
     fun getDepartment(): Single<List<Department>> {
         return api!!.getDepartment()
             .map {
@@ -97,6 +101,34 @@ class KNUService {
                 items
             }
             .onErrorResumeNext { getDepartment() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 특정 과 정보 가져오기
+    fun getDepartmentById(id: String): Single<List<Department>> {
+        return api!!.getDepartmentById(id)
+            .map {
+                val respJson = JSONObject(it.string())
+                val contents = respJson.getJSONArray("content")
+                val items = gson.fromJson<List<Department>>(contents.toString(), object : TypeToken<List<Department>>() {}.type)
+                items
+            }
+            .onErrorResumeNext { getDepartmentById(id) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 특정 과 공지사항 가져오기
+    fun getNotice(id: String): Single<List<Announcement>> {
+        return api!!.getNotice(id)
+            .map {
+                val respJson = JSONObject(it.string())
+                val contents = respJson.getJSONArray("notice")
+                val items = gson.fromJson<List<Announcement>>(contents.toString(), object : TypeToken<List<Announcement>>() {}.type)
+                items
+            }
+            .onErrorResumeNext { getNotice(id) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

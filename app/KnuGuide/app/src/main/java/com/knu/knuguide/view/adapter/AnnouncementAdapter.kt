@@ -12,10 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.announcement.Announcement
+import com.knu.knuguide.support.KNUAdapterListener
 import kotlinx.android.synthetic.main.item_announcement.view.*
 import kotlinx.android.synthetic.main.item_announcement_preview.view.*
 
-class AnnouncementAdapter(private val context: Context, private val items: ArrayList<KNUData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AnnouncementAdapter(
+    private val context: Context,
+    private var items: ArrayList<KNUData>,
+    private val listener: KNUAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -50,9 +54,9 @@ class AnnouncementAdapter(private val context: Context, private val items: Array
     private fun bindAnnouncement(announcement: Announcement, holder: AnnouncementViewHolder) {
         holder.itemView.department.text = announcement.department
         holder.itemView.title.text = announcement.title
-        holder.itemView.date.text = announcement.getDateString()
+        holder.itemView.date.text = announcement.date
 
-        if (announcement.isFavorite) {
+        if (announcement.isFixed()) {
             holder.itemView.v_tag.setBackgroundResource(R.color.item_announcement_favorite)
             holder.itemView.iv_department.setColorFilter(ContextCompat.getColor(context, R.color.item_announcement_favorite))
             holder.itemView.iv_date.setColorFilter(ContextCompat.getColor(context, R.color.item_announcement_favorite))
