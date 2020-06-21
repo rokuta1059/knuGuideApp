@@ -13,6 +13,9 @@ interface KNUData : Serializable {
             const val ITEM_DAY_EMPTY = 20
             const val ITEM_DAY = 21
             const val ITEM_TASK = 22
+
+            // Search
+            const val ITEM_SEARCH_DEPARTMENT = 30
         }
     }
 

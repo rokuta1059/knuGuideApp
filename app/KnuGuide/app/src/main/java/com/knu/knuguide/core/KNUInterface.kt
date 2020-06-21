@@ -32,4 +32,7 @@ interface KNUInterface {
      */
     @GET("university/schedule")
     fun getSchedule(): Single<ResponseBody>
+
+    @GET("department/office")
+    fun getDepartment(): Single<ResponseBody>
 }

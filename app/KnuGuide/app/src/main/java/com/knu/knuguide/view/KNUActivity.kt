@@ -4,6 +4,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.appbar.AppBarLayout
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.main.MainActivity
+import com.knu.knuguide.view.search.SearchActivity
 import kotlinx.android.synthetic.main.knu_appbar.*
 
 abstract class KNUActivity : KNUBlankActivity() {
@@ -16,7 +17,8 @@ abstract class KNUActivity : KNUBlankActivity() {
     private fun initActionBar(KNU_ID: String) {
         when (KNU_ID) {
             MainActivity.KNU_ID,
-            CalendarActivity.KNU_ID -> {
+            CalendarActivity.KNU_ID,
+            SearchActivity.KNU_ID -> {
                 setSupportActionBar(appbar)
             }
         }
@@ -33,6 +35,10 @@ abstract class KNUActivity : KNUBlankActivity() {
                 setActionBarTitle(true, "학사일정", "")
                 setActionBarScrollFlag()
             }
+            SearchActivity.KNU_ID -> {
+                setActionBarCustomView(KNU_ID)
+                setActionBarTitle(false, "", "")
+            }
         }
     }
 
@@ -43,6 +49,10 @@ abstract class KNUActivity : KNUBlankActivity() {
             }
             CalendarActivity.KNU_ID -> {
                 appbar_back.isVisible = true
+            }
+            SearchActivity.KNU_ID -> {
+                appbar_back.isVisible = true
+                searchview.isVisible = true
             }
         }
     }

@@ -7,16 +7,19 @@ import com.knu.knuguide.BuildConfig
 import com.knu.knuguide.core.logging.HttpPrettyLogging
 import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.data.calendar.Task
+import com.knu.knuguide.data.search.Department
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Headers
 import java.util.concurrent.TimeUnit
 
 
@@ -73,12 +76,6 @@ class KNUService {
 //            .observeOn(AndroidSchedulers.mainThread())
 //    }
 
-    fun getTest(): Single<ResponseBody> {
-        return api!!.getTest()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
     fun getSchedule(): Single<List<Task>> {
         return api!!.getSchedule()
             .map {
@@ -87,6 +84,19 @@ class KNUService {
                 val scheduleList = gson.fromJson<List<Task>>(contents.toString(), object : TypeToken<List<Task>>() {}.type)
                 scheduleList
             }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getDepartment(): Single<List<Department>> {
+        return api!!.getDepartment()
+            .map {
+                val respJson = JSONObject(it.string())
+                val contents = respJson.getJSONArray("content")
+                val items = gson.fromJson<List<Department>>(contents.toString(), object : TypeToken<List<Department>>() {}.type)
+                items
+            }
+            .onErrorResumeNext { getDepartment() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

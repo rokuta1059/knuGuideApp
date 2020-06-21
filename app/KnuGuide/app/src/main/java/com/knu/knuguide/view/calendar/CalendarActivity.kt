@@ -201,9 +201,6 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
     }
 
     override fun onCalendarTaskItemClick(task: Task, isUnchecked: Boolean): Boolean {
-        if (!fastClickPreventer.isClickable())
-            return false
-
         /* 현재 월의 Day 정보 초기화 */
         val dayList: ArrayList<KNUDay> = adapter.getItems() as ArrayList<KNUDay>
         dayList.iterator().forEach { it.dayType = DayType.NONE }

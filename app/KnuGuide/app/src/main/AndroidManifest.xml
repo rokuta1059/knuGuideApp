@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.announcement.FilterSearchTestActivity"></activity>
+        <activity android:name=".view.search.SearchActivity"></activity>
+        <activity android:name=".view.announcement.FilterSearchTestActivity" />
         <activity android:name=".view.speech.SpeechTestActivity" />
         <activity android:name=".view.calendar.CalendarActivity" />
         <activity android:name=".view.announcement.AnnouncementActivity" />
@@ -24,13 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".view.main.MainActivity"></activity>
     </application>
 
 </manifest>
