@@ -22,11 +22,24 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ic_star"
         app:layout_constraintStart_toEndOf="@id/ic_department"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="학과 이름" />
+
+    <ImageView
+        android:id="@+id/ic_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:padding="8dp"
+        android:tint="@color/item_announcement_favorite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_star_filled" />
 </androidx.constraintlayout.widget.ConstraintLayout>

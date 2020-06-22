@@ -14,7 +14,9 @@ import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.announcement.Announcement
 import com.knu.knuguide.support.KNUAdapterListener
 import kotlinx.android.synthetic.main.item_announcement.view.*
+import kotlinx.android.synthetic.main.item_announcement.view.title
 import kotlinx.android.synthetic.main.item_announcement_preview.view.*
+import kotlinx.android.synthetic.main.item_search_department.view.*
 
 class AnnouncementAdapter(
     private val context: Context,
@@ -67,6 +69,10 @@ class AnnouncementAdapter(
             holder.itemView.iv_department.setColorFilter(ContextCompat.getColor(context, R.color.item_announcement_not_favorite))
             holder.itemView.iv_date.setColorFilter(ContextCompat.getColor(context, R.color.item_announcement_not_favorite))
             holder.itemView.bt_view.setColorFilter(ContextCompat.getColor(context, R.color.item_announcement_not_favorite))
+        }
+
+        holder.itemView.setOnClickListener {
+            listener.onAnnouncementClick(announcement)
         }
     }
 

@@ -13,6 +13,7 @@ class PrefService {
     private var editor: SharedPreferences.Editor? = null
 
     private lateinit var noticeId: String
+    private lateinit var favoriteId: String
 
     interface PrefChangeListener {
         fun onChangePref(key: String, value: Any)
@@ -23,6 +24,7 @@ class PrefService {
         pref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
         noticeId = pref.getString(NOTICE_DEPARTMENT_KEY, "")!!
+        favoriteId = pref.getString(DEPARTMENT_FAVORITE_KEY, "")!!
     }
 
     fun register(key: String, listener: PrefChangeListener?) {
@@ -42,9 +44,18 @@ class PrefService {
         return noticeId
     }
 
+    fun getFavoriteId(): String{
+        return favoriteId
+    }
+
     fun putNoticeId(id: String) {
         noticeId = id
         service?.put(NOTICE_DEPARTMENT_KEY, id)
+    }
+
+    fun putFavoriteId(id: String) {
+        favoriteId = id
+        service?.put(DEPARTMENT_FAVORITE_KEY, id)
     }
 
     private fun put(key: String, value: String) {
@@ -84,6 +95,8 @@ class PrefService {
         private var service: PrefService? = null
 
         const val NOTICE_DEPARTMENT_KEY = "NOTICE_DEPARTMENT_KEY"
+
+        const val DEPARTMENT_FAVORITE_KEY = "DEPARTMENT_FAVORITE_KEY"
 
         @Synchronized
         fun instance(): PrefService? {

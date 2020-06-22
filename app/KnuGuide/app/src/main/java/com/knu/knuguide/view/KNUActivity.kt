@@ -18,7 +18,8 @@ abstract class KNUActivity : KNUBlankActivity() {
         when (KNU_ID) {
             MainActivity.KNU_ID,
             CalendarActivity.KNU_ID,
-            SearchActivity.KNU_ID -> {
+            SearchActivity.KNU_ID,
+            WebViewActivity.KNU_ID -> {
                 setSupportActionBar(appbar)
             }
         }
@@ -39,6 +40,11 @@ abstract class KNUActivity : KNUBlankActivity() {
                 setActionBarCustomView(KNU_ID)
                 setActionBarTitle(false, "", "")
             }
+            WebViewActivity.KNU_ID -> {
+                setActionBarCustomView(KNU_ID)
+                setActionBarTitle(false, "", "")
+                setActionBarScrollFlag()
+            }
         }
     }
 
@@ -53,6 +59,9 @@ abstract class KNUActivity : KNUBlankActivity() {
             SearchActivity.KNU_ID -> {
                 appbar_back.isVisible = true
                 searchview.isVisible = true
+            }
+            WebViewActivity.KNU_ID -> {
+                appbar_back.isVisible = true
             }
         }
     }

@@ -12,10 +12,11 @@
     <style name="ProgressBarHorizontalTheme" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">4dp</item>
-        <item name="android:indeterminateTint">@color/appBackground</item>
+        <item name="android:indeterminateTint">@color/cal_header_title</item>
         <item name="android:indeterminate">true</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:visibility">invisible</item>
+        <item name="android:scaleY">3</item>
     </style>
 
 </resources>

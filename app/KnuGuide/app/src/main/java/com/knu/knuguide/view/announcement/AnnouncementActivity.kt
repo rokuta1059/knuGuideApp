@@ -13,14 +13,16 @@ import com.knu.knuguide.data.search.Department
 import com.knu.knuguide.support.FastClickPreventer
 import com.knu.knuguide.support.KNUAdapterListener
 import com.knu.knuguide.view.KNUActivityCollapse
+import com.knu.knuguide.view.WebViewActivity
 import com.knu.knuguide.view.adapter.AnnouncementAdapter
 import com.knu.knuguide.view.adapter.decor.AnnouncementDecor
 import com.knu.knuguide.view.search.SearchActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
+import kotlinx.android.synthetic.main.activity_announcement.*
 import kotlinx.android.synthetic.main.knu_appbar_collapse.*
-import kotlinx.android.synthetic.main.preview_announcement.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.preview_announcement.recyclerView
+import java.io.Serializable
 
 class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener {
     private val fastClickPreventer = FastClickPreventer()
@@ -33,7 +35,7 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener {
     private var items = ArrayList<KNUData>()
 
     //
-    lateinit var noticeId: String
+    private lateinit var noticeId: String
 
     /**
      * todo: 1. 즐겨찾기 / 검색
@@ -70,17 +72,19 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener {
 
     private fun setDepartment(item: Department) {
         val id = item.id
-        
-        // set title text
-        department_collapsed.text = item.department
-        department_expanded.text = item.department
 
         if (!id.isNullOrEmpty()) {
             noticeId = id // id 저장
 
+            progress_bar.startProgress()
             // 공지사항 데이터 불러오기
             compositeDisposable.add(KNUService.instance()!!.getNotice(id).subscribeWith(object : DisposableSingleObserver<List<Announcement>>() {
                 override fun onSuccess(list: List<Announcement>) {
+                    progress_bar.stopProgress()
+                    // set title text
+                    department_collapsed.text = item.department
+                    department_expanded.text = item.department
+
                     items.clear()
                     for (item in list) {
                         item.type = Announcement.Type.GENERAL // 일반 보기 형식 지정
@@ -98,6 +102,7 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener {
     }
 
     private fun setDepartmentById(id: String) {
+        progress_bar.startProgress()
 
         compositeDisposable.add(KNUService.instance()!!.getDepartmentById(id).subscribeWith(object : DisposableSingleObserver<List<Department>>() {
             override fun onSuccess(list: List<Department>) {
@@ -110,6 +115,8 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener {
                     // 공지사항 데이터 불러오기
                     compositeDisposable.add(KNUService.instance()!!.getNotice(id).subscribeWith(object : DisposableSingleObserver<List<Announcement>>() {
                         override fun onSuccess(list: List<Announcement>) {
+                            progress_bar.stopProgress()
+
                             items.clear()
                             for (item in list) {
                                 item.type = Announcement.Type.GENERAL // 일반 보기 형식 지정
@@ -131,8 +138,12 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener {
                 Log.d("Error", e.message)
             }
         }))
+    }
 
-
+    override fun onAnnouncementClick(item: Announcement) {
+        val args = Bundle()
+        args.putSerializable(WebViewActivity.KEY_DATA, item.link)
+        navigateTo(WebViewActivity::class.java, args)
     }
 
     // 자원 해제
