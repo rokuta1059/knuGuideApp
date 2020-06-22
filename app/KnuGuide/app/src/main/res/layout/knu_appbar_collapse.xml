@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
+                app:layout_constraintGuide_percent="0.5"/>
 
             <ImageButton
                 android:id="@+id/appbar_menu"
@@ -103,6 +103,20 @@
                 tools:text="컴퓨터공학과"
                 tools:visibility="visible"/>
 
+            <ImageButton
+                android:id="@+id/appbar_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:tint="@android:color/white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/guideline"
+                app:layout_constraintEnd_toStartOf="@id/appbar_search"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_star_filled"
+                tools:visibility="visible" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         
         <!-- collapsed toolbar -->
@@ -117,6 +131,19 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/appbar_back_collapsed"
+                    android:layout_width="24dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@android:color/transparent"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_arrow_back"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/department_collapsed"
@@ -142,7 +169,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_search_white"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

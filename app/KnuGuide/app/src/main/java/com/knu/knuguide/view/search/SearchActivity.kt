@@ -16,6 +16,7 @@ import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.SearchAdapter
 import com.knu.knuguide.view.adapter.decor.SearchAdapterDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity.Companion.KEY_DEPARTMENT
+import com.knu.knuguide.view.department.DepartmentActivity.Companion.KEY_DEPARTMENT_INFO
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_search.*
@@ -48,6 +49,17 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         recycler_view_search.layoutManager = LinearLayoutManager(this)
         recycler_view_search.adapter = mAdapter
         recycler_view_search.addItemDecoration(SearchAdapterDecor(this, 1F, 16F))
+
+        try {
+            val bundle = intent.extras
+            if (bundle != null) {
+                if (bundle.getBoolean(KEY_DEPARTMENT_INFO))
+                    mAdapter.releaseFavorite()
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         // getNoticeId
         favoriteId = PrefService.instance()!!.getFavoriteId()
@@ -128,7 +140,9 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
                 sb.append(department.id)
         }
 
-        if (sb.isNotEmpty())
+        if (sb.toString().isEmpty())
+            PrefService.instance()?.putFavoriteId("")
+        else
             PrefService.instance()?.putFavoriteId(sb.toString())
     }
 

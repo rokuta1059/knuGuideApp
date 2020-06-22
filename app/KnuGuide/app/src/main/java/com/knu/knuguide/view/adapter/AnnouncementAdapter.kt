@@ -71,14 +71,17 @@ class AnnouncementAdapter(
             holder.itemView.bt_view.setColorFilter(ContextCompat.getColor(context, R.color.item_announcement_not_favorite))
         }
 
-        holder.itemView.setOnClickListener {
-            listener.onAnnouncementClick(announcement)
-        }
+        holder.itemView.setOnClickListener { listener.onAnnouncementClick(announcement) }
+        holder.itemView.bt_view.setOnClickListener { listener.onAnnouncementClick(announcement) }
     }
 
     private fun bindAnnouncementPreview(announcement: Announcement, holder: AnnouncementViewHolder) {
         holder.itemView.source.text = announcement.department
         holder.itemView.itemtitle.text = announcement.title
+
+        holder.itemView.setOnClickListener {
+            listener.onAnnouncementClick(announcement)
+        }
     }
 
 

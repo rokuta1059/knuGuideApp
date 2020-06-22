@@ -100,7 +100,6 @@ class KNUService {
                 val items = gson.fromJson<List<Department>>(contents.toString(), object : TypeToken<List<Department>>() {}.type)
                 items
             }
-            .onErrorResumeNext { getDepartment() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

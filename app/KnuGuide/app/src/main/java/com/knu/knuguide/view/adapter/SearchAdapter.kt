@@ -12,6 +12,8 @@ import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.search.Department
 import com.knu.knuguide.support.KNUAdapterListener
+import com.knu.knuguide.support.Utils
+import kotlinx.android.synthetic.main.activity_announcement.*
 import kotlinx.android.synthetic.main.item_search_department.view.*
 
 class SearchAdapter(
@@ -20,6 +22,8 @@ class SearchAdapter(
     private val listener: KNUAdapterListener) :  RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     private var searchItems = items
+
+    private var unFavorite = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -84,6 +88,9 @@ class SearchAdapter(
     private fun bindDepartmentHolder(holder: DepartmentViewHolder, item: Department, position: Int) {
         holder.itemView.title.text = item.department
 
+        if (unFavorite)
+            holder.itemView.ic_star.visibility = View.INVISIBLE
+
         if (item.isFavorite)
             holder.itemView.ic_star.setImageResource(R.drawable.ic_star_filled)
         else
@@ -96,13 +103,22 @@ class SearchAdapter(
                 item.isFavorite = false
 
                 holder.itemView.ic_star.setImageResource(R.drawable.ic_star_unfilled)
+
+                Utils.showSnackbar(holder.itemView, "${item.department} (이)가 즐겨찾기에서 삭제되었습니다.")
             }
             else {
                 item.isFavorite = true
 
                 holder.itemView.ic_star.setImageResource(R.drawable.ic_star_filled)
+
+                Utils.showSnackbar(holder.itemView, "${item.department} (이)가 즐겨찾기에 추가되었습니다.")
             }
         }
+    }
+
+    fun releaseFavorite() {
+        unFavorite = true
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {

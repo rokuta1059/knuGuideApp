@@ -15,6 +15,8 @@ class PrefService {
     private lateinit var noticeId: String
     private lateinit var favoriteId: String
 
+    private var isFavorite: Boolean = false
+
     interface PrefChangeListener {
         fun onChangePref(key: String, value: Any)
     }
@@ -25,6 +27,8 @@ class PrefService {
 
         noticeId = pref.getString(NOTICE_DEPARTMENT_KEY, "")!!
         favoriteId = pref.getString(DEPARTMENT_FAVORITE_KEY, "")!!
+
+        isFavorite = pref.getBoolean(NOTICE_IS_FAVORITE_KEY, false)!!
     }
 
     fun register(key: String, listener: PrefChangeListener?) {
@@ -48,6 +52,10 @@ class PrefService {
         return favoriteId
     }
 
+    fun getIsFavorite(): Boolean {
+        return isFavorite
+    }
+
     fun putNoticeId(id: String) {
         noticeId = id
         service?.put(NOTICE_DEPARTMENT_KEY, id)
@@ -55,7 +63,13 @@ class PrefService {
 
     fun putFavoriteId(id: String) {
         favoriteId = id
+        service?.broadcast(DEPARTMENT_FAVORITE_KEY, id)
         service?.put(DEPARTMENT_FAVORITE_KEY, id)
+    }
+
+    fun putIsFavorite(`is`: Boolean) {
+        isFavorite = `is`
+        service?.put(NOTICE_IS_FAVORITE_KEY, `is`)
     }
 
     private fun put(key: String, value: String) {
@@ -95,6 +109,7 @@ class PrefService {
         private var service: PrefService? = null
 
         const val NOTICE_DEPARTMENT_KEY = "NOTICE_DEPARTMENT_KEY"
+        const val NOTICE_IS_FAVORITE_KEY = "NOTICE_IS_FAVORITE_KEY"
 
         const val DEPARTMENT_FAVORITE_KEY = "DEPARTMENT_FAVORITE_KEY"
 
