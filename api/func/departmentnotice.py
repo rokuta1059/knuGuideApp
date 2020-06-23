@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 baseurl = ""
 
 
-
 def callreq(base, url):
     """
     일반적인 홈페이지 불러올 때 사용하는 함수
@@ -20,9 +19,11 @@ def callreq(base, url):
     """
     global baseurl
     baseurl = base
-    resp = requests.get(base+url)
+    head = {'User-Agent': 'Mozilla/5.0', 'referer': 'http://itb.kangwon.ac.kr'}
+    resp = requests.get(base+url, headers=head)
     soup = BeautifulSoup(resp.content, "html.parser")
     return soup
+
 
 def callurl(base, url):
     """
@@ -1116,7 +1117,7 @@ if __name__ == '__main__':
 
     # 경영대 국제무역학과
     itburl = "http://itb.kangwon.ac.kr/bbs/board.php?bo_table=notice"
-    # itbarr = itb(callurl('', itburl))
+    # itbarr = itb(callreq('', itburl))
 
     # 농생대
     # agrilifesciarr = agrilifesci()
