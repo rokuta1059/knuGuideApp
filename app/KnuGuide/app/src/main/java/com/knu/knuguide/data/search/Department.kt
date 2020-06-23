@@ -19,6 +19,7 @@ class Department : KNUData {
     @SerializedName("site")
     var site: String? = null
 
+    var isFavorite = false
 
     override fun getRecyclerType(): Int {
         return KNUData.Type.ITEM_SEARCH_DEPARTMENT

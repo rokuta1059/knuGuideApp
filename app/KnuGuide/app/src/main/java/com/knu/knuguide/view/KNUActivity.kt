@@ -3,6 +3,7 @@ package com.knu.knuguide.view
 import androidx.core.view.isVisible
 import com.google.android.material.appbar.AppBarLayout
 import com.knu.knuguide.view.calendar.CalendarActivity
+import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.main.MainActivity
 import com.knu.knuguide.view.search.SearchActivity
 import kotlinx.android.synthetic.main.knu_appbar.*
@@ -18,7 +19,9 @@ abstract class KNUActivity : KNUBlankActivity() {
         when (KNU_ID) {
             MainActivity.KNU_ID,
             CalendarActivity.KNU_ID,
-            SearchActivity.KNU_ID -> {
+            SearchActivity.KNU_ID,
+            WebViewActivity.KNU_ID,
+            DepartmentActivity.KNU_ID -> {
                 setSupportActionBar(appbar)
             }
         }
@@ -39,6 +42,15 @@ abstract class KNUActivity : KNUBlankActivity() {
                 setActionBarCustomView(KNU_ID)
                 setActionBarTitle(false, "", "")
             }
+            WebViewActivity.KNU_ID -> {
+                setActionBarCustomView(KNU_ID)
+                setActionBarTitle(false, "", "")
+                setActionBarScrollFlag()
+            }
+            DepartmentActivity.KNU_ID -> {
+                setActionBarCustomView(KNU_ID)
+                setActionBarTitle(false, "", "")
+            }
         }
     }
 
@@ -53,6 +65,13 @@ abstract class KNUActivity : KNUBlankActivity() {
             SearchActivity.KNU_ID -> {
                 appbar_back.isVisible = true
                 searchview.isVisible = true
+            }
+            WebViewActivity.KNU_ID -> {
+                appbar_back.isVisible = true
+            }
+            DepartmentActivity.KNU_ID -> {
+                appbar_back.isVisible = true
+                appbar_search.isVisible = true
             }
         }
     }

@@ -193,8 +193,6 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
             }
 
             override fun onError(e: Throwable) {
-                progress_bar.stopProgress()
-
                 Log.d("Error", e.message)
             }
         }))

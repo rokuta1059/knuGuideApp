@@ -7,6 +7,7 @@ import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.knu.knuguide.R
 import com.knu.knuguide.core.KNUService
+import com.knu.knuguide.core.PrefService
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.search.Department
 import com.knu.knuguide.support.FastClickPreventer
@@ -15,10 +16,12 @@ import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.SearchAdapter
 import com.knu.knuguide.view.adapter.decor.SearchAdapterDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity.Companion.KEY_DEPARTMENT
+import com.knu.knuguide.view.department.DepartmentActivity.Companion.KEY_DEPARTMENT_INFO
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.knu_appbar.*
+import java.lang.Exception
 
 class SearchActivity : KNUActivity(), KNUAdapterListener {
     private val fastClickPreventer = FastClickPreventer()
@@ -29,6 +32,10 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
 
     // search items
     private var items = ArrayList<KNUData>()
+    private var favoriteIds = ArrayList<String>()
+
+    //
+    private lateinit var favoriteId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +49,21 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         recycler_view_search.layoutManager = LinearLayoutManager(this)
         recycler_view_search.adapter = mAdapter
         recycler_view_search.addItemDecoration(SearchAdapterDecor(this, 1F, 16F))
+
+        try {
+            val bundle = intent.extras
+            if (bundle != null) {
+                if (bundle.getBoolean(KEY_DEPARTMENT_INFO))
+                    mAdapter.releaseFavorite()
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // getNoticeId
+        favoriteId = PrefService.instance()!!.getFavoriteId()
+        setFavoriteIds()
 
         // 과 목록 불러오기
         getDepartment()
@@ -65,7 +87,24 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         compositeDisposable.add(KNUService.instance()!!.getDepartment().subscribeWith(object : DisposableSingleObserver<List<Department>>() {
             override fun onSuccess(list: List<Department>) {
                 items.clear()
-                items.addAll(list)
+                for (item in list) {
+                    if (favoriteIds.contains(item.id))
+                        item.isFavorite = true
+
+                    items.add(item)
+                }
+                items.sortWith(object : Comparator<KNUData> {
+                    override fun compare(o1: KNUData?, o2: KNUData?): Int {
+                        val d1 = o1 as Department
+                        val d2 = o2 as Department
+
+                        if (d1.isFavorite != d2.isFavorite) {
+                            return if (d1.isFavorite) -1
+                            else 1
+                        }
+                        return 0
+                    }
+                })
 
                 mAdapter.notifyDataSetChanged()
             }
@@ -77,10 +116,41 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         }))
     }
 
+    private fun setFavoriteIds() {
+        try {
+            for (i in favoriteId.indices step 3) {
+                if (i+3 <= favoriteId.length) {
+                    val id = favoriteId.substring(i, i+3)
+
+                    favoriteIds.add(id)
+                }
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun saveFavorite() {
+        val sb = StringBuilder()
+
+        for (item in items) {
+            val department = item as Department
+            if (department.isFavorite)
+                sb.append(department.id)
+        }
+
+        if (sb.toString().isEmpty())
+            PrefService.instance()?.putFavoriteId("")
+        else
+            PrefService.instance()?.putFavoriteId(sb.toString())
+    }
+
     // compositeDisposable 해제
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
+        saveFavorite()
     }
 
     override fun getKNUID(): String {

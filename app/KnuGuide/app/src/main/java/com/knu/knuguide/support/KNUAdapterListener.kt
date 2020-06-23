@@ -1,5 +1,6 @@
 package com.knu.knuguide.support
 
+import com.knu.knuguide.data.announcement.Announcement
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.data.search.Department
 
@@ -8,4 +9,6 @@ interface KNUAdapterListener {
     fun onCalendarTaskItemClick(task: Task, isUnchecked: Boolean): Boolean { return false }
 
     fun onSearchItemClick(item: Department) {}
+
+    fun onAnnouncementClick(item: Announcement) {}
 }

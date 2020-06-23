@@ -38,7 +38,7 @@ class SearchAdapterDecor(val context: Context, var spacing: Float, var margin: F
 
             val position = params.viewAdapterPosition
             if (position < state.itemCount - 1)
-                c.drawLine(view.left.toFloat() + margin, view.bottom + offset, view.right.toFloat() - margin, view.bottom + offset, paint)
+                c.drawLine(view.left.toFloat() + margin, view.bottom + offset, view.right.toFloat(), view.bottom + offset, paint)
         }
     }
 }

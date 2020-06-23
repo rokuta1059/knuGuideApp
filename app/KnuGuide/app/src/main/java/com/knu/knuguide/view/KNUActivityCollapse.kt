@@ -13,6 +13,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.knu.knuguide.R
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
+import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.main.MainActivity
 import kotlinx.android.synthetic.main.knu_appbar_collapse.*
 import kotlin.math.abs
@@ -74,6 +75,7 @@ abstract class KNUActivityCollapse : KNUBlankActivity() {
                 appbar_back.isVisible = true
                 appbar_title.isVisible = true
                 appbar_search.isVisible = true
+                appbar_star.isVisible = true
                 appbar_search_collapsed.isVisible = true
                 department_expanded.isVisible = true
                 department_collapsed.isVisible = true

@@ -1,6 +1,7 @@
 package com.knu.knuguide.view.adapter
 
 import android.content.Context
+import android.os.DeadObjectException
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.knu.knuguide.R
 import com.knu.knuguide.data.KNUData
 import com.knu.knuguide.data.search.Department
 import com.knu.knuguide.support.KNUAdapterListener
+import com.knu.knuguide.support.Utils
+import kotlinx.android.synthetic.main.activity_announcement.*
 import kotlinx.android.synthetic.main.item_search_department.view.*
 
 class SearchAdapter(
@@ -19,6 +22,8 @@ class SearchAdapter(
     private val listener: KNUAdapterListener) :  RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     private var searchItems = items
+
+    private var unFavorite = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -63,6 +68,18 @@ class SearchAdapter(
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 searchItems = results?.values as ArrayList<KNUData>
+                searchItems.sortWith(object : Comparator<KNUData> {
+                    override fun compare(o1: KNUData?, o2: KNUData?): Int {
+                        val d1 = o1 as Department
+                        val d2 = o2 as Department
+
+                        if (d1.isFavorite != d2.isFavorite) {
+                            return if (d1.isFavorite) -1
+                            else 1
+                        }
+                        return 0
+                    }
+                })
                 notifyDataSetChanged()
             }
         }
@@ -71,7 +88,37 @@ class SearchAdapter(
     private fun bindDepartmentHolder(holder: DepartmentViewHolder, item: Department, position: Int) {
         holder.itemView.title.text = item.department
 
+        if (unFavorite)
+            holder.itemView.ic_star.visibility = View.INVISIBLE
+
+        if (item.isFavorite)
+            holder.itemView.ic_star.setImageResource(R.drawable.ic_star_filled)
+        else
+            holder.itemView.ic_star.setImageResource(R.drawable.ic_star_unfilled)
+
         holder.itemView.setOnClickListener { listener.onSearchItemClick(item) }
+
+        holder.itemView.ic_star.setOnClickListener {
+            if (item.isFavorite) {
+                item.isFavorite = false
+
+                holder.itemView.ic_star.setImageResource(R.drawable.ic_star_unfilled)
+
+                Utils.showSnackbar(holder.itemView, "${item.department} (이)가 즐겨찾기에서 삭제되었습니다.")
+            }
+            else {
+                item.isFavorite = true
+
+                holder.itemView.ic_star.setImageResource(R.drawable.ic_star_filled)
+
+                Utils.showSnackbar(holder.itemView, "${item.department} (이)가 즐겨찾기에 추가되었습니다.")
+            }
+        }
+    }
+
+    fun releaseFavorite() {
+        unFavorite = true
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {

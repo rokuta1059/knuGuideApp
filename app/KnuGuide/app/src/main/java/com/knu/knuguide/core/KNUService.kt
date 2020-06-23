@@ -31,6 +31,7 @@ class KNUService {
 
         val baseClientBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(HeaderInterceptor())
 
         if (BuildConfig.DEBUG)
             baseClientBuilder.addInterceptor(loggingInterceptor)
@@ -86,7 +87,6 @@ class KNUService {
                 val scheduleList = gson.fromJson<List<Task>>(contents.toString(), object : TypeToken<List<Task>>() {}.type)
                 scheduleList
             }
-            .onErrorResumeNext { getSchedule() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -100,7 +100,6 @@ class KNUService {
                 val items = gson.fromJson<List<Department>>(contents.toString(), object : TypeToken<List<Department>>() {}.type)
                 items
             }
-            .onErrorResumeNext { getDepartment() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -114,7 +113,6 @@ class KNUService {
                 val items = gson.fromJson<List<Department>>(contents.toString(), object : TypeToken<List<Department>>() {}.type)
                 items
             }
-            .onErrorResumeNext { getDepartmentById(id) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -128,7 +126,6 @@ class KNUService {
                 val items = gson.fromJson<List<Announcement>>(contents.toString(), object : TypeToken<List<Announcement>>() {}.type)
                 items
             }
-            .onErrorResumeNext { getNotice(id) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
