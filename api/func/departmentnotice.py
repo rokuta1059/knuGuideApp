@@ -11,21 +11,25 @@ from bs4 import BeautifulSoup
 baseurl = ""
 
 
-# 일반적인 홈페이지 불러올 때 사용하는 함수
-# requests.get 함수를 사용한다.
-# return soup (홈페이지 소스)
+
 def callreq(base, url):
+    """
+    일반적인 홈페이지 불러올 때 사용하는 함수
+    requests.get 함수를 사용한다.
+    return soup (홈페이지 소스)
+    """
     global baseurl
     baseurl = base
     resp = requests.get(base+url)
     soup = BeautifulSoup(resp.content, "html.parser")
     return soup
 
-
-# 인증서가 필요한 홈페이지를 불러올 때 사용하는 함수
-# urlopen 함수를 사용한다.
-# return soup (홈페이지 소스)
 def callurl(base, url):
+    """
+    인증서가 필요한 홈페이지를 불러올 때 사용하는 함수
+    urlopen 함수를 사용한다.
+    return soup (홈페이지 소스)
+    """
     global baseurl
     baseurl = base
     context = ssl._create_unverified_context()          # 인증서 생성
@@ -34,11 +38,13 @@ def callurl(base, url):
     return soup
 
 
-# num을 받아 와서 num이 비어있거나 알파벳이 들어가 있으면
-# num을 공지로 바꿔주고 리턴한다.
-# 숫자일 경우 그대로 리턴해준다.
-# return num (공지 or 숫자)
 def numbering(num):
+    """
+    num을 받아 와서 num이 비어있거나 알파벳이 들어가 있으면
+    num을 공지로 바꿔주고 리턴한다.
+    숫자일 경우 그대로 리턴해준다.
+    return num (공지 or 숫자)
+    """
     compare = num[0:1]
     if num == '':
         num = '공지'
@@ -48,10 +54,12 @@ def numbering(num):
     return num
 
 
-# soup (홈페이지 소스)
-# titlesign (제목의 태그가 무엇인지 받아오는 변수)
-# callsign (callreq를 사용할 것인지 callurl을 사용할 것인지 받아오는 변수)
-def cba(soup, titlesign, callsign):
+def cba(department, soup, titlesign, callsign):
+    """
+    - soup : 홈페이지 소스
+    - titlesign : 제목의 태그가 무엇인지 받아오는 변수
+    - callsign : callreq를 사용할 것인지 callurl을 사용할 것인지 받아오는 변수
+    """
     data = []
     # iframe을 발견하면 iframe 페이지를 불러온다.
     if soup.find('iframe') is not None:
@@ -84,10 +92,10 @@ def cba(soup, titlesign, callsign):
         # 하이퍼링크를 받아올 변수
         link = keyword.a.get('href')
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -95,7 +103,7 @@ def cba(soup, titlesign, callsign):
     return data
 
 
-def biz(soup):
+def biz(department, soup):
     global baseurl
     data = []
     keyword = soup.find('tr', "bg1")
@@ -113,10 +121,10 @@ def biz(soup):
         link = baseurl+title[length-1].get('href').lstrip(".")
         title = title[length-1].text.strip()
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -125,7 +133,7 @@ def biz(soup):
 
 
 # 경영대 회계학전공
-def account(soup):
+def account(department, soup):
     data = []
     keyword = soup.find('table', "table table-hover").tbody.tr
 
@@ -143,10 +151,10 @@ def account(soup):
         date = soup.find('div', "desc").find_all('strong')[1]
         date = date.text.split(" ")[0]
 
-        print(number, title, date)
-        print(url)
+        # print(number, title, date)
+        # print(url)
 
-        tmp = [number, title, date, url]
+        tmp = [department, number, title, date, url]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -155,7 +163,7 @@ def account(soup):
 
 
 # 경영대 국제무역학과
-def itb(soup):
+def itb(department, soup):
     data = []
     keyword = soup.find('table', "table table-hover text-center bottom-3b").tbody.tr
 
@@ -170,10 +178,10 @@ def itb(soup):
         date = "20"+date.text.split(" ")[0]
         link = keyword.a.get('href')
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -182,7 +190,7 @@ def itb(soup):
 
 
 # 농생대
-def agrilifesci():
+def agrilifesci(department):
     data = []
     # 앞부분의 url
     base = "http://knucals.kangwon.ac.kr/contents.do?v="
@@ -202,10 +210,10 @@ def agrilifesci():
         date = keyword.find('span', "board_col date").text.lstrip("등록일").strip()
         link = base + "view&id=" + keyword.a.get('data-id')+cid+masterid+lasturl
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -213,7 +221,7 @@ def agrilifesci():
     return data
 
 
-def cll(soup):
+def cll(department, soup):
     data = []
     keyword = soup.find('td', "td_subject").parent
 
@@ -226,10 +234,10 @@ def cll(soup):
         date = soup.find('section', id="bo_v_info").find('strong', "if_date")
         date = "20"+date.text.split(" ")[1].strip()
 
-        print(number, title, date)
-        print(url)
+        # print(number, title, date)
+        # print(url)
 
-        tmp = [number, title, date, url]
+        tmp = [department, number, title, date, url]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -237,7 +245,7 @@ def cll(soup):
     return data
 
 
-def dbe(soup):
+def dbe(department, soup):
     global baseurl
     data = []
     keyword = soup.find('td', 'text-center hidden-xs').parent
@@ -251,10 +259,10 @@ def dbe(soup):
             date = array[3].text.replace("/", "-", 2)
             link = baseurl+array[1].a.get('href')
 
-            print(number, title, date)
-            print(link)
+            # print(number, title, date)
+            # print(link)
 
-            tmp = [number, title, date, link]
+            tmp = [department, number, title, date, link]
             data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -263,7 +271,7 @@ def dbe(soup):
 
 
 # 문예대공대 건축학과(5년제)
-def architecture(soup):
+def architecture(department, soup):
     global baseurl
     data = []
     keyword = soup.find('td', "left").parent
@@ -277,10 +285,10 @@ def architecture(soup):
             date = date.next_sibling
         link = baseurl+keyword.a.get('href')
         title = title.text
-        print(number, title, date.text)
-        print(link)
+        # print(number, title, date.text)
+        # print(link)
 
-        tmp = [number, title, date.text, link]
+        tmp = [department, number, title, date.text, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -288,7 +296,7 @@ def architecture(soup):
     return data
 
 
-def archi(soup):
+def archi(department, soup):
     global baseurl
     data = []
     keyword = soup.find('td', "tit").parent
@@ -302,10 +310,10 @@ def archi(soup):
             date = date.next_sibling
         link = baseurl + keyword.a.get('href')
 
-        print(number, title, date.text)
-        print(link)
+        # print(number, title, date.text)
+        # print(link)
 
-        tmp = [number, title, date.text, link]
+        tmp = [department, number, title, date.text, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling
@@ -316,7 +324,7 @@ def archi(soup):
 # 문예대공대 무용학과 <- 터졋나?
 
 # 문예대공대 미술학과
-def art(soup):
+def art(department, soup):
     global baseurl
     data = []
     keyword = soup.find('tr', "kboard-list-notice")
@@ -329,10 +337,10 @@ def art(soup):
         link = baseurl+title.get('href')
         title = title.text.strip()
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -341,7 +349,7 @@ def art(soup):
 
 
 # 사범대
-def educatio(soup):
+def educatio(department, soup):
     global baseurl
     data = []
     keyword = soup.find('iframe').get('src').lstrip(".")
@@ -361,16 +369,16 @@ def educatio(soup):
         date = "20"+date.text
         link = baseurl+array[i].a.get('href').lstrip("./")
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
     return data
 
 
-def edu(soup):
+def edu(department, soup):
     global baseurl
     data = []
     keyword = soup.find('iframe')
@@ -387,17 +395,17 @@ def edu(soup):
         datetext = date[1].next_sibling.next_sibling.text.split("조회")[0].strip()
         link = baseurl + url
 
-        print(number[i], title, datetext)
-        print(link)
+        # print(number[i], title, datetext)
+        # print(link)
 
-        tmp = [number[i], title, datetext, link]
+        tmp = [department, number[i], title, datetext, link]
         data.append(tmp)
 
     return data
 
 
 # 사범대 국어교육과
-def kedu(soup):
+def kedu(department, soup):
     global baseurl
     data = []
     keyword = soup.find('div', id="con").find('iframe').get('src')
@@ -424,17 +432,17 @@ def kedu(soup):
         title = title.text.strip()
         date = date.text.replace(".", "-", 2)
 
-        print(number, title, date)
-        print(url)
+        # print(number, title, date)
+        # print(url)
 
-        tmp = [number, title, date, url]
+        tmp = [department, number, title, date, url]
         data.append(tmp)
 
     return data
 
 
 # 사범대 영어교육과
-def engedu(soup):
+def engedu(department, soup):
     global baseurl
     data = []
     keyword = soup.find('div', id="user_board_list").tr.next_sibling.next_sibling
@@ -447,10 +455,10 @@ def engedu(soup):
         link = baseurl+title.a.get('href')
         title = title.text.strip()
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -459,7 +467,7 @@ def engedu(soup):
 
 
 # 사범대 지리교육과
-def geoedu(soup):
+def geoedu(department, soup):
     global baseurl
     data = []
     array = soup.find_all('td', "text-left")
@@ -475,17 +483,17 @@ def geoedu(soup):
         link = link + "&pw_check1=&pw_check2=&pw_check3=&pw_check4=&pw_check5" \
                       "=&pw_check6=&pw_check7=&pw_check8=&pw_check9=&pw_check10="
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
     return data
 
 
 # 사범대 가정교육과
-def homecs(soup):
+def homecs(department, soup):
     global baseurl
     data = []
     keyword = soup.find('tr', "title").next_sibling.next_sibling
@@ -498,10 +506,10 @@ def homecs(soup):
         datetext = date.text.replace("·", "-", 2)
         link = baseurl+keyword.a.get('href')
 
-        print(number, title, datetext)
-        print(link)
+        # print(number, title, datetext)
+        # print(link)
 
-        tmp = [number, title, datetext, link]
+        tmp = [department, number, title, datetext, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -510,7 +518,7 @@ def homecs(soup):
 
 
 # 사범대 수학교육과
-def mathedu(soup):
+def mathedu(department, soup):
     global baseurl
     data = []
     keyword = soup.find('tr', height="25")
@@ -522,10 +530,10 @@ def mathedu(soup):
         date = keyword.find_all('td', align="center")[2].text
         link = baseurl+keyword.a.get('href')
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling.next_sibling
@@ -536,7 +544,7 @@ def mathedu(soup):
 # sign
 # (number와 date에 접근하는 부분을 제외하고 나머지 부분이
 #  똑같은 코드이기 때문에 합친 후, number와 date 접근의 차이를 두기 위한 변수)
-def social(soup, sign):
+def social(department, soup, sign):
     global baseurl
     data = []
     keyword = soup.find_all('td', "list_han3")
@@ -558,16 +566,16 @@ def social(soup, sign):
         number = numbering(number)
         link = baseurl+keyword[i * 2].a.get('href')
 
-        print(number, title, datetext)
-        print(link)
+        # print(number, title, datetext)
+        # print(link)
 
-        tmp = [number, title, datetext, link]
+        tmp = [department, number, title, datetext, link]
         data.append(tmp)
 
     return data
 
 
-def masscom(soup):
+def masscom(department, soup):
     global baseurl
     data = []
     if soup.find('iframe').get('src') is not None:
@@ -586,10 +594,10 @@ def masscom(soup):
         date = "20"+arr.text.split(" ")[2]
         link = baseurl+url
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -598,7 +606,7 @@ def masscom(soup):
 
 
 # 사과대 정치외교학과
-def politics(soup):
+def politics(department, soup):
     global baseurl
     data = []
     keyword = soup.find('tr', "notice")
@@ -613,10 +621,10 @@ def politics(soup):
         date = "20"+date
         link = baseurl + url
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -625,7 +633,7 @@ def politics(soup):
 
 
 # 사과대 행정학전공
-def padm(soup):
+def padm(department, soup):
     data = []
     keyword = soup.find('li', "list-item")
 
@@ -642,10 +650,10 @@ def padm(soup):
             datetext = date[num-1].get('content').split("KST")[0]
         link = keyword.a.get('href')
 
-        print(number, title, datetext)
-        print(link)
+        # print(number, title, datetext)
+        # print(link)
 
-        tmp = [number, title, datetext, link]
+        tmp = [department, number, title, datetext, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
@@ -654,7 +662,7 @@ def padm(soup):
 
 
 # 인문대
-def humanities(soup):
+def humanities(department, soup):
     data = []
     keyword = soup.find_all('table', align="center")
 
@@ -676,17 +684,17 @@ def humanities(soup):
         title = title.text.strip()
         date = date.text.replace(".", "-", 2)
 
-        print(number, title, date)
-        print(url)
+        # print(number, title, date)
+        # print(url)
 
-        tmp = [number, title, date, url]
+        tmp = [department, number, title, date, url]
         data.append(tmp)
 
     return data
 
 
 # 인문대 국어국문학전공
-def korean(soup):
+def korean(department, soup):
     global baseurl
     data = []
     keyword = soup.find_all('tr', align="center")
@@ -700,17 +708,17 @@ def korean(soup):
         link = baseurl+title.get('href').lstrip(".")
         title = title.text
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
     return data
 
 
 # 인문대 불어불문학과
-def france(soup):
+def france(department, soup):
     global baseurl
     data = []
     keyword = soup.find_all('tr', align="center")
@@ -724,16 +732,16 @@ def france(soup):
         link = baseurl+title.get('href').lstrip(".")
         title = title.text
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
     return data
 
 
-def physics(soup):
+def physics(department, soup):
     global baseurl
     data = []
     keyword = soup.find('tr', "notice")
@@ -747,10 +755,10 @@ def physics(soup):
             date = array[3].text.replace(".", "-", 2)
             link = baseurl + array[1].a.get('href')
 
-            print(number, title, date)
-            print(link)
+            # print(number, title, date)
+            # print(link)
 
-            tmp = [number, title, date, link]
+            tmp = [department, number, title, date, link]
             data.append(tmp)
 
         keyword = keyword.next_sibling
@@ -758,7 +766,7 @@ def physics(soup):
     return data
 
 
-def it(soup):
+def it(department, soup):
     global baseurl
     data = []
     keyword = soup.find('table', "bbs_list").tbody.tr
@@ -773,10 +781,10 @@ def it(soup):
         link = baseurl+title.get('href')
         title = title.text.strip()
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
 
-        tmp = [number, title, date, link]
+        tmp = [department, number, title, date, link]
         data.append(tmp)
 
         keyword = keyword.next_sibling
@@ -1108,7 +1116,7 @@ if __name__ == '__main__':
 
     # 경영대 국제무역학과
     itburl = "http://itb.kangwon.ac.kr/bbs/board.php?bo_table=notice"
-    itbarr = itb(callurl('', itburl))
+    # itbarr = itb(callreq('', itburl))
 
     # 농생대
     # agrilifesciarr = agrilifesci()
