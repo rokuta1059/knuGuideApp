@@ -108,7 +108,7 @@ def get_department_func(department_id):
                 )
             elif row['crf'] == 'itb':
                 notice_data.extend(
-                    dn.itb(row['department'], dn.callreq('', row['site']))
+                    dn.itb(row['department'], dn.callurl('', row['site']))
                 )
             elif row['crf'] == 'agrilifesci':
                 notice_data.extend(
