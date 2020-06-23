@@ -1116,7 +1116,7 @@ if __name__ == '__main__':
 
     # 경영대 국제무역학과
     itburl = "http://itb.kangwon.ac.kr/bbs/board.php?bo_table=notice"
-    # itbarr = itb(callreq('', itburl))
+    # itbarr = itb(callurl('', itburl))
 
     # 농생대
     # agrilifesciarr = agrilifesci()
