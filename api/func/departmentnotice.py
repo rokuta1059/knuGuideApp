@@ -19,8 +19,7 @@ def callreq(base, url):
     """
     global baseurl
     baseurl = base
-    head = {'User-Agent': 'Mozilla/5.0', 'referer': 'http://itb.kangwon.ac.kr'}
-    resp = requests.get(base+url, headers=head)
+    resp = requests.get(base+url)
     soup = BeautifulSoup(resp.content, "html.parser")
     return soup
 
@@ -817,7 +816,7 @@ def ksef(department, soup):
     return data
 
 
-def museum(soup):
+def museum(department, soup):
     global baseurl
     data = []
     keyword = soup.find_all('tr', align="center")
@@ -831,14 +830,17 @@ def museum(soup):
         date = "20" + soup.find('span', style="color:#888888;").text.split(' ')[2]
         url = baseurl + link
 
-        print(number, title, date)
-        print(url)
+        # print(number, title, date)
+        # print(url)
+
+        tmp = [department, number, title, date, url]
+        data.append(tmp)
 
     return data
 
 
 # 학생생활관
-def knudorm(soup):
+def knudorm(department, soup):
     global baseurl
     data = []
     keyword = soup.find('iframe').get('src')
@@ -856,8 +858,11 @@ def knudorm(soup):
         date = arr[3].text.strip()
         url = baseurl + "/admin/board/" + link
 
-        print(number, title, date)
-        print(url)
+        # print(number, title, date)
+        # print(url)
+
+        tmp = [department, number, title, date, url]
+        data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
 
@@ -865,7 +870,7 @@ def knudorm(soup):
 
 
 # 교육혁신원
-def itl(soup):
+def itl(department, soup):
     global baseurl
     data = []
     keyword = soup.find('li', "tbody notice")
@@ -877,8 +882,34 @@ def itl(soup):
         link = baseurl + arr[1].a.get('href')
         date = arr[5].text.strip()
 
-        print(number, title, date)
-        print(link)
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
+
+    return data
+
+
+# 체육진흥원
+def sports(department, soup):
+    data = []
+    keyword = soup.find('td', 'td_subject').parent
+
+    while keyword is not None:
+        arr = keyword.find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        date = arr[3].text.strip()
+        link = arr[1].a.get('href')
+
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
 
         keyword = keyword.next_sibling.next_sibling
 
@@ -886,10 +917,25 @@ def itl(soup):
 
 
 # 창업보육센터
-def kwbi(soup):
+def kwbi(department, soup):
     global baseurl
     data = []
+    keyword = soup.find('table', 'bbs_list_style1').tbody.tr
 
+    while keyword is not None:
+        arr = keyword.find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        date = arr[4].text.strip().replace('.', '-')
+        link = baseurl + arr[1].a.get('href')
+
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
 
     return data
 
@@ -1312,7 +1358,7 @@ if __name__ == '__main__':
 
     # 체육진흥원
     sportsurl = 'http://sports.kangwon.ac.kr/bbs/board.php?bo_table=sub5_1'
-    # sportsarr =
+    # sportsarr = sports(callreq('', sportsurl))
 
     # 학생생활관
     knudormurl = ['http://knudorm.kangwon.ac.kr', '/home/sub04/index.jsp?board_nm=notice']
@@ -1324,4 +1370,8 @@ if __name__ == '__main__':
 
     # 창업보육센터
     kwbiurl = ['http://kwbi.kangwon.ac.kr/', 'board_list.asp?boardcode=notice']
-    kwbiarr = kwbi(callreq(kwbiurl[0], kwbiurl[1]))
+    # kwbiarr = kwbi(callreq(kwbiurl[0], kwbiurl[1]))
+
+    # 평생교육원
+    ileurl = 'http://ile.kangwon.ac.kr'
+    # ile(callreq('', ileurl))
