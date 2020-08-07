@@ -19,8 +19,7 @@ def callreq(base, url):
     """
     global baseurl
     baseurl = base
-    head = {'User-Agent': 'Mozilla/5.0', 'referer': 'http://itb.kangwon.ac.kr'}
-    resp = requests.get(base+url, headers=head)
+    resp = requests.get(base+url)
     soup = BeautifulSoup(resp.content, "html.parser")
     return soup
 
@@ -793,9 +792,152 @@ def it(department, soup):
     return data
 
 
-def printdate(data):
-    for i in range(0, len(data)):
-        print(data[i])
+# 창업지원단
+def ksef(department, soup):
+    global baseurl
+    data = []
+    keyword = soup.find('table', 'table_bbs').tbody.tr
+
+    while keyword is not None:
+        arr = keyword.find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        link = baseurl+arr[1].a.get('href')
+        date = arr[4].text.replace('.', '-').strip()
+
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
+
+    return data
+
+
+def museum(department, soup):
+    global baseurl
+    data = []
+    keyword = soup.find_all('tr', align="center")
+
+    for i in range(1, len(keyword)):
+        arr = keyword[i].find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        link = arr[1].a.get('href').lstrip('.')
+        soup = callreq(baseurl, link)
+        date = "20" + soup.find('span', style="color:#888888;").text.split(' ')[2]
+        url = baseurl + link
+
+        # print(number, title, date)
+        # print(url)
+
+        tmp = [department, number, title, date, url]
+        data.append(tmp)
+
+    return data
+
+
+# 학생생활관
+def knudorm(department, soup):
+    global baseurl
+    data = []
+    keyword = soup.find('iframe').get('src')
+    soup = callreq(baseurl, keyword)
+    keyword = soup.find('table', "Notice_Board").tbody.tr.next_sibling.next_sibling
+
+    while keyword is not None:
+        arr = keyword.find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        if keyword.get('onclick') is not None:
+            link = keyword.get('onclick').split('href=\'')[1].rstrip('\'')
+        else:
+            link = arr[1].a.get('onclick').split('location=\'')[1].rstrip('\'')
+        date = arr[3].text.strip()
+        url = baseurl + "/admin/board/" + link
+
+        # print(number, title, date)
+        # print(url)
+
+        tmp = [department, number, title, date, url]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
+
+    return data
+
+
+# 교육혁신원
+def itl(department, soup):
+    global baseurl
+    data = []
+    keyword = soup.find('li', "tbody notice")
+
+    while keyword is not None:
+        arr = keyword.find_all('span')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        link = baseurl + arr[1].a.get('href')
+        date = arr[5].text.strip()
+
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
+
+    return data
+
+
+# 체육진흥원
+def sports(department, soup):
+    data = []
+    keyword = soup.find('td', 'td_subject').parent
+
+    while keyword is not None:
+        arr = keyword.find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        date = arr[3].text.strip()
+        link = arr[1].a.get('href')
+
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
+
+    return data
+
+
+# 창업보육센터
+def kwbi(department, soup):
+    global baseurl
+    data = []
+    keyword = soup.find('table', 'bbs_list_style1').tbody.tr
+
+    while keyword is not None:
+        arr = keyword.find_all('td')
+        number = numbering(arr[0].text.strip())
+        title = arr[1].text.strip()
+        date = arr[4].text.strip().replace('.', '-')
+        link = baseurl + arr[1].a.get('href')
+
+        # print(number, title, date)
+        # print(link)
+
+        tmp = [department, number, title, date, link]
+        data.append(tmp)
+
+        keyword = keyword.next_sibling.next_sibling
+
+    return data
 
 
 if __name__ == '__main__':
@@ -1183,3 +1325,53 @@ if __name__ == '__main__':
     # 자연대 수학과
     mathurl = "http://math.kangwon.ac.kr/xe/notice"
     # physicsarr = physics(callreq('', mathurl))
+
+    # 부속시설
+    # 백령아트센터
+    kwbcurl = ["https://kwbc.kangwon.ac.kr/kwbc/", "bbs_list.php?code=sub07a&keyvalue=sub07"]
+    # kwbcarr = dbe(callreq(kwbcurl[0], kwbcurl[1]))
+
+    # 창업지원단
+    ksefurl = ['http://ksef.kangwon.ac.kr/',
+               'board_list.asp?boardCode=notice&blang=&searchBoardField=&searchBoardText=&page=1&delMain=&cpSection=']
+    # ksefarr = ksef(callreq(ksefurl[0], ksefurl[1]))
+
+    # 링크사업단
+    lincurl = ['http://linc.kangwon.ac.kr/', 'index.php?mp=4_1']
+    # lincarr = it(callreq(lincurl[0], lincurl[1]))
+
+    # 교양교육원
+    kileurl = ['https://kile.kangwon.ac.kr/kile/', 'bbs_list.php?code=sub07a&keyvalue=sub07']
+    # kilearr = dbe(callreq(kileurl[0], kileurl[1]))
+
+    # 중앙박물관
+    museumurl = ['http://museum.kangwon.ac.kr', '/bbs/board.php?bo_table=km_notice']
+    # museumarr = museum(callreq(museumurl[0], museumurl[1]))
+
+    # SW중심대학사업단
+    swunivurl = ['http://swuniv.kangwon.ac.kr/', 'index.php?mp=5_1']
+    # swunivarr = it(callreq(swunivurl[0], swunivurl[1]))
+
+    # 인권센터
+    khrurl = ['http://khr.kangwon.ac.kr/', 'index.php?mt=page&mp=5_1&mm=oxbbs&oxid=1']
+    # khrarr = it(callreq(khrurl[0], khrurl[1]))
+
+    # 체육진흥원
+    sportsurl = 'http://sports.kangwon.ac.kr/bbs/board.php?bo_table=sub5_1'
+    # sportsarr = sports(callreq('', sportsurl))
+
+    # 학생생활관
+    knudormurl = ['http://knudorm.kangwon.ac.kr', '/home/sub04/index.jsp?board_nm=notice']
+    # knudormarr = knudorm(callreq(knudormurl[0], knudormurl[1]))
+
+    # 교육혁신원
+    itlurl = ['https://itl.kangwon.ac.kr', '/ko/community/notice']
+    # itlurl = itl(callreq(itlurl[0], itlurl[1]))
+
+    # 창업보육센터
+    kwbiurl = ['http://kwbi.kangwon.ac.kr/', 'board_list.asp?boardcode=notice']
+    # kwbiarr = kwbi(callreq(kwbiurl[0], kwbiurl[1]))
+
+    # 평생교육원
+    ileurl = 'http://ile.kangwon.ac.kr'
+    # ile(callreq('', ileurl))
