@@ -940,6 +940,47 @@ def kwbi(department, soup):
     return data
 
 
+# 학생식당
+def schoolcafeteria(department, soup):
+    global baseurl
+    data = []
+    keyword = soup.find_all('table')[1]
+    daydata = keyword.thead.find_all('th')
+    # 날짜 데이터 추가
+    tmp = []
+    for i in range(1, len(daydata)):
+        tmp.append(daydata[i].text)
+    data.append(tmp)
+
+    # 식단 데이터 추가
+    detaildata = keyword.tbody.find_all('tr')
+    corner = ""
+    for i in range(0, len(detaildata)):
+        # 코너, (아침 or 점심 or 저녁) 데이터 추가
+        classify = detaildata[i].find_all('th')
+        if len(classify) == 2:
+            corner = classify[0].text
+            tmp = [corner, classify[1].text]
+        else:
+            tmp = [corner, classify[0].text]
+        # 식단 리스트 불러오기
+        foodlist = detaildata[i].find_all('td')
+        for j in range(0, len(foodlist)):
+            # 식단 리스트의 필요없는 부분 제거
+            arr = str(foodlist[j]).lstrip('<td>').rstrip('<td/>').split('<br/>')
+            # 식단 배열에 개행문자 추가. 마지막은 개행문자를 넣지 않음
+            foodstring = ""
+            length = len(arr)
+            for t in range(0, length):
+                if t == length-1:
+                    foodstring += arr[t]
+                else:
+                    foodstring += arr[t] + "\n"
+            tmp.append(foodstring)
+        data.append(tmp)
+    return data
+
+
 if __name__ == '__main__':
     # 경영대
     cbaurl = "http://cba.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1"
@@ -1375,3 +1416,15 @@ if __name__ == '__main__':
     # 평생교육원
     ileurl = 'http://ile.kangwon.ac.kr'
     # ile(callreq('', ileurl))
+
+    # 천지관식당
+    cheonjiurl = 'http://www.kangwon.ac.kr/www/selecttnCafMenuListWU.do?key=1077&sc1=CC10&sc2=CC'
+    schoolcafeteria(callreq('', cheonjiurl))
+
+    # 백록관식당
+    baekrokurl = 'http://www.kangwon.ac.kr/www/selecttnCafMenuListWU.do?key=1077&sc1=CC20&sc2=CC'
+    schoolcafeteria(callreq('', baekrokurl))
+
+    # 교직원식당
+    facultyurl = 'http://www.kangwon.ac.kr/www/selecttnCafMenuListWU.do?key=1077&sc1=CC30&sc2=CC&sc5=20200830#week_anchor'
+    schoolcafeteria(callreq('', facultyurl))
