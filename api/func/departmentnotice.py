@@ -4,6 +4,9 @@ from urllib.request import urlopen
 import requests
 from bs4 import BeautifulSoup
 
+from datetime import datetime
+import _datetime
+
 
 # 게시글의 하이퍼링크가 너무 길어 앞이 짤리는 부분을 채워주기 위한 변수
 # ex) cba.kangwon.ac.kr/  <- baseurl
@@ -941,8 +944,7 @@ def kwbi(department, soup):
 
 
 # 학생식당
-def schoolcafeteria(department, soup):
-    global baseurl
+def schoolcafeteria(soup):
     data = []
     keyword = soup.find_all('table')[1]
     daydata = keyword.thead.find_all('th')
@@ -978,6 +980,35 @@ def schoolcafeteria(department, soup):
                     foodstring += arr[t] + "\n"
             tmp.append(foodstring)
         data.append(tmp)
+    return data
+
+
+# 기숙사식당
+def dormcafeteria(soup):
+    data = []
+    keyword = soup.find('div', id='sub02_text')
+    date = keyword.text.split('~')[0].strip()
+    for i in range(1, 4):
+        # 1번은 재정, 2번은 새롬관, 3번은 이룸관 식단표
+        dormtype = 'foodtab'+i.__str__()
+        if i == 1:
+            dorm = '재정'
+        elif i == 2:
+            dorm = '새롬관'
+        else:
+            dorm = '이룸관'
+        datevalue = datetime.strptime(date, '%Y-%m-%d')
+        keyword = soup.find('div', id=dormtype)
+        keyword = keyword.find_all('table')[1]
+        keyword = keyword.find_all('tr')
+        for j in range(1, len(keyword)):
+            datestr = datevalue.year.__str__() + '-' + datevalue.month.__str__() + '-' + datevalue.day.__str__()
+            tmp = [datestr, dorm,  keyword[j].th.text]
+            datevalue = datevalue + _datetime.timedelta(days=1)
+            foodlist = keyword[j].find_all('td')
+            for t in range(0, 3):
+                tmp.append(foodlist[t].text.replace('\t', '').replace('\r', '').lstrip('\n').rstrip('\n'))
+            data.append(tmp)
     return data
 
 
@@ -1419,12 +1450,16 @@ if __name__ == '__main__':
 
     # 천지관식당
     cheonjiurl = 'http://www.kangwon.ac.kr/www/selecttnCafMenuListWU.do?key=1077&sc1=CC10&sc2=CC'
-    schoolcafeteria(callreq('', cheonjiurl))
+    # schoolcafeteria(callreq('', cheonjiurl))
 
     # 백록관식당
     baekrokurl = 'http://www.kangwon.ac.kr/www/selecttnCafMenuListWU.do?key=1077&sc1=CC20&sc2=CC'
-    schoolcafeteria(callreq('', baekrokurl))
+    # schoolcafeteria(callreq('', baekrokurl))
 
     # 교직원식당
     facultyurl = 'http://www.kangwon.ac.kr/www/selecttnCafMenuListWU.do?key=1077&sc1=CC30&sc2=CC&sc5=20200830#week_anchor'
-    schoolcafeteria(callreq('', facultyurl))
+    # schoolcafeteria(callreq('', facultyurl))
+
+    # 기숙사식당
+    dormurl = 'http://knudorm.kangwon.ac.kr/home/sub02/sub02_05_bj.jsp'
+    # dormcafeteria(callreq('', dormurl))
