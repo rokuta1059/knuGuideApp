@@ -1012,6 +1012,30 @@ def dormcafeteria(soup):
     return data
 
 
+# 장학게시판
+def scholarship(soup):
+    global baseurl
+    data = []
+    keyword = soup.find('table', 'bbs_default list').tbody
+    keyword = keyword.find_all('tr')
+    for i in range(0, len(keyword)):
+        list = keyword[i].find_all('td');
+        number = numbering(editstring(list[0].text))
+        campus = editstring(list[1].text)
+        title = editstring(list[2].text)
+        date = editstring(keyword[i].find('td', 'date').text)
+        link = baseurl + list[2].a.get('href').lstrip('./')
+        tmp = [number, campus, title, date, link]
+        data.append(tmp)
+    print(data)
+    return data
+
+
+def editstring(str):
+    str = str.replace('\r', '').replace('\t', '').replace('\n', '').strip()
+    return str
+
+
 if __name__ == '__main__':
     # 경영대
     cbaurl = "http://cba.kangwon.ac.kr/bbs/board.php?bo_table=sub06_1"
@@ -1463,3 +1487,7 @@ if __name__ == '__main__':
     # 기숙사식당
     dormurl = 'http://knudorm.kangwon.ac.kr/home/sub02/sub02_05_bj.jsp'
     # dormcafeteria(callreq('', dormurl))
+
+    # 장학게시판
+    scholarurl = ['https://www.kangwon.ac.kr/www/', 'selectBbsNttList.do?bbsNo=34&key=232&']
+    scholarship(callreq(scholarurl[0], scholarurl[1]))
