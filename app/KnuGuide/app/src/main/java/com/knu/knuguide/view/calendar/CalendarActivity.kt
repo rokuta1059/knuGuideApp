@@ -169,9 +169,6 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
             override fun onSuccess(list: List<Task>) {
                 progress_bar.stopProgress()
 
-                /**
-                 * todo : 1. list에 담긴 task 하나씩 startDate와 endDate를 비교하여 걸친 년월에 모두 Task를 추가
-                 * */
                 for (task in list) {
                     val startTag = task.startDateToYearMonthTag()
                     val endTag = task.endDateToYearMonthTag()
@@ -193,7 +190,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
             }
 
             override fun onError(e: Throwable) {
-                Log.d("Error", e.message)
+                Log.d("Error", e.message!!)
             }
         }))
     }

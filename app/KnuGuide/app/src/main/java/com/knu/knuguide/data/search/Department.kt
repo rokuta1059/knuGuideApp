@@ -14,7 +14,7 @@ class Department : KNUData {
     var callnumber: String? = null
     @SerializedName("location")
     var location: String? = null
-    @SerializedName("map")
+    @SerializedName("mapAddress")
     var map: String? = null
     @SerializedName("site")
     var site: String? = null

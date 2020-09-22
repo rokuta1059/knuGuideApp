@@ -39,7 +39,7 @@ class WebViewActivity : KNUActivity() {
                     val data =
                         bundle.getSerializable(WebViewActivity.KEY_DATA) as String?
                     if (!TextUtils.isEmpty(data)) {
-                        web_view.loadUrl(data)
+                        web_view.loadUrl(data!!)
                     }
                 }
             }

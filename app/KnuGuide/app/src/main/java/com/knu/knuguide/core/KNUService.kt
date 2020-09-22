@@ -39,7 +39,7 @@ class KNUService {
         val baseClient = baseClientBuilder.build()
 
         val baseRetrofitBuilder = Retrofit.Builder()
-                .baseUrl(TEST_URL_2)
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(baseClient)
@@ -135,8 +135,9 @@ class KNUService {
         lateinit var gson: Gson
 
         private var TEST_URL = "http://www.chbis.kr/"
-        private var TEST_URL_2 = "http://13.125.224.14:8888/"
+        private var baseURL = "http://13.125.224.14/"   // 포트 번호 제거
         private var TEST_URL_3 = "https://samples.openweathermap.org/data/2.5/"
+        private var TEST_URL_4 = "http://itb.kangwon.ac.kr/"
 
         private var api: KNUInterface? = null
 

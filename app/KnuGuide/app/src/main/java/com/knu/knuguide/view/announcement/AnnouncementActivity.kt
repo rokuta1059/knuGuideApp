@@ -132,7 +132,7 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
 
                 override fun onError(e: Throwable) {
                     e.printStackTrace()
-                    Log.d("Error", e.message)
+                    Log.d("Error", e.message!!)
                 }
             }))
         }
@@ -168,7 +168,7 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
 
                 override fun onError(e: Throwable) {
                     e.printStackTrace()
-                    Log.d("Error", e.message)
+                    Log.d("Error", e.message!!)
                 }
             }))
         }
@@ -199,7 +199,7 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
 
                             override fun onError(e: Throwable) {
                                 e.printStackTrace()
-                                Log.d("Error", e.message)
+                                Log.d("Error", e.message!!)
                             }
                         }))
                     }
@@ -207,7 +207,7 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
 
                 override fun onError(e: Throwable) {
                     e.printStackTrace()
-                    Log.d("Error", e.message)
+                    Log.d("Error", e.message!!)
                 }
             }))
         }
@@ -228,6 +228,8 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == RESULT_OK) {
             if (requestCode == REQ_CODE_SEARCH_DEPARTMENT) {
                 val item = data?.getSerializableExtra(KEY_DEPARTMENT) as Department

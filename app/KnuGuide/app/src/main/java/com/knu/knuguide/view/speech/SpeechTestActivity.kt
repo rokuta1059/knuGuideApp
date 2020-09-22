@@ -9,19 +9,30 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
+import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.auth.oauth2.ServiceAccountCredentials
+import com.google.cloud.dialogflow.v2beta1.*
 import com.knu.knuguide.R
+import com.knu.knuguide.core.RequestV2Task
 import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_speech_test.*
+import java.io.InputStream
 import java.util.*
 
-
+// todo : 1. TTS로 음성 읽기 -> 읽은 Text를 DialogFlow에 전달 -> 받은 Query에 대해서 명령 실행
 class SpeechTestActivity : KNUActivity(), TextToSpeech.OnInitListener {
-
+    private val compositeDisposable = CompositeDisposable()
     private lateinit var textToSpeech: TextToSpeech
+
+    private val uuid = UUID.randomUUID().toString()
+
+    // Dialogflow V2
+    private lateinit var sessionsClient: SessionsClient
+    private lateinit var session: SessionName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +56,39 @@ class SpeechTestActivity : KNUActivity(), TextToSpeech.OnInitListener {
             } catch (e: ActivityNotFoundException) {
                 Toast.makeText(applicationContext, "지원할 수 있는 기능이 없습니다.", Toast.LENGTH_SHORT).show();
             }
+        }
+
+        initV2Chatbot()
+        sendMessage("컴공 알려줘")
+    }
+
+    private fun initV2Chatbot() {
+        val stream: InputStream = resources.openRawResource(R.raw.credential_file)
+        val credentials = GoogleCredentials.fromStream(stream)
+        val projectId = (credentials as ServiceAccountCredentials).projectId
+
+        val settingsBuilder: SessionsSettings.Builder = SessionsSettings.newBuilder()
+        val sessionsSettings: SessionsSettings =
+            settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build()
+        sessionsClient = SessionsClient.create(sessionsSettings)
+        session = SessionName.of(projectId, uuid)
+    }
+
+    private fun sendMessage(msg: String) {
+        // Java V2
+        val queryInput: QueryInput = QueryInput.newBuilder()
+                    .setText(TextInput.newBuilder().setText(msg).setLanguageCode("ko-KR")).build()
+        RequestV2Task(this@SpeechTestActivity, session, sessionsClient, queryInput).execute()
+    }
+
+    fun callbackV2(response: DetectIntentResponse?) {
+        if (response != null) {
+            // process aiResponse here
+            val botReply: String = response.queryResult.fulfillmentText
+            println(botReply)
+        } else {
+            println("There was some communication issue. Please Try again!")
         }
     }
 
