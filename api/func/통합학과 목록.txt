@@ -7,7 +7,6 @@ cba {
 	applybio 응용생물학전공
 	horti 원예과학전공
 	agecon 농업자원경제학과
-	aed 지역건설공학과
 	sport 스포츠과학과
 	phyedu 체육교육과
 	forest 산림대
