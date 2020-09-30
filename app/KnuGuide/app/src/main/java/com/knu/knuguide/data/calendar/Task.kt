@@ -13,11 +13,13 @@ class Task : Serializable, KNUData {
      * endDate : 종료일
      * content : 일정 내용
      */
-    @SerializedName("start_date")
+    @SerializedName("id")
+    internal var id: Int = 0
+    @SerializedName("startdate")
     internal var startDate: String? = null
-    @SerializedName("end_date")
+    @SerializedName("enddate")
     internal var endDate: String? = null
-    @SerializedName("content")
+    @SerializedName("description")
     var content: String? = null
 
     override fun getRecyclerType(): Int {
@@ -26,21 +28,21 @@ class Task : Serializable, KNUData {
 
     private fun getStartDate(): String {
         if (startDate.isNullOrEmpty())
-            startDate = "2000.01.01(월)"
+            startDate = "2000-01-01"
 
         return "$startDate"
     }
 
     private fun getEndDate(): String {
         if (endDate.isNullOrEmpty())
-            endDate = "2000.01.01(월)"
+            endDate = "2000-01-01"
 
         return "$endDate"
     }
 
     fun getStartDateCalendar(): Calendar {
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy.MM.dd(E)")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         // Calendar 시간 설정
         calendar.time = dateFormat.parse(getStartDate())
@@ -50,7 +52,7 @@ class Task : Serializable, KNUData {
 
     fun getEndDateCalendar(): Calendar {
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy.MM.dd(E)")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         // Calendar 시간 설정
         calendar.time = dateFormat.parse(getEndDate())

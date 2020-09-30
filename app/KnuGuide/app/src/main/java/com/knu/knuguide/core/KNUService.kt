@@ -82,9 +82,7 @@ class KNUService {
     fun getSchedule(): Single<List<Task>> {
         return api!!.getSchedule()
             .map {
-                val respJson = JSONObject(it.string())
-                val contents = respJson.getJSONArray("content")
-                val scheduleList = gson.fromJson<List<Task>>(contents.toString(), object : TypeToken<List<Task>>() {}.type)
+                val scheduleList = gson.fromJson<List<Task>>(it.string(), object : TypeToken<List<Task>>() {}.type)
                 scheduleList
             }
             .subscribeOn(Schedulers.io())
@@ -134,10 +132,7 @@ class KNUService {
         private var service: KNUService? = null
         lateinit var gson: Gson
 
-        private var TEST_URL = "http://www.chbis.kr/"
-        private var baseURL = "http://13.125.224.14/"   // 포트 번호 제거
-        private var TEST_URL_3 = "https://samples.openweathermap.org/data/2.5/"
-        private var TEST_URL_4 = "http://itb.kangwon.ac.kr/"
+        private var baseURL = "http://13.125.224.14/"
 
         private var api: KNUInterface? = null
 
