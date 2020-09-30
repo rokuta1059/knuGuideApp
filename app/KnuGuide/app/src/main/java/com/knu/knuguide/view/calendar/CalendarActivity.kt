@@ -2,8 +2,10 @@ package com.knu.knuguide.view.calendar
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.knu.knuguide.R
 import com.knu.knuguide.core.KNUService
@@ -14,13 +16,10 @@ import com.knu.knuguide.data.calendar.KNUDay
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.support.FastClickPreventer
 import com.knu.knuguide.support.KNUAdapterListener
-import com.knu.knuguide.support.Utils
 import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.CalendarAdapter
 import com.knu.knuguide.view.adapter.CalendarTaskAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
-import com.knu.knuguide.view.widget.KNUHorizontalProgressbar
-import com.orhanobut.logger.Logger
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_calendar.*
@@ -28,7 +27,6 @@ import kotlinx.android.synthetic.main.cal_contents.*
 import kotlinx.android.synthetic.main.cal_header.*
 import kotlinx.android.synthetic.main.cal_months.*
 import kotlinx.android.synthetic.main.knu_appbar.*
-import okhttp3.ResponseBody
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -155,7 +153,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
                 dayList.add(KNUDay(KNUData.Type.ITEM_DAY_EMPTY, 0))
             }
             for (j in 1..max) {
-                dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j))
+                dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j).apply { if ((dayOfWeek + j) % 7 in 0..1) isWeekEnd = true })
             }
 
             cal_maps[i] = dayList
@@ -190,6 +188,9 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
             }
 
             override fun onError(e: Throwable) {
+                progress_bar.stopProgress()
+                Snackbar.make(ctl_calendar, "잠시 후 다시 시도해주세요.", Snackbar.LENGTH_SHORT).show()
+
                 Log.d("Error", e.message!!)
             }
         }))

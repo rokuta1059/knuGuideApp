@@ -16,6 +16,11 @@
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:icon="@drawable/ic_department"
             android:title="학과정보" />
+        <item
+            android:id="@+id/bus"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:icon="@drawable/ic_bus"
+            android:title="300번 버스" />
 <!--        <item-->
 <!--            android:id="@+id/speech"-->
 <!--            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"-->

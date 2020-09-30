@@ -29,4 +29,7 @@
     <!-- 공지사항 즐겨찾기 O / X -->
     <color name="item_announcement_favorite">#FFCE44</color>
     <color name="item_announcement_not_favorite">#5CBFFF</color>
+
+    <!-- 300번 버스 -->
+    <color name="item_bus_path_sticker_default">#808080</color>
 </resources>

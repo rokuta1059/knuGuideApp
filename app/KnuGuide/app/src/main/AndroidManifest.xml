@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.department.DepartmentActivity"></activity>
+        <activity android:name=".view.bus.BusActivity"></activity>
+        <activity android:name=".view.department.DepartmentActivity" />
         <activity android:name=".view.WebViewActivity" />
         <activity android:name=".view.search.SearchActivity" />
         <activity android:name=".view.announcement.FilterSearchTestActivity" />
