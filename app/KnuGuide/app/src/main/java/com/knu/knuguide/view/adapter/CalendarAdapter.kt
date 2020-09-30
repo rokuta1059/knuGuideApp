@@ -57,7 +57,10 @@ class CalendarAdapter(
 
         when (day.dayType) {
             DayType.NONE -> {
-                holder.itemView.tv_day.setTextColor(ContextCompat.getColor(context, R.color.item_day_text_default_weekday))
+                holder.itemView.tv_day.setTextColor(
+                    if (!day.isWeekEnd) ContextCompat.getColor(context, R.color.item_day_text_default_weekday)
+                    else ContextCompat.getColor(context, R.color.item_day_text_default_weekend)
+                )
             }
             DayType.SINGLE -> {
                 holder.itemView.tv_day.background = ContextCompat.getDrawable(context, R.drawable.day_single)

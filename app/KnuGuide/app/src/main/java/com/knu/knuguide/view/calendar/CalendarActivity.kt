@@ -153,7 +153,7 @@ class CalendarActivity : KNUActivity(), KNUAdapterListener {
                 dayList.add(KNUDay(KNUData.Type.ITEM_DAY_EMPTY, 0))
             }
             for (j in 1..max) {
-                dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j))
+                dayList.add(KNUDay(KNUData.Type.ITEM_DAY, j).apply { if ((dayOfWeek + j) % 7 in 0..1) isWeekEnd = true })
             }
 
             cal_maps[i] = dayList
