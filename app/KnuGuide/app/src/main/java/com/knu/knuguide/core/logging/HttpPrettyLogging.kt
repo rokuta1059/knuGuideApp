@@ -25,7 +25,7 @@ class HttpPrettyLogging : HttpLoggingInterceptor.Logger {
     }
 
     companion object {
-        private val MAX_LEN = 3000;
+        private val MAX_LEN = 3000
 
         private fun largeLog(tag: String, content: String) {
             if (content.length > 3000) {

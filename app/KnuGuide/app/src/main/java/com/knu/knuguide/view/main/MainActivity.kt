@@ -16,6 +16,7 @@ import com.knu.knuguide.view.WebViewActivity
 import com.knu.knuguide.view.adapter.AnnouncementAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
+import com.knu.knuguide.view.bus.BusActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.speech.SpeechTestActivity
@@ -58,11 +59,14 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
                 R.id.department -> {
                     navigateTo(DepartmentActivity::class.java, null)
                 }
+                R.id.bus -> {
+                    navigateTo(BusActivity::class.java, null)
+                }
 //                R.id.speech -> {
 //                    navigateTo(SpeechTestActivity::class.java, null)
 //                }
             }
-            true
+            false
         }
 
         more.setOnClickListener {

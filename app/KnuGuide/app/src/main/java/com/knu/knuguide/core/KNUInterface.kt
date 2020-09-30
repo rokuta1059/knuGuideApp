@@ -1,6 +1,5 @@
 package com.knu.knuguide.core
 
-import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.*

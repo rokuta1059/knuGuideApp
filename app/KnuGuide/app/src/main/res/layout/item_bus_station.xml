@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="68dp">
+
+    <View
+        android:id="@+id/path_sticker_top"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="90dp"
+        android:background="@color/item_bus_path_sticker_default"
+        app:layout_constraintBottom_toTopOf="@id/gl_divide_path_sticker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/path_sticker_bottom"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="90dp"
+        android:background="@color/item_bus_path_sticker_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gl_divide_path_sticker" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_divide_path_sticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/ic_path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:tint="@color/item_bus_path_sticker_default"
+        app:layout_constraintBottom_toBottomOf="@id/gl_divide_path_sticker"
+        app:layout_constraintEnd_toEndOf="@id/path_sticker_top"
+        app:layout_constraintStart_toStartOf="@id/path_sticker_top"
+        app:layout_constraintTop_toTopOf="@id/gl_divide_path_sticker"
+        app:srcCompat="@drawable/ic_bus_station" />
+
+    <TextView
+        android:id="@+id/tv_bus_station_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/gl_divide_path_sticker"
+        app:layout_constraintStart_toEndOf="@id/path_sticker_top"
+        tools:text="춘천역환승센터" />
+
+    <TextView
+        android:id="@+id/tv_bus_station_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tv_bus_station_name"
+        app:layout_constraintTop_toBottomOf="@id/gl_divide_path_sticker"
+        tools:text="0000" />
+
+    <View
+        android:id="@+id/divider_number_time"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/item_bus_path_sticker_default"
+        app:layout_constraintBottom_toBottomOf="@id/tv_bus_station_number"
+        app:layout_constraintStart_toEndOf="@id/tv_bus_station_number"
+        app:layout_constraintTop_toTopOf="@id/tv_bus_station_number" />
+
+    <TextView
+        android:id="@+id/tv_bus_station_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_bus_station_number"
+        app:layout_constraintStart_toEndOf="@id/divider_number_time"
+        app:layout_constraintTop_toTopOf="@id/tv_bus_station_number"
+        tools:text="00:00 ~ 00:00" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
