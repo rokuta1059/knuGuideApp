@@ -1,6 +1,0 @@
-admin
-knuappdb
-kangwonapi-db.cfmp0bi6d6ix.ap-northeast-2.rds.amazonaws.com
-3306
-knuapp
-utf8
