@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 import com.knu.knuguide.data.KNUData
 
 class Department : KNUData {
-    @SerializedName("college")
-    var college: String? = null
-    @SerializedName("department")
-    var department: String? = null
     @SerializedName("id")
     var id: String? = null
+    @SerializedName("college")
+    var college: String? = null
+    @SerializedName("name")
+    var department: String? = null
     @SerializedName("callnumber")
     var callnumber: String? = null
     @SerializedName("location")
@@ -18,6 +18,10 @@ class Department : KNUData {
     var map: String? = null
     @SerializedName("site")
     var site: String? = null
+    @SerializedName("siteAppend")
+    var siteAppend: String? = null
+    @SerializedName("crf")
+    var crf: String? = null
 
     var isFavorite = false
 

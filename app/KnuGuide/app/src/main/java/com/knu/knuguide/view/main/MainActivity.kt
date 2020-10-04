@@ -17,18 +17,15 @@ import com.knu.knuguide.view.adapter.AnnouncementAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.bus.BusActivity
+import com.knu.knuguide.view.bus.BusInfoActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.department.DepartmentActivity
-import com.knu.knuguide.view.speech.SpeechTestActivity
-import com.orhanobut.logger.Logger
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
-import kotlinx.android.synthetic.main.activity_announcement.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.knu_appbar.*
 import kotlinx.android.synthetic.main.preview_announcement.*
 import kotlinx.android.synthetic.main.preview_announcement.recyclerView
-import okhttp3.ResponseBody
 
 class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeListener {
     private val compositeDisposable = CompositeDisposable()
@@ -61,6 +58,15 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
                 }
                 R.id.bus -> {
                     navigateTo(BusActivity::class.java, null)
+                }
+                /** temporary code
+                 *  @author 제문 */
+                R.id.testBusNode -> {
+                    val bundle = Bundle().apply {
+                        putInt(BusInfoActivity.KEY_BUS_NUMBER, 300)
+                        putString(BusInfoActivity.KEY_BUS_ROUTE, "CCB250030000")
+                    }
+                    navigateTo(BusInfoActivity::class.java, bundle)
                 }
 //                R.id.speech -> {
 //                    navigateTo(SpeechTestActivity::class.java, null)

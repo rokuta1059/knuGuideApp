@@ -2,6 +2,7 @@ package com.knu.knuguide.view
 
 import androidx.core.view.isVisible
 import com.google.android.material.appbar.AppBarLayout
+import com.knu.knuguide.view.bus.BusInfoActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.main.MainActivity
@@ -21,7 +22,8 @@ abstract class KNUActivity : KNUBlankActivity() {
             CalendarActivity.KNU_ID,
             SearchActivity.KNU_ID,
             WebViewActivity.KNU_ID,
-            DepartmentActivity.KNU_ID -> {
+            DepartmentActivity.KNU_ID,
+            BusInfoActivity.KNU_ID -> {
                 setSupportActionBar(appbar)
             }
         }
@@ -51,6 +53,11 @@ abstract class KNUActivity : KNUBlankActivity() {
                 setActionBarCustomView(KNU_ID)
                 setActionBarTitle(false, "", "")
             }
+            BusInfoActivity.KNU_ID -> {
+                setActionBarCustomView(KNU_ID)
+                setActionBarTitle(true, "", "BUS")
+                setActionBarBack()
+            }
         }
     }
 
@@ -73,16 +80,28 @@ abstract class KNUActivity : KNUBlankActivity() {
                 appbar_back.isVisible = true
                 appbar_search.isVisible = true
             }
+            BusInfoActivity.KNU_ID -> {
+                appbar_back.isVisible = true
+            }
         }
     }
 
     private fun setActionBarTitle(visiblility: Boolean, title: String, subtitle: String) {
         appbar_title.isVisible = visiblility
         appbar_title.text = title
+
+        if (subtitle.isNotEmpty()) {
+            appbar_subtitle.isVisible = true
+            appbar_subtitle.text = subtitle
+        }
     }
 
     private fun setActionBarScrollFlag() {
         val params = appbar.layoutParams as AppBarLayout.LayoutParams
         params.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED
+    }
+
+    private fun setActionBarBack() {
+        appbar_back.setOnClickListener { onBackPressed() }
     }
 }

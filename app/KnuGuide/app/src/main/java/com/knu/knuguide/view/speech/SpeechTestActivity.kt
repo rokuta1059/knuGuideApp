@@ -10,9 +10,6 @@ import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.api.gax.core.FixedCredentialsProvider
-import com.google.auth.oauth2.GoogleCredentials
-import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.dialogflow.v2beta1.*
 import com.knu.knuguide.R
 import com.knu.knuguide.core.RequestV2Task
@@ -20,7 +17,6 @@ import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_speech_test.*
-import java.io.InputStream
 import java.util.*
 
 // todo : 1. TTS로 음성 읽기 -> 읽은 Text를 DialogFlow에 전달 -> 받은 Query에 대해서 명령 실행
@@ -58,22 +54,22 @@ class SpeechTestActivity : KNUActivity(), TextToSpeech.OnInitListener {
             }
         }
 
-        initV2Chatbot()
+        //initV2Chatbot()
         sendMessage("컴공 알려줘")
     }
 
-    private fun initV2Chatbot() {
-        val stream: InputStream = resources.openRawResource(R.raw.credential_file)
-        val credentials = GoogleCredentials.fromStream(stream)
-        val projectId = (credentials as ServiceAccountCredentials).projectId
-
-        val settingsBuilder: SessionsSettings.Builder = SessionsSettings.newBuilder()
-        val sessionsSettings: SessionsSettings =
-            settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-                .build()
-        sessionsClient = SessionsClient.create(sessionsSettings)
-        session = SessionName.of(projectId, uuid)
-    }
+//    private fun initV2Chatbot() {
+//        val stream: InputStream = resources.openRawResource(R.raw.credential_file)
+//        val credentials = GoogleCredentials.fromStream(stream)
+//        val projectId = (credentials as ServiceAccountCredentials).projectId
+//
+//        val settingsBuilder: SessionsSettings.Builder = SessionsSettings.newBuilder()
+//        val sessionsSettings: SessionsSettings =
+//            settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+//                .build()
+//        sessionsClient = SessionsClient.create(sessionsSettings)
+//        session = SessionName.of(projectId, uuid)
+//    }
 
     private fun sendMessage(msg: String) {
         // Java V2

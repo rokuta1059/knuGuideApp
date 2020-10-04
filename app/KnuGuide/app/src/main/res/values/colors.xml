@@ -32,4 +32,8 @@
 
     <!-- 300번 버스 -->
     <color name="item_bus_path_sticker_default">#808080</color>
+
+    <!-- 버스 노선 정보 -->
+    <color name="item_bus_subtitle_background">#00b0f0</color>
+    <color name="item_bus_divider_background">#DAE3F3</color>
 </resources>

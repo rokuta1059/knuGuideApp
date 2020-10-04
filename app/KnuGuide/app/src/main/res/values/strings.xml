@@ -3,4 +3,7 @@
 
     <!-- SearchActivity -->
     <string name="search_query_hint">과 이름 검색</string>
+
+    <!-- BusInfoActivity -->
+    <string name="busInfo_routes_interval_title">운행 구간</string>
 </resources>
