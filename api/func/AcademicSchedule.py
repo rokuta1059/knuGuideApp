@@ -1,14 +1,26 @@
 import requests
+from datetime import datetime
 from bs4 import BeautifulSoup
 
 
 # 학사일정
 def aca_schedule():
+    data = []
+    curyear = datetime.today().year
+    for i in range(curyear-1, curyear+2):
+       data.append(aca_yearlyschedule(i.__str__(), (i+1).__str__()))
+    return data
+
+def aca_yearlyschedule(startyear, endyear):
     """
         학사 일정을 받아오는 함수
     """
+    # resp = requests.get('http://www.kangwon.ac.kr/www/selectTnSchafsSchdulListUS.do?'
+    #                'sc1=%ED%95%99%EC%82%AC%EC%9D%BC%EC%A0%95&key=156&')
     resp = requests.get('http://www.kangwon.ac.kr/www/selectTnSchafsSchdulListUS.do?'
-                        'sc1=%ED%95%99%EC%82%AC%EC%9D%BC%EC%A0%95&key=156&')
+                        'ti1='+startyear+'&si1='+endyear+'&sc1=%ED%95%99%EC%82%AC%EC%9D%BC%EC%A0%95&'
+                        'sc2=TERMSCH&sc5='+startyear+'0101&sc6='+startyear+'1231&ad1=0&key=156')
+
     soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tbody', "text_left").tr
 
