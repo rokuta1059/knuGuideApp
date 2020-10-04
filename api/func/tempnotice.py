@@ -880,12 +880,12 @@ def masscom():
 def politics():
     baseURL = "http://politics.kangwon.ac.kr"
     resp = requests.get(baseURL + '/bbs/board.php?bo_table=sub9_3')
-    soup = bs(resp.content, "html.parser")
+    soup = BeautifulSoup(resp.content, "html.parser")
     keyword = soup.find('tr', "notice")
 
     while keyword is not None:
         resp = requests.get(baseURL + keyword.a.get('href').lstrip("."))
-        soup = bs(resp.content, "html.parser")
+        soup = BeautifulSoup(resp.content, "html.parser")
         title = keyword.a
         date = soup.find('div', "info").find('span', "date").text.split(" ")[1]
         print(title.text, date)
@@ -1481,7 +1481,6 @@ def cse():
 
 
 if __name__ == '__main__':
-    tmp = 0
     #cba()
     #biz()
     #account()
