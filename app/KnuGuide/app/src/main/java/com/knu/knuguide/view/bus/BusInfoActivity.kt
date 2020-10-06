@@ -1,7 +1,6 @@
 package com.knu.knuguide.view.bus
 
 import android.os.Bundle
-import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.knu.knuguide.R
 import com.knu.knuguide.core.KNUService
