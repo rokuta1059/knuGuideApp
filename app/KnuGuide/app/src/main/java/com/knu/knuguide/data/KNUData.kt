@@ -19,9 +19,13 @@ interface KNUData : Serializable {
             const val ITEM_SEARCH_DEPARTMENT = 30
 
             // Bus
+            const val ITEM_BUS_STOP = 100
+
+            // Bus Info
             const val ITEM_BUS_ROUTE = 110
             const val ITEM_BUS_ROUTE_HEADER = 111
             const val ITEM_BUS_ROUTE_INTERVAL = 112
+
         }
     }
 

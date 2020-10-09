@@ -109,7 +109,6 @@ class BusRouteAdapter(
     }
 
     fun addRouteList(routeList: List<KNUData>) {
-        println("Add Routes ${routeList.size}")
         var scrollTo = -1
         routeList.forEachIndexed { idx, it ->
             items.add(it)

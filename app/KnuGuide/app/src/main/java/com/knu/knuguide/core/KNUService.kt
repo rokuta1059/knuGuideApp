@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.knu.knuguide.BuildConfig
 import com.knu.knuguide.core.logging.HttpPrettyLogging
 import com.knu.knuguide.data.announcement.Announcement
+import com.knu.knuguide.data.bus.Bus
 import com.knu.knuguide.data.bus.Route
 import com.knu.knuguide.data.bus.RouteBus
 import com.knu.knuguide.data.bus.RouteInfo
@@ -129,6 +130,17 @@ class KNUService {
                 val serializer = Persister()
                 val routeBus = serializer.read(RouteBus::class.java, it.string())
                 routeBus
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getSpecifyArrivalBusList(cityCode: Int = 32010, nodeId: String, routeId: String = "CCB250030000"): Single<Bus> {
+        return tagoApi!!.getSpecifyArrivalBusList(TAGO_API_KEY, cityCode, nodeId, routeId)
+            .map {
+                val serializer = Persister()
+                val bus = serializer.read(Bus::class.java, it.string())
+                bus
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

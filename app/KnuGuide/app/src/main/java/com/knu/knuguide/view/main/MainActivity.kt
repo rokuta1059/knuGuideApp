@@ -59,15 +59,6 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
                 R.id.bus -> {
                     navigateTo(BusActivity::class.java, null)
                 }
-                /** temporary code
-                 *  @author 제문 */
-                R.id.testBusNode -> {
-                    val bundle = Bundle().apply {
-                        putInt(BusInfoActivity.KEY_BUS_NUMBER, 300)
-                        putString(BusInfoActivity.KEY_BUS_ROUTE, "CCB250026903")
-                    }
-                    navigateTo(BusInfoActivity::class.java, bundle)
-                }
 //                R.id.speech -> {
 //                    navigateTo(SpeechTestActivity::class.java, null)
 //                }

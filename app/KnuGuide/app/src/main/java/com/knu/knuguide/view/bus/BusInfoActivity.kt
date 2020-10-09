@@ -1,11 +1,8 @@
 package com.knu.knuguide.view.bus
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,11 +17,9 @@ import com.knu.knuguide.view.adapter.BusRouteAdapter
 import com.knu.knuguide.view.adapter.decor.BusRouteAdapterDecor
 import com.knu.knuguide.view.adapter.decor.StickyHeaderDecor
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_bus_node_info.*
 import kotlinx.android.synthetic.main.knu_appbar.*
-import java.util.*
 
 /**
  * 운행 노선 정보를 담는 액티비티
@@ -63,9 +58,6 @@ class BusInfoActivity : KNUActivity(), KNUAdapterListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bus_node_info)
 
-        fab_goToTop.setOnClickListener { rv_nodes.scrollToPosition(0) }
-        fab_refresh.setOnClickListener { setBusRoutes() }
-
         getExtras()
         setUpRecyclerView()
 
@@ -76,6 +68,9 @@ class BusInfoActivity : KNUActivity(), KNUAdapterListener {
         else {
             Snackbar.make(rootLayout, "일시적으로 노선 정보를 불러올 수 없습니다.", Snackbar.LENGTH_SHORT).show()
         }
+
+        fab_goToTop.setOnClickListener { rv_nodes.scrollToPosition(0) }
+        fab_refresh.setOnClickListener { setBusRoutes() }
     }
 
     override fun onResume() {
@@ -207,7 +202,7 @@ class BusInfoActivity : KNUActivity(), KNUAdapterListener {
     override fun getKNUID(): String = KNU_ID
 
     companion object {
-        const val KNU_ID = "BusNodeInfoActivity"
+        const val KNU_ID = "BusInfoActivity"
         const val KEY_BUS_NUMBER = "number"
         const val KEY_BUS_ROUTE = "routeId"
     }

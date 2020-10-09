@@ -9,14 +9,6 @@ import retrofit2.http.Query
 
 interface TAGOInterface {
 
-    // 노선별 경유정류소 목록 조회
-    @GET("BusRouteInfoInqireService/getRouteAcctoThrghSttnList/{userKey}/{cityCode}/{routeId}/{numOfRows}")
-    fun getStationsByRouteId(
-        @Path("userKey") userKey: String,
-        @Path("cityCode") cityCode: Int,
-        @Path("routeId") routeId: String,
-        @Path("numOfRows") numOfRows: Int): Single<ResponseBody>
-
     // 노선 정보(시작 지점, 끝 지점, 현재 운행 버스 수) 조회
     @GET("BusRouteInfoInqireService/getRouteInfoIem")
     fun getRouteInfo(
@@ -39,6 +31,15 @@ interface TAGOInterface {
     fun getRouteBusList(
         @Query("ServiceKey", encoded = true) userKey: String,
         @Query("cityCode", encoded = true) cityCode: Int,
+        @Query("routeId", encoded = true) routeId: String
+    ): Single<ResponseBody>
+
+    // 특정 노선 버스 도착 정보 조회
+    @GET("ArvlInfoInqireService/getSttnAcctoSpcifyRouteBusArvlPrearngeInfoList")
+    fun getSpecifyArrivalBusList(
+        @Query("ServiceKey", encoded = true) userKey: String,
+        @Query("cityCode", encoded = true) cityCode: Int,
+        @Query("nodeId", encoded = true) nodeId: String,
         @Query("routeId", encoded = true) routeId: String
     ): Single<ResponseBody>
 }
