@@ -11,4 +11,7 @@ interface KNUAdapterListener {
     fun onSearchItemClick(item: Department) {}
 
     fun onAnnouncementClick(item: Announcement) {}
+
+    // BusInfoActivity
+    fun scrollToNodePosition(position: Int) {}
 }

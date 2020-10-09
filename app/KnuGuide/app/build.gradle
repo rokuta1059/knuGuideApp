@@ -66,25 +66,23 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
 
     // Okhttp3 (HTTP 통신 라이브러리)
-    implementation 'com.squareup.okhttp3:okhttp:4.0.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.1'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.0.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.3'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-simplexml:2.6.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-simplexml:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
 
     // Gson (Json 파싱 라이브러리)
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     // Jsoup (HTML 파싱 라이브러리)
     implementation 'org.jsoup:jsoup:1.13.1'
 
     // RxKotlin (데이터 라이브러리)
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

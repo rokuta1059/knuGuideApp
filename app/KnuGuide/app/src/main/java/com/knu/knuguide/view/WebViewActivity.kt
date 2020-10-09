@@ -7,9 +7,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.knu.knuguide.R
 import com.knu.knuguide.support.FastClickPreventer
-import kotlinx.android.synthetic.main.activity_calendar.progress_bar
 import kotlinx.android.synthetic.main.activity_web_view.*
+import kotlinx.android.synthetic.main.knu_appbar.*
 import kotlinx.android.synthetic.main.knu_appbar_collapse.*
+import kotlinx.android.synthetic.main.knu_appbar_collapse.appbar_back
 
 class WebViewActivity : KNUActivity() {
     private val fastClickPreventer = FastClickPreventer()

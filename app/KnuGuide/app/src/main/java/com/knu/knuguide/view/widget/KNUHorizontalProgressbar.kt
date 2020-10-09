@@ -24,4 +24,11 @@ class KNUHorizontalProgressbar(context: Context, attrs: AttributeSet): FrameLayo
         progressBar.visibility = View.INVISIBLE
     }
 
+    fun startProgressWithCounter(taskCounter: Int) {
+        if (taskCounter == 1) startProgress()
+    }
+
+    fun stopProgressWithCounter(taskCounter: Int) {
+        if (taskCounter == 0) stopProgress()
+    }
 }

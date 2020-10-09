@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/appBackground">
-    
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -108,5 +108,13 @@
 
 
     </androidx.appcompat.widget.Toolbar>
+
+    <com.knu.knuguide.view.widget.KNUHorizontalProgressbar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+    </com.knu.knuguide.view.widget.KNUHorizontalProgressbar>
 
 </com.google.android.material.appbar.AppBarLayout>
