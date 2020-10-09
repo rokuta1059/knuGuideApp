@@ -64,7 +64,7 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
                 R.id.testBusNode -> {
                     val bundle = Bundle().apply {
                         putInt(BusInfoActivity.KEY_BUS_NUMBER, 300)
-                        putString(BusInfoActivity.KEY_BUS_ROUTE, "CCB250030000")
+                        putString(BusInfoActivity.KEY_BUS_ROUTE, "CCB250026903")
                     }
                     navigateTo(BusInfoActivity::class.java, bundle)
                 }

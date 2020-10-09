@@ -3,6 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 
     <color name="appBackground">#5CBEFF</color>
     <color name="preview_announcement_divider">#808080</color>
@@ -36,4 +38,6 @@
     <!-- 버스 노선 정보 -->
     <color name="item_bus_subtitle_background">#00b0f0</color>
     <color name="item_bus_divider_background">#DAE3F3</color>
+    <color name="item_bus_node_bottom_decor">#ADB5BD</color>
+    <color name="item_bus_node_accent">#BEF7FF</color>
 </resources>

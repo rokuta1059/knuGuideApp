@@ -1,5 +1,6 @@
 package com.knu.knuguide.data
 
+import androidx.annotation.LayoutRes
 import java.io.Serializable
 
 interface KNUData : Serializable {
@@ -16,10 +17,15 @@ interface KNUData : Serializable {
 
             // Search
             const val ITEM_SEARCH_DEPARTMENT = 30
+
+            // Bus
+            const val ITEM_BUS_ROUTE = 110
+            const val ITEM_BUS_ROUTE_HEADER = 111
+            const val ITEM_BUS_ROUTE_INTERVAL = 112
         }
     }
 
     fun getRecyclerType(): Int
 
-    fun compare(other: KNUData): Boolean { return false }
+    fun compare(other: KNUData): Boolean = false
 }

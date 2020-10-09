@@ -6,6 +6,8 @@ import com.google.gson.reflect.TypeToken
 import com.knu.knuguide.BuildConfig
 import com.knu.knuguide.core.logging.HttpPrettyLogging
 import com.knu.knuguide.data.announcement.Announcement
+import com.knu.knuguide.data.bus.Route
+import com.knu.knuguide.data.bus.RouteBus
 import com.knu.knuguide.data.bus.RouteInfo
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.data.search.Department
@@ -105,6 +107,28 @@ class KNUService {
                 val serializer = Persister()
                 val routeInfo = serializer.read(RouteInfo::class.java, it.string())
                 routeInfo
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getAllRoutes(cityCode: Int = 32010, routeId: String = "CCB250030000", numOfRows: Int = 100): Single<Route> {
+        return tagoApi!!.getAllRoutes(TAGO_API_KEY, cityCode, routeId, numOfRows)
+            .map {
+                val serializer = Persister()
+                val route = serializer.read(Route::class.java, it.string())
+                route
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getRouteBusList(cityCode: Int = 32010, routeId: String = "CCB250030000"): Single<RouteBus> {
+        return tagoApi!!.getRouteBusList(TAGO_API_KEY, cityCode, routeId)
+            .map {
+                val serializer = Persister()
+                val routeBus = serializer.read(RouteBus::class.java, it.string())
+                routeBus
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -18,9 +18,25 @@ interface TAGOInterface {
         @Path("numOfRows") numOfRows: Int): Single<ResponseBody>
 
     // 노선 정보(시작 지점, 끝 지점, 현재 운행 버스 수) 조회
-    @Headers("Connection: close")
     @GET("BusRouteInfoInqireService/getRouteInfoIem")
     fun getRouteInfo(
+        @Query("ServiceKey", encoded = true) userKey: String,
+        @Query("cityCode", encoded = true) cityCode: Int,
+        @Query("routeId", encoded = true) routeId: String
+    ): Single<ResponseBody>
+
+    // 전체 노선 정보 조회
+    @GET("BusRouteInfoInqireService/getRouteAcctoThrghSttnList")
+    fun getAllRoutes(
+        @Query("ServiceKey", encoded = true) userKey: String,
+        @Query("cityCode", encoded = true) cityCode: Int,
+        @Query("routeId", encoded = true) routeId: String,
+        @Query("numOfRows", encoded = true) rows: Int
+    ): Single<ResponseBody>
+
+    // 현재 운행 중인 버스 위치 정보 조회
+    @GET("BusLcInfoInqireService/getRouteAcctoBusLcList")
+    fun getRouteBusList(
         @Query("ServiceKey", encoded = true) userKey: String,
         @Query("cityCode", encoded = true) cityCode: Int,
         @Query("routeId", encoded = true) routeId: String
