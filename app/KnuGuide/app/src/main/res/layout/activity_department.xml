@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -18,130 +19,229 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="36dp"
-            android:paddingBottom="16dp">
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_department"
+                android:layout_width="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:adjustViewBounds="true"
+                android:tint="@color/appBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_department" />
 
             <TextView
                 android:id="@+id/tv_college"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="단과대학"
-                android:textColor="@android:color/black"
+                android:layout_marginStart="8dp"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toTopOf="@id/tv_name"
+                app:layout_constraintStart_toEndOf="@id/iv_department"
+                app:layout_constraintTop_toTopOf="@id/iv_department"
+                tools:text="IT대학" />
 
             <TextView
-                android:id="@+id/tv_department"
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="학과명"
+                android:layout_marginStart="8dp"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_college" />
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_department"
+                app:layout_constraintStart_toEndOf="@id/iv_department"
+                app:layout_constraintTop_toBottomOf="@id/tv_college"
+                tools:text="전기전자공학과" />
 
             <TextView
-                android:id="@+id/tv_number"
+                android:id="@+id/tv_index_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="전화번호"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/department_index_info"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_department" />
+                app:layout_constraintTop_toBottomOf="@id/iv_department" />
 
-            <TextView
-                android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="위치"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
+            <View
+                android:id="@+id/divider_index_info"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/appBackground"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_number" />
-
-            <TextView
-                android:id="@+id/tv_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="사이트"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_location" />
+                app:layout_constraintTop_toBottomOf="@id/tv_index_info" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
+                android:id="@+id/gl_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.25" />
+                app:layout_constraintGuide_percent="0.3" />
+
+            <ImageView
+                android:id="@+id/iv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_index_info"
+                app:srcCompat="@drawable/ic_telephone" />
 
             <TextView
-                android:id="@+id/college"
+                android:id="@+id/tv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/department_phone"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@id/iv_phone"
+                app:layout_constraintStart_toEndOf="@id/iv_phone"
+                app:layout_constraintTop_toTopOf="@id/iv_phone" />
+
+            <TextView
+                android:id="@+id/tv_phone_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@id/tv_phone"
+                app:layout_constraintEnd_toEndOf="@id/divider_index_info"
+                app:layout_constraintStart_toEndOf="@id/gl_value"
+                app:layout_constraintTop_toTopOf="@id/tv_phone"
+                tools:text="010-1111-1111" />
+
+            <View
+                android:id="@+id/divider_phone"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/item_bus_divider_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_phone" />
+
+            <ImageView
+                android:id="@+id/iv_pos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@id/divider_pos"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_phone"
+                app:srcCompat="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/tv_pos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/department_pos"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@id/iv_pos"
+                app:layout_constraintStart_toEndOf="@id/iv_pos"
+                app:layout_constraintTop_toTopOf="@id/iv_pos" />
+
+            <TextView
+                android:id="@+id/tv_pos_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@id/divider_pos"
+                app:layout_constraintEnd_toEndOf="@id/divider_index_info"
+                app:layout_constraintStart_toEndOf="@id/gl_value"
+                app:layout_constraintTop_toTopOf="@id/divider_phone"
+                tools:text="공학1호관 111호" />
+
+            <View
+                android:id="@+id/divider_pos"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/item_bus_divider_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_pos" />
+
+            <ImageView
+                android:id="@+id/iv_site"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@id/divider_site"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_pos"
+                app:srcCompat="@drawable/ic_site" />
+
+            <TextView
+                android:id="@+id/tv_site"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/department_site"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@id/iv_site"
+                app:layout_constraintStart_toEndOf="@id/iv_site"
+                app:layout_constraintTop_toTopOf="@id/iv_site" />
+
+            <TextView
+                android:id="@+id/tv_site_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="@id/divider_site"
+                app:layout_constraintEnd_toEndOf="@id/divider_index_info"
+                app:layout_constraintStart_toEndOf="@id/gl_value"
+                app:layout_constraintTop_toTopOf="@id/divider_pos"
+                tools:text="https://eee.kangwon.ac.kr" />
+
+            <View
+                android:id="@+id/divider_site"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/item_bus_divider_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_site_value" />
+
+            <TextView
+                android:id="@+id/tv_index_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_college"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/tv_college"
-                tools:text="단과대학명" />
+                android:layout_marginTop="32dp"
+                android:text="@string/department_index_credit"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_site" />
 
-            <TextView
-                android:id="@+id/department"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <View
+                android:id="@+id/divider_index_credit"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
                 android:layout_marginStart="16dp"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_department"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/tv_department"
-                tools:text="학과명" />
-
-            <TextView
-                android:id="@+id/number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_number"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/tv_number"
-                tools:text="전화번호 내용" />
-
-            <TextView
-                android:id="@+id/location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_location"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/tv_location"
-                tools:text="위치명" />
-
-            <TextView
-                android:id="@+id/link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_link"
-                app:layout_constraintStart_toStartOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@id/tv_link"
-                tools:text="사이트 주소명" />
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/appBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_index_credit" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

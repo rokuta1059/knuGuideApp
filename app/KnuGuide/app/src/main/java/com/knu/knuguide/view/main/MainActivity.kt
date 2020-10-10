@@ -20,6 +20,7 @@ import com.knu.knuguide.view.bus.BusActivity
 import com.knu.knuguide.view.bus.BusInfoActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.department.DepartmentActivity
+import com.knu.knuguide.view.search.SearchActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.activity_main.*
@@ -54,7 +55,9 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
                     navigateTo(CalendarActivity::class.java, null)
                 }
                 R.id.department -> {
-                    navigateTo(DepartmentActivity::class.java, null)
+                    val bundle = Bundle()
+                    bundle.putBoolean(DepartmentActivity.KEY_DEPARTMENT_INFO, true)
+                    navigateTo(SearchActivity::class.java, bundle)
                 }
                 R.id.bus -> {
                     navigateTo(BusActivity::class.java, null)

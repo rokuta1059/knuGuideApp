@@ -2,8 +2,9 @@ package com.knu.knuguide.data.search
 
 import com.google.gson.annotations.SerializedName
 import com.knu.knuguide.data.KNUData
+import java.io.Serializable
 
-class Department : KNUData {
+class Department : KNUData, Serializable {
     @SerializedName("id")
     var id: String? = null
     @SerializedName("college")

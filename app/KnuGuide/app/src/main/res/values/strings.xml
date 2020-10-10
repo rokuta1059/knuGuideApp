@@ -6,4 +6,11 @@
 
     <!-- BusInfoActivity -->
     <string name="busInfo_routes_interval_title">운행 구간</string>
+
+    <!-- DpeartActivity -->
+    <string name="department_index_info">정보</string>
+    <string name="department_index_credit">영역별 이수 학점</string>
+    <string name="department_phone">전화번호</string>
+    <string name="department_pos">위치</string>
+    <string name="department_site">사이트</string>
 </resources>

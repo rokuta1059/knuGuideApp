@@ -53,7 +53,8 @@ abstract class KNUActivity : KNUBlankActivity() {
             }
             DepartmentActivity.KNU_ID -> {
                 setActionBarCustomView(KNU_ID)
-                setActionBarTitle(false, "", "")
+                setActionBarTitle(true, "학과정보", "")
+                setActionBarBack()
             }
             BusActivity.KNU_ID -> {
                 setActionBarCustomView(KNU_ID)

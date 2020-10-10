@@ -16,6 +16,8 @@ import com.knu.knuguide.view.KNUActivity
 import com.knu.knuguide.view.adapter.SearchAdapter
 import com.knu.knuguide.view.adapter.decor.SearchAdapterDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity.Companion.KEY_DEPARTMENT
+import com.knu.knuguide.view.bus.BusInfoActivity
+import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.department.DepartmentActivity.Companion.KEY_DEPARTMENT_INFO
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -33,6 +35,8 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
     // search items
     private var items = ArrayList<KNUData>()
     private var favoriteIds = ArrayList<String>()
+
+    private var isDepartmentInfo = false
 
     //
     private lateinit var favoriteId: String
@@ -53,8 +57,10 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         try {
             val bundle = intent.extras
             if (bundle != null) {
-                if (bundle.getBoolean(KEY_DEPARTMENT_INFO))
+                if (bundle.getBoolean(KEY_DEPARTMENT_INFO)) {
                     mAdapter.releaseFavorite()
+                    isDepartmentInfo = true
+                }
             }
         }
         catch (e: Exception) {
@@ -165,9 +171,17 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         item을 이전 activity에 넘겨준다.
      */
     override fun onSearchItemClick(item: Department) {
-        val intent = Intent()
-        intent.putExtra(KEY_DEPARTMENT, item)
-        setResult(RESULT_OK, intent)
-        finish()
+        if (isDepartmentInfo) {
+            val bundle = Bundle().apply {
+                putSerializable(KEY_DEPARTMENT, item)
+            }
+            navigateTo(DepartmentActivity::class.java, bundle)
+        }
+        else {
+            val intent = Intent()
+            intent.putExtra(KEY_DEPARTMENT, item)
+            setResult(RESULT_OK, intent)
+            finish()
+        }
     }
 }
