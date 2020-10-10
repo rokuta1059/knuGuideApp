@@ -7,10 +7,26 @@
     <!-- BusInfoActivity -->
     <string name="busInfo_routes_interval_title">운행 구간</string>
 
-    <!-- DpeartActivity -->
+    <!-- DepartActivity -->
     <string name="department_index_info">정보</string>
     <string name="department_index_credit">영역별 이수 학점</string>
     <string name="department_phone">전화번호</string>
     <string name="department_pos">위치</string>
     <string name="department_site">사이트</string>
+
+    <string name="department_table_credit_section_culture">교 양 영 역</string>
+    <string name="department_table_credit_section_major">전 공 영 역</string>
+    <string name="department_table_credit_section_teaching">교 직</string>
+    <string name="department_table_credit_section_free_choice">자유\n선택</string>
+    <string name="department_table_credit_section_total">합 계\n(졸업학점)</string>
+    <string name="department_table_credit_basic">기초</string>
+    <string name="department_table_credit_balanced">균형</string>
+    <string name="department_table_credit_specialized">특화</string>
+    <string name="department_table_credit_college">대학별</string>
+    <string name="department_table_credit_min_major">최소전공</string>
+    <string name="department_table_credit_deep">심화전공</string>
+    <string name="department_table_credit_required">필수</string>
+    <string name="department_table_credit_select">선택</string>
+    <string name="department_table_credit_partial_total">소계</string>
+    <string name="department_table_credit_total">계</string>
 </resources>

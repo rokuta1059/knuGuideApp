@@ -87,7 +87,6 @@ abstract class KNUActivity : KNUBlankActivity() {
             }
             DepartmentActivity.KNU_ID -> {
                 appbar_back.isVisible = true
-                appbar_search.isVisible = true
             }
             BusActivity.KNU_ID -> {
                 appbar_back.isVisible = true

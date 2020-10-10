@@ -27,15 +27,6 @@ class DepartmentActivity : KNUActivity() {
         setContentView(R.layout.activity_department)
 
         getExtras()
-
-        appbar_search.setOnClickListener {
-            if (fastClickPreventer.isClickable()) {
-                val bundle = Bundle()
-                bundle.putBoolean(KEY_DEPARTMENT_INFO, true)
-                navigateToForResult(SearchActivity::class.java, bundle, REQ_CODE_SEARCH_DEPARTMENT)
-            }
-        }
-
         getDepartmentInfo()
     }
 
@@ -84,9 +75,6 @@ class DepartmentActivity : KNUActivity() {
 
     companion object {
         const val KNU_ID = "DepartmentActivity"
-
-        // REQ_CODE
-        const val REQ_CODE_SEARCH_DEPARTMENT = 200
 
         // KEYS
         const val KEY_DEPARTMENT_INFO = "DEPARTMENT_INFO"
