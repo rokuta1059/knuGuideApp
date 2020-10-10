@@ -77,12 +77,10 @@ class KNUService {
     }
 
     // 특정 과 정보 가져오기
-    fun getDepartmentById(id: String): Single<List<Department>> {
+    fun getDepartmentById(id: String): Single<Department> {
         return api!!.getDepartmentById(id)
             .map {
-                val respJson = JSONObject(it.string())
-                val contents = respJson.getJSONArray("content")
-                val items = gson.fromJson<List<Department>>(contents.toString(), object : TypeToken<List<Department>>() {}.type)
+                val items = gson.fromJson<Department>(it.string(), object : TypeToken<Department>() {}.type)
                 items
             }
             .subscribeOn(Schedulers.io())

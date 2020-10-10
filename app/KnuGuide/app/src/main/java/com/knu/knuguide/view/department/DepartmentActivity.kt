@@ -50,19 +50,15 @@ class DepartmentActivity : KNUActivity() {
 
         progress_bar.startProgress()
 
-        compositeDisposable.add(KNUService.instance()!!.getDepartmentById(departmentId).subscribeWith(object : DisposableSingleObserver<List<Department>>() {
-            override fun onSuccess(list: List<Department>) {
+        compositeDisposable.add(KNUService.instance()!!.getDepartmentById(departmentId).subscribeWith(object : DisposableSingleObserver<Department>() {
+            override fun onSuccess(item: Department) {
                 progress_bar.stopProgress()
 
-                if (list.isNotEmpty()) {
-                    val item: Department = list[0]
-
-                    college.text = item.college
-                    department.text = item.department
-                    number.text = item.callnumber
-                    location.text = item.location
-                    link.text = item.site
-                }
+                college.text = item.college
+                department.text = item.department
+                number.text = item.callnumber
+                location.text = item.location
+                link.text = item.site
             }
 
             override fun onError(e: Throwable) {

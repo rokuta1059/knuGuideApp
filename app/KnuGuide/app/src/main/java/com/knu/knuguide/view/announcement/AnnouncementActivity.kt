@@ -176,33 +176,31 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
         else {
             progress_bar.startProgress()
 
-            compositeDisposable.add(KNUService.instance()!!.getDepartmentById(id).subscribeWith(object : DisposableSingleObserver<List<Department>>() {
-                override fun onSuccess(list: List<Department>) {
-                    if (list.isNotEmpty()) {
-                        val item: Department = list[0]
+            compositeDisposable.add(KNUService.instance()!!.getDepartmentById(id).subscribeWith(object : DisposableSingleObserver<Department>() {
+                override fun onSuccess(item: Department) {
 
-                        department_collapsed.text = item.department
-                        department_expanded.text = item.department
+                    department_collapsed.text = item.department
+                    department_expanded.text = item.department
 
-                        // 공지사항 데이터 불러오기
-                        compositeDisposable.add(KNUService.instance()!!.getNotice(id).subscribeWith(object : DisposableSingleObserver<List<Announcement>>() {
-                            override fun onSuccess(list: List<Announcement>) {
-                                progress_bar.stopProgress()
+                    // 공지사항 데이터 불러오기
+                    compositeDisposable.add(KNUService.instance()!!.getNotice(id).subscribeWith(object : DisposableSingleObserver<List<Announcement>>() {
+                        override fun onSuccess(list: List<Announcement>) {
+                            progress_bar.stopProgress()
 
-                                items.clear()
-                                for (item in list) {
-                                    item.type = Announcement.Type.GENERAL // 일반 보기 형식 지정
-                                    items.add(item)
-                                }
-                                mAdapter.notifyDataSetChanged()
+                            items.clear()
+                            for (item in list) {
+                                item.type = Announcement.Type.GENERAL // 일반 보기 형식 지정
+                                items.add(item)
                             }
+                            mAdapter.notifyDataSetChanged()
+                        }
 
-                            override fun onError(e: Throwable) {
-                                e.printStackTrace()
-                                Log.d("Error", e.message!!)
-                            }
-                        }))
-                    }
+                        override fun onError(e: Throwable) {
+                            e.printStackTrace()
+                            Log.d("Error", e.message!!)
+                        }
+
+                    }))
                 }
 
                 override fun onError(e: Throwable) {

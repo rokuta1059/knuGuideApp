@@ -12,7 +12,7 @@ interface KNUInterface {
     @GET("department")
     fun getDepartment(): Single<ResponseBody>
 
-    @GET("department/office/{id}")
+    @GET("department/{id}")
     fun getDepartmentById(@Path("id") id: String): Single<ResponseBody>
 
     @GET("department/notice/{id}")
