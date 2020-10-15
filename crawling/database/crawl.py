@@ -13,7 +13,7 @@ def db_connect():
         데이터베이스에 연결한 후
         커넥션을 반환한다.
     """
-    f = open('account.txt', 'r')
+    f = open('database/account.txt', 'r')
     db_connect_table = f.read().split()
     user = db_connect_table[0]
     passwd = db_connect_table[1]
