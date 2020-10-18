@@ -205,7 +205,7 @@
                     android:id="@+id/tv_site_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
+                    android:linksClickable="true"
                     app:layout_constraintBottom_toBottomOf="@id/divider_site"
                     app:layout_constraintEnd_toEndOf="@id/divider_index_info"
                     app:layout_constraintStart_toEndOf="@id/gl_value"
@@ -256,14 +256,15 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:fillViewport="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divider_index_credit">
 
                 <include
-                    layout="@layout/table_credit"
-                    android:layout_width="match_parent"
+                    layout="@layout/table_credit_2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </HorizontalScrollView>
