@@ -7,16 +7,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Announcement : Serializable, KNUData {
-
-    @SerializedName("department")
+    @SerializedName("id")
+    var id: String? = null
+    @SerializedName("departmentid")
+    var departmentId: String? = null
+    @SerializedName("department_name")
     var department: String? = null
-    @SerializedName("number")
+    @SerializedName("announce")
     var number: String? = null
-    @SerializedName("title")
+    @SerializedName("name")
     var title: String? = null
     @SerializedName("date")
     var date: String? = null
-    @SerializedName("link")
+    @SerializedName("url")
     var link: String? = null
 
     var type = Type.PREVIEW // Default PREVIEW

@@ -131,6 +131,8 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
                 }
 
                 override fun onError(e: Throwable) {
+                    progress_bar.stopProgress()
+
                     e.printStackTrace()
                     Log.d("Error", e.message!!)
                 }
@@ -167,6 +169,8 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
                 }
 
                 override fun onError(e: Throwable) {
+                    progress_bar.stopProgress()
+
                     e.printStackTrace()
                     Log.d("Error", e.message!!)
                 }
@@ -204,6 +208,8 @@ class AnnouncementActivity : KNUActivityCollapse(), KNUAdapterListener, PrefServ
                 }
 
                 override fun onError(e: Throwable) {
+                    progress_bar.stopProgress()
+
                     e.printStackTrace()
                     Log.d("Error", e.message!!)
                 }
