@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ct_tb_credit"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border_bottom_black">
@@ -11,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="113dp" />
+        app:layout_constraintGuide_begin="136dp" />
 
     <View
         android:id="@+id/border_top"
@@ -26,7 +27,7 @@
     <TextView
         android:id="@+id/tv_section_culture"
         android:layout_width="0dp"
-        android:layout_height="36dp"
+        android:layout_height="48dp"
         android:background="@drawable/border_right_bottom_white"
         android:gravity="center"
         android:text="@string/department_table_credit_section_culture"
@@ -39,7 +40,7 @@
     <TextView
         android:id="@+id/tv_section_major"
         android:layout_width="0dp"
-        android:layout_height="36dp"
+        android:layout_height="48dp"
         android:background="@drawable/border_right_bottom_white"
         android:gravity="center"
         android:minWidth="200dp"
@@ -69,6 +70,7 @@
         android:id="@+id/tv_teaching_value"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/border_right_black"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tv_section_teaching"
@@ -95,6 +97,7 @@
         android:id="@+id/tv_free_choice_value"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/border_right_black"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tv_section_free_choice"
@@ -130,7 +133,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tv_section_culture"
         app:layout_constraintStart_toStartOf="@id/tv_section_culture"
@@ -141,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="74dp" />
+            app:layout_constraintGuide_begin="86dp" />
 
         <TextView
             android:id="@+id/tv_basic"
@@ -160,11 +163,12 @@
             android:id="@+id/tv_basic_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_basic"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_basic"
+            app:layout_constraintTop_toBottomOf="@id/border_section"
             tools:text="10" />
 
         <TextView
@@ -184,11 +188,12 @@
             android:id="@+id/tv_balanced_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_balanced"
             app:layout_constraintStart_toStartOf="@id/tv_balanced"
-            app:layout_constraintTop_toBottomOf="@id/tv_balanced"
+            app:layout_constraintTop_toBottomOf="@id/border_section"
             tools:text="10" />
 
         <TextView
@@ -208,11 +213,12 @@
             android:id="@+id/tv_specialized_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_specialized"
             app:layout_constraintStart_toStartOf="@id/tv_specialized"
-            app:layout_constraintTop_toBottomOf="@id/tv_specialized"
+            app:layout_constraintTop_toBottomOf="@id/border_section"
             tools:text="10" />
 
         <TextView
@@ -234,11 +240,12 @@
             android:id="@+id/tv_college_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_college"
             app:layout_constraintStart_toStartOf="@id/tv_college"
-            app:layout_constraintTop_toBottomOf="@id/tv_college"
+            app:layout_constraintTop_toBottomOf="@id/border_section"
             tools:text="10" />
 
         <TextView
@@ -258,11 +265,12 @@
             android:id="@+id/tv_partial_total_culture_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_partial_total_culture"
             app:layout_constraintStart_toStartOf="@id/tv_partial_total_culture"
-            app:layout_constraintTop_toBottomOf="@id/tv_partial_total_culture"
+            app:layout_constraintTop_toBottomOf="@id/border_section"
             tools:text="10" />
 
         <View
@@ -280,7 +288,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ct_major"
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tv_section_major"
         app:layout_constraintStart_toStartOf="@id/tv_section_major"
@@ -291,7 +299,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="74dp" />
+            app:layout_constraintGuide_begin="86dp" />
 
         <TextView
             android:id="@+id/tv_min_major"
@@ -325,11 +333,12 @@
             android:id="@+id/tv_required_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_required"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_required"
+            app:layout_constraintTop_toBottomOf="@id/border_section_2"
             tools:text="10" />
 
         <TextView
@@ -349,11 +358,12 @@
             android:id="@+id/tv_select_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_select"
             app:layout_constraintStart_toStartOf="@id/tv_select"
-            app:layout_constraintTop_toBottomOf="@id/tv_select"
+            app:layout_constraintTop_toBottomOf="@id/border_section_2"
             tools:text="10" />
 
         <TextView
@@ -364,15 +374,16 @@
             android:gravity="center"
             android:text="@string/department_table_credit_partial_total"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/gl_point2"
+            app:layout_constraintBottom_toTopOf="@id/border_section_2"
             app:layout_constraintEnd_toStartOf="@id/tv_deep"
             app:layout_constraintStart_toEndOf="@id/tv_min_major"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_partial_totl_min_major_value"
+            android:id="@+id/tv_partial_total_min_major_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_partial_total_min_major"
@@ -390,7 +401,7 @@
             android:paddingRight="8dp"
             android:text="@string/department_table_credit_deep"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/gl_point2"
+            app:layout_constraintBottom_toTopOf="@id/border_section_2"
             app:layout_constraintEnd_toStartOf="@id/tv_total"
             app:layout_constraintStart_toEndOf="@id/tv_partial_total_min_major"
             app:layout_constraintTop_toTopOf="parent" />
@@ -399,11 +410,12 @@
             android:id="@+id/tv_deep_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_deep"
             app:layout_constraintStart_toStartOf="@id/tv_deep"
-            app:layout_constraintTop_toBottomOf="@id/tv_deep"
+            app:layout_constraintTop_toBottomOf="@id/border_section_2"
             tools:text="10" />
 
         <TextView
@@ -414,7 +426,7 @@
             android:gravity="center"
             android:text="@string/department_table_credit_total"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/gl_point2"
+            app:layout_constraintBottom_toTopOf="@id/border_section_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_deep"
             app:layout_constraintTop_toTopOf="parent" />
@@ -423,11 +435,12 @@
             android:id="@+id/tv_total_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border_right_black"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_total"
             app:layout_constraintStart_toStartOf="@id/tv_total"
-            app:layout_constraintTop_toBottomOf="@id/tv_total"
+            app:layout_constraintTop_toBottomOf="@id/border_section_2"
             tools:text="10" />
 
         <View

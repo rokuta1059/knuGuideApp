@@ -2,6 +2,7 @@ package com.knu.knuguide.core
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import com.knu.knuguide.BuildConfig
 import com.knu.knuguide.core.logging.HttpPrettyLogging
@@ -11,12 +12,14 @@ import com.knu.knuguide.data.bus.Route
 import com.knu.knuguide.data.bus.RouteBus
 import com.knu.knuguide.data.bus.RouteInfo
 import com.knu.knuguide.data.calendar.Task
+import com.knu.knuguide.data.department.Credit
 import com.knu.knuguide.data.search.Department
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONArray
 import org.json.JSONObject
 import org.simpleframework.xml.core.Persister
 import retrofit2.Retrofit
@@ -91,9 +94,19 @@ class KNUService {
     fun getNotice(id: String): Single<List<Announcement>> {
         return api!!.getNotice(id)
             .map {
-                val respJson = JSONObject(it.string())
-                val contents = respJson.getJSONArray("notice")
-                val items = gson.fromJson<List<Announcement>>(contents.toString(), object : TypeToken<List<Announcement>>() {}.type)
+                val respJson = JSONArray(it.string())
+                val items = gson.fromJson<List<Announcement>>(respJson.toString(), object : TypeToken<List<Announcement>>() {}.type)
+                items
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getDepartmentCredit(id: String): Single<List<Credit>> {
+        return api!!.getDepartmentCredit(id)
+            .map {
+                val respJson = JSONArray(it.string())
+                val items = gson.fromJson<List<Credit>>(respJson.toString(), object : TypeToken<List<Credit>>() {}.type)
                 items
             }
             .subscribeOn(Schedulers.io())

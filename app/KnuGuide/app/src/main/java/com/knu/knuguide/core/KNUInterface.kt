@@ -17,4 +17,7 @@ interface KNUInterface {
 
     @GET("department/notice/{id}")
     fun getNotice(@Path("id") id: String): Single<ResponseBody>
+
+    @GET("department/credit/{id}/2020")
+    fun getDepartmentCredit(@Path("id") id: String): Single<ResponseBody>
 }

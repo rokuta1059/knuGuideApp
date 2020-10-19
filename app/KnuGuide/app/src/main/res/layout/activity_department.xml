@@ -236,6 +236,37 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_site" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ct_filter_credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_index_credit"
+                    app:layout_constraintEnd_toEndOf="@id/divider_index_credit"
+                    app:layout_constraintTop_toTopOf="@id/tv_index_credit">
+
+                    <TextView
+                        android:id="@+id/tv_filter_credit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:textColor="@color/appBackground"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/iv_filter_credit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/department_credit_single" />
+
+                    <ImageView
+                        android:id="@+id/iv_filter_credit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/appBackground"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_credit" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <View
                     android:id="@+id/divider_index_credit"
                     android:layout_width="0dp"

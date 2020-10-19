@@ -13,6 +13,9 @@
     <string name="department_phone">전화번호</string>
     <string name="department_pos">위치</string>
     <string name="department_site">사이트</string>
+    <string name="department_credit_single">주전공</string>
+    <string name="department_credit_double">복수전공</string>
+    <string name="department_credit_minor">부전공</string>
 
     <string name="department_table_credit_section_culture">교 양 영 역</string>
     <string name="department_table_credit_section_major">전 공 영 역</string>
