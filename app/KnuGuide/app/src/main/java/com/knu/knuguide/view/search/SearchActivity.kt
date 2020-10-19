@@ -90,8 +90,12 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
     }
 
     private fun getDepartment() {
+        progress_bar.startProgress()
+
         compositeDisposable.add(KNUService.instance()!!.getDepartment().subscribeWith(object : DisposableSingleObserver<List<Department>>() {
             override fun onSuccess(list: List<Department>) {
+                progress_bar.stopProgress()
+
                 items.clear()
                 for (item in list) {
                     if (favoriteIds.contains(item.id))
@@ -116,6 +120,8 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
             }
 
             override fun onError(e: Throwable) {
+                progress_bar.stopProgress()
+
                 e.printStackTrace()
                 Log.d("Error", e.message)
             }
@@ -159,9 +165,7 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
         saveFavorite()
     }
 
-    override fun getKNUID(): String {
-        return KNU_ID
-    }
+    override fun getKNUID(): String = KNU_ID
 
     companion object {
         const val KNU_ID = "SearchActivity"
