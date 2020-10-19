@@ -102,6 +102,11 @@ class KNUService {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // 특정 식당 식단표 가져오기
+    //fun getCafeteria(id: String): Single<List<Cafeteria>> {
+
+    //}
+
     fun getDepartmentCredit(id: String): Single<List<Credit>> {
         return api!!.getDepartmentCredit(id)
             .map {

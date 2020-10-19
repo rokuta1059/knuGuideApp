@@ -4,6 +4,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.appbar.AppBarLayout
 import com.knu.knuguide.view.bus.BusActivity
 import com.knu.knuguide.view.bus.BusInfoActivity
+import com.knu.knuguide.view.cafeteria.CafeteriaActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.main.MainActivity
@@ -24,6 +25,7 @@ abstract class KNUActivity : KNUBlankActivity() {
             SearchActivity.KNU_ID,
             WebViewActivity.KNU_ID,
             DepartmentActivity.KNU_ID,
+            CafeteriaActivity.KNU_ID,
             BusActivity.KNU_ID,
             BusInfoActivity.KNU_ID -> {
                 setSupportActionBar(appbar)
@@ -67,6 +69,11 @@ abstract class KNUActivity : KNUBlankActivity() {
                 setActionBarTitle(true, "", "BUS")
                 setActionBarBack()
             }
+            CafeteriaActivity.KNU_ID -> {
+                setActionBarCustomView(KNU_ID)
+                setActionBarTitle(true, "식당", "")
+                setActionBarBack()
+            }
         }
     }
 
@@ -92,6 +99,9 @@ abstract class KNUActivity : KNUBlankActivity() {
                 appbar_back.isVisible = true
             }
             BusInfoActivity.KNU_ID -> {
+                appbar_back.isVisible = true
+            }
+            CafeteriaActivity.KNU_ID -> {
                 appbar_back.isVisible = true
             }
         }
