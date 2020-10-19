@@ -1,13 +1,16 @@
 package com.knu.knuguide.view.department
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
+import android.text.util.Linkify
 import com.google.android.material.snackbar.Snackbar
 import com.knu.knuguide.R
 import com.knu.knuguide.core.KNUService
 import com.knu.knuguide.data.search.Department
 import com.knu.knuguide.support.FastClickPreventer
 import com.knu.knuguide.view.KNUActivity
+import com.knu.knuguide.view.WebViewActivity
 import com.knu.knuguide.view.announcement.AnnouncementActivity.Companion.KEY_DEPARTMENT
 import com.knu.knuguide.view.search.SearchActivity
 import io.reactivex.disposables.CompositeDisposable
@@ -55,7 +58,16 @@ class DepartmentActivity : KNUActivity() {
                 tv_name.text = item.department
                 tv_phone_value.text = item.callnumber
                 tv_pos_value.text = item.location
-                tv_site_value.text = item.site
+                tv_site_value.apply {
+                    paintFlags = paintFlags.or(Paint.UNDERLINE_TEXT_FLAG)
+                    text = item.site
+
+                    setOnClickListener {
+                        val args = Bundle()
+                        args.putSerializable(WebViewActivity.KEY_DATA, item.site)
+                        navigateTo(WebViewActivity::class.java, args)
+                    }
+                }
             }
 
             override fun onError(e: Throwable) {

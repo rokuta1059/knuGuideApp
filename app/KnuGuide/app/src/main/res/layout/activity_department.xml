@@ -205,7 +205,7 @@
                     android:id="@+id/tv_site_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:linksClickable="true"
+                    android:textColor="@color/item_department_hyperlink"
                     app:layout_constraintBottom_toBottomOf="@id/divider_site"
                     app:layout_constraintEnd_toEndOf="@id/divider_index_info"
                     app:layout_constraintStart_toEndOf="@id/gl_value"

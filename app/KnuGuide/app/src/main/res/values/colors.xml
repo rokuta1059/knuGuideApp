@@ -32,6 +32,9 @@
     <color name="item_announcement_favorite">#FFCE44</color>
     <color name="item_announcement_not_favorite">#5CBFFF</color>
 
+    <!-- 학과정보 -->
+    <color name="item_department_hyperlink">#005DF5</color>
+
     <!-- 300번 버스 -->
     <color name="item_bus_path_sticker_default">#808080</color>
 

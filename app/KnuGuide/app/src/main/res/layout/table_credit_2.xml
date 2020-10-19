@@ -16,8 +16,8 @@
     <View
         android:id="@+id/border_top"
         android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:background="@color/cal_header_title"
+        android:layout_height="2dp"
+        android:background="#487EE8"
         app:layout_constraintBottom_toTopOf="@id/tv_section_culture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
