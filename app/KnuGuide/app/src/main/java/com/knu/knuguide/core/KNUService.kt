@@ -11,6 +11,7 @@ import com.knu.knuguide.data.bus.Bus
 import com.knu.knuguide.data.bus.Route
 import com.knu.knuguide.data.bus.RouteBus
 import com.knu.knuguide.data.bus.RouteInfo
+import com.knu.knuguide.data.cafeteria.Cafeteria
 import com.knu.knuguide.data.calendar.Task
 import com.knu.knuguide.data.department.Credit
 import com.knu.knuguide.data.search.Department
@@ -103,9 +104,16 @@ class KNUService {
     }
 
     // 특정 식당 식단표 가져오기
-    //fun getCafeteria(id: String): Single<List<Cafeteria>> {
-
-    //}
+    fun getCafeteria(id: String): Single<List<Cafeteria>> {
+        return api!!.getCafeteria(id)
+            .map{
+                val respJson = JSONArray(it.string())
+                val items = gson.fromJson<List<Cafeteria>>(respJson.toString(), object : TypeToken<List<Cafeteria>>() {}.type)
+                items
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
     fun getDepartmentCredit(id: String): Single<List<Credit>> {
         return api!!.getDepartmentCredit(id)
