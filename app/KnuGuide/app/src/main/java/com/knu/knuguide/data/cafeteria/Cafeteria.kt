@@ -19,5 +19,17 @@ class Cafeteria: KNUData, Serializable {
     @SerializedName("dinner")
     var dinner: String? = null
 
-    override fun getRecyclerType(): Int = KNUData.Type.ITEM_CAFETERIA
+    var type = Type.JAEJEONG
+
+    override fun getRecyclerType(): Int {
+        return when(type){
+            Type.JAEJEONG -> KNUData.Type.ITEM_CAFETERIA_JAEJEONG
+            Type.SAEROM -> KNUData.Type.ITEM_CAFETERIA_SAEROM
+            Type.IRUM -> KNUData.Type.ITEM_CAFETERIA_IRUM
+        }
+    }
+
+    enum class Type{
+        JAEJEONG, SAEROM, IRUM
+    }
 }

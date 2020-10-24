@@ -104,7 +104,7 @@ class KNUService {
     }
 
     // 특정 식당 식단표 가져오기
-    fun getCafeteria(id: String): Single<List<Cafeteria>> {
+    fun getCafeteriaById(id: String): Single<List<Cafeteria>> {
         return api!!.getCafeteria(id)
             .map{
                 val respJson = JSONArray(it.string())
