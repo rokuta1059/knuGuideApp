@@ -29,6 +29,7 @@ import com.knu.knuguide.view.adapter.AnnouncementAdapter
 import com.knu.knuguide.view.adapter.decor.PreviewAnnouncementDecor
 import com.knu.knuguide.view.announcement.AnnouncementActivity
 import com.knu.knuguide.view.bus.BusActivity
+import com.knu.knuguide.view.cafeteria.CafeteriaActivity
 import com.knu.knuguide.view.calendar.CalendarActivity
 import com.knu.knuguide.view.department.DepartmentActivity
 import com.knu.knuguide.view.search.SearchActivity
@@ -90,6 +91,12 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
                 }
                 R.id.bus -> {
                     navigateTo(BusActivity::class.java, null)
+                }
+//                R.id.speech -> {
+//                    navigateTo(SpeechTestActivity::class.java, null)
+//                }
+                R.id.cafeteria -> {
+                    navigateTo(CafeteriaActivity::class.java, null);
                 }
             }
             false
@@ -248,9 +255,9 @@ class MainActivity : KNUActivity(), KNUAdapterListener, PrefService.PrefChangeLi
         super.onDestroy()
 
         compositeDisposable.dispose()
-        textToSpeech?.apply {
-            stop()
-            shutdown()
+        textToSpeech?.let {
+            it.stop()
+            it.shutdown()
         }
     }
 

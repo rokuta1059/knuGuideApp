@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.cafeteria.CafeteriaActivity" />
         <activity android:name=".view.bus.BusInfoActivity"></activity>
         <activity android:name=".view.bus.BusActivity" />
         <activity android:name=".view.department.DepartmentActivity" />

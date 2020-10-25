@@ -18,6 +18,11 @@ interface KNUData : Serializable {
             // Search
             const val ITEM_SEARCH_DEPARTMENT = 30
 
+            // Cafeteria
+            const val ITEM_CAFETERIA_JAEJEONG = 40
+            const val ITEM_CAFETERIA_SAEROM = 41
+            const val ITEM_CAFETERIA_IRUM = 42
+
             // Bus
             const val ITEM_BUS_STOP = 100
 
