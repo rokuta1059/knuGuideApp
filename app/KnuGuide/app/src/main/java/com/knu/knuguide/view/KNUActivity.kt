@@ -71,7 +71,7 @@ abstract class KNUActivity : KNUBlankActivity() {
             }
             CafeteriaActivity.KNU_ID -> {
                 setActionBarCustomView(KNU_ID)
-                setActionBarTitle(true, "식당", "")
+                setActionBarTitle(true, "식단표", "")
                 setActionBarBack()
             }
         }

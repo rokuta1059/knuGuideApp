@@ -5,7 +5,6 @@ import com.knu.knuguide.data.KNUData
 import java.io.Serializable
 
 class Cafeteria: KNUData, Serializable {
-
     @SerializedName("date")
     var date: String? = null
     @SerializedName("dormitory")
@@ -13,23 +12,16 @@ class Cafeteria: KNUData, Serializable {
     @SerializedName("week")
     var week: String? = null
     @SerializedName("breakfast")
-    var breakfast: String? = null
+    var breakfast: String = ""
     @SerializedName("lunch")
-    var lunch: String? = null
+    var lunch: String = ""
     @SerializedName("dinner")
-    var dinner: String? = null
+    var dinner: String = ""
 
-    var type = Type.JAEJEONG
+    var menus = listOf<Menu>(
+        Menu(breakfast).apply { menuType = MenuType.BREAKFAST },
+        Menu(lunch).apply { menuType = MenuType.LUNCH },
+        Menu(dinner).apply { menuType = MenuType.DINNER })
 
-    override fun getRecyclerType(): Int {
-        return when(type){
-            Type.JAEJEONG -> KNUData.Type.ITEM_CAFETERIA_JAEJEONG
-            Type.SAEROM -> KNUData.Type.ITEM_CAFETERIA_SAEROM
-            Type.IRUM -> KNUData.Type.ITEM_CAFETERIA_IRUM
-        }
-    }
-
-    enum class Type{
-        JAEJEONG, SAEROM, IRUM
-    }
+    override fun getRecyclerType(): Int = KNUData.Type.ITEM_CAFETERIA
 }

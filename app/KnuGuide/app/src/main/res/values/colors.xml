@@ -44,4 +44,9 @@
     <color name="item_bus_divider_background">#DAE3F3</color>
     <color name="item_bus_node_bottom_decor">#ADB5BD</color>
     <color name="item_bus_node_accent">#BEF7FF</color>
+
+    <!-- 식단표 -->
+    <color name="item_cafeteria_morning">#FF8430</color>
+    <color name="item_cafeteria_lunch">#FFED00</color>
+    <color name="item_cafeteria_evening">#5CBEFF</color>
 </resources>

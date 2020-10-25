@@ -32,4 +32,7 @@
     <string name="department_table_credit_select">선택</string>
     <string name="department_table_credit_partial_total">소계</string>
     <string name="department_table_credit_total">계</string>
+
+    <!-- Cafeteria -->
+    <string name="cafeteria_is_foods_empty">아직 등록된 메뉴가 없어요 !</string>
 </resources>
