@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database: mysql
+#    database: h2
+  h2:
+    console:
+      enabled: true
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
+  datasource:
+    driver-class-name: --
+    url: --
+    username: --
+    password: --
+
+server:
+  port: 8080
+
