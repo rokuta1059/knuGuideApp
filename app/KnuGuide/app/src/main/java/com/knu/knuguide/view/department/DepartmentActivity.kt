@@ -54,9 +54,8 @@ class DepartmentActivity : KNUActivity() {
     private fun getExtras() {
         val bundle = intent.extras
         if (bundle != null) {
-            if (bundle.containsKey(KEY_DEPARTMENT)) departmentId = (bundle.getSerializable(
-                KEY_DEPARTMENT
-            ) as Department).id
+            if (bundle.containsKey(KEY_DEPARTMENT))
+                departmentId = bundle.getString(KEY_DEPARTMENT)
         }
     }
 

@@ -177,7 +177,7 @@ class SearchActivity : KNUActivity(), KNUAdapterListener {
     override fun onSearchItemClick(item: Department) {
         if (isDepartmentInfo) {
             val bundle = Bundle().apply {
-                putSerializable(KEY_DEPARTMENT, item)
+                putString(KEY_DEPARTMENT, item.id)
             }
             navigateTo(DepartmentActivity::class.java, bundle)
         }

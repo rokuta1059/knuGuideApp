@@ -18,7 +18,6 @@
         app:tabIndicatorColor="@color/cal_header_title"
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="4dp"
-        app:tabMaxWidth="60dp"
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem

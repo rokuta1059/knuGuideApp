@@ -12,3 +12,5 @@
 /captures
 .externalNativeBuild
 .cxx
+
+credential_file.json

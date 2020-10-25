@@ -3,7 +3,7 @@ package com.knu.knuguide.core
 import android.app.Activity
 import android.os.AsyncTask
 import com.google.cloud.dialogflow.v2beta1.*
-import com.knu.knuguide.view.speech.SpeechTestActivity
+import com.knu.knuguide.view.main.MainActivity
 
 class RequestV2Task: AsyncTask<Void, Void, DetectIntentResponse> {
 
@@ -34,6 +34,6 @@ class RequestV2Task: AsyncTask<Void, Void, DetectIntentResponse> {
     }
 
     override fun onPostExecute(response: DetectIntentResponse?) {
-        (activity as SpeechTestActivity).callbackV2(response)
+        (activity as MainActivity).callbackV2(response)
     }
 }
