@@ -78,7 +78,7 @@ def crawling_department():
             elif row[3] == 'cll':
                 notice_data = notice.cll(row[0], notice.callreq('', row[1]))
             elif row[3] == 'dbe':
-                notice_data = notice.dbe(row[0], notice.callreq(row[1], row[2]), row[1] + row[2])
+                notice_data = notice.dbe(row[0], notice.callreq(row[1], row[2]), row[1])
             elif row[3] == 'edu':
                 notice_data = notice.edu(row[0], notice.callreq(row[1], row[2]), row[1])
             elif row[3] == 'engedu':

@@ -780,9 +780,9 @@ if __name__ == '__main__':
     # aWR4PTg5MCZzdGFydFBhZ2U9MCZsaXN0Tm89NTAzJnRhYmxlPWNzX2Jic19kYXRhJmNvZGU9c3ViMDdhJnNlYXJjaF9pdGVtPSZzZWFyY2hfb3JkZXI9JnVybD1zdWIwN2Ema2V5dmFsdWU9c3ViMDc
 
     # AAA - IT대학 전기전자공학과
-    # url = 'https://eee.kangwon.ac.kr/eee/'
-    # url2 = 'bbs_list.php?code=sub07a&keyvalue=sub07'
-    # print('\n'.join(str(a) for a in dbe('AAA', callreq(url, url2), url + url2)))
+    url = 'https://eee.kangwon.ac.kr/eee/'
+    url2 = 'bbs_list.php?code=sub07a&keyvalue=sub07'
+    print('\n'.join(str(a) for a in dbe('AAA', callreq(url, url2), url)))
 
     # ABA - 간호대 간호학과
     # url = 'https://nurse.kangwon.ac.kr/nurse/'
