@@ -28,8 +28,11 @@ public class DietDormitoryJpaController {
     public List<dietdormitory> getDietByDormitory(@PathVariable String dormitory) {
         SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
+        if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            c.add(Calendar.DATE, -1);
+        }
         c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
-        // System.out.println(c.getTime());
+        System.out.println(c.getTime());
         return dietDormitoryRepository.findByDormitory(dormitory, fm.format(c.getTime()));
     }
 }
